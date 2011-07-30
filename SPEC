@@ -1,0 +1,114 @@
+This specification aims to formalize the Link protocol for building web
+applications using the Node.js JavaScript platform. You can (and should) use
+the lint middleware to enforce it. When you develop middleware, be sure to add
+a lint before and after to catch all mistakes.
+
+= Link Applications
+
+A Link application is a JavaScript function that takes exactly two arguments:
+the *environment* and a *callback*.
+
+== The Environment
+
+The environment is a JavaScript object that includes CGI-like properties. It
+must include the following properties except when they would be empty, but see
+below.
+
+  - protocol          The protocol used in the request (i.e. "http:" or
+                      "https:"). This variable may never be an empty string and
+                      is always required.
+  - protocolVersion   The version of the protocol used in the request. This
+                      variable may never be an empty string and is always
+                      required.
+  - requestMethod     The request method (e.g. "GET" or "POST"). This cannot
+                      ever be an empty string, and is always required.
+  - serverName,       When combined with scriptName and pathInfo these
+    serverPort        variables may be used to reconstruct the original
+                      request URL. Note, however, that if httpHost is present,
+                      it should be used in preference to serverName. These
+                      variables can never be empty strings, and are always
+                      required.
+  - scriptName        The initial portion of the request URL's "path" that
+                      corresponds to the application, so that it knows its
+                      virtual "location". This may be an empty string, if the
+                      application corresponds to the "root" of the server.
+  - pathInfo          The remainder of the request URL's "path", designating
+                      the virtual "location" of the target resource within the
+                      application. This may be an empty string if the request
+                      URL targets the root of the application and does not
+                      have a trailing slash. This value may be percent-encoded
+                      when originating from a URL.
+  - queryString       The portion of the request URL that follows the "?", if
+                      any. May be an empty string, but is always required.
+  - http*             Variables corresponding to the client-supplied HTTP
+                      request headers (i.e. variables whose names begin with
+                      http). The presence or absence of these variables should
+                      correspond with the presence or absence of the
+                      appropriate HTTP header in the request. The remainder of
+                      the property name will be the camel-cased version of the
+                      original header name (e.g. "httpAccept" and
+                      "httpUserAgent").
+
+The environment must not contain the properties httpContentType or
+httpContentLength (use contentType and contentLength instead).
+
+In addition to these, the environment must include the following Link-specific
+variables:
+
+  - link.version      The current version of the Link library.
+  - link.input        An EventEmitter of data contained in the request body.
+  - link.error        A writable Stream for error output.
+  - link.session      A JavaScript object containing session data.
+
+There are the following restrictions:
+
+  - protocol must be either "http:" or "https:".
+  - requestMethod must be a valid token.
+  - scriptName, if not empty, should start with a "/".
+  - pathInfo, if not empty, should start with a "/".
+  - Both scriptName and pathInfo must be set. pathInfo should be "/" if
+    scriptName is empty. scriptName should never be "/" but instead be empty.
+  - contentLength, if given, must consist of digits only.
+  - link.version must be an array of integers [major, minor, patch].
+
+The application is free to modify the environment. Property names must contain
+at least one dot and should be prefixed uniquely. The prefix "link" is reserved
+for use within the Link core distribution and other accepted specifications and
+is not available for use elsewhere.
+
+== The Callback
+
+The callback is used to issue a response to the client and must be called with
+exactly three arguments: the response *status*, HTTP *headers*, and *body*.
+
+=== The Status
+
+The status must be an HTTP status code as a Number.
+
+=== The Headers
+
+The headers must be a JavaScript object whose properties are the names of HTTP
+headers in their canonical form (i.e. "Content-Type" instead of "content-type").
+Header names may contain only letters, digits, "-", and "_" and must start with
+a letter and must not end with a "-" or "_". If more than one value for a header
+is required, the value for that property must be an array.
+
+=== The Content-Type
+
+There must be a Content-Type header, except for when the status is 1xx, 204, or
+304, in which case there must be none given.
+
+=== The Content-Length
+
+There must not be a Content-Length header when the status is 1xx, 204, or 304.
+
+=== The Body
+
+The body must be either a string or a readable Stream. If it is a Stream, the
+response will be pumped through to the client.
+
+= Credits
+
+Some parts of this specification are adopted from PEP333: Python Web Server
+Gateway Interface v1.0 (http://www.python.org/dev/peps/pep-0333/) and the Rack
+specification (http://rack.rubyforge.org/doc/files/SPEC.html).

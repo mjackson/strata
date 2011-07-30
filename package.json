@@ -1,0 +1,8 @@
+{
+    "name": "link",
+    "description": "A modular web server interface for Node.js",
+    "version": "0.1.0",
+    "engines": ["0.5.0"],
+    "author": "Michael Jackson <mjijackson@gmail.com>",
+    "repository": "git://github.com/mjijackson/link.git"
+}

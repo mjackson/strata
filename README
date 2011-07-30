@@ -1,0 +1,58 @@
+Link is a modular web server interface for Node.js. Using Link, web developers
+can build highly performant servers in a powerful, modular style that encourages
+readability and clean separation of responsibility. The core Link distribution
+consists of three things:
+
+  - A specification (see SPEC) for building applications and middleware
+  - A library (see lib) with many useful utilities and middleware to aid
+    developers in the common tasks of building applications that conform to the
+    specification
+  - An executable (see bin/linkup) for running Link applications from the
+    command line
+
+= Installation
+
+Using npm:
+
+  $ npm install link
+
+= Usage
+
+Link reduces the complex task of building a web application to the simplest
+terms possible. A Link application is simply a JavaScript function that takes
+two arguments: the environment and a callback. The environment is a JavaScript
+object that contains information about the incoming request such as the request
+method that was used, any parameters that were sent, etc. When the application
+is ready to send the response to the client, it simply calls the callback with
+the response status code, the headers, and the response body.
+
+  function (env, callback) {
+      callback(200, {
+          "Content-Type": "text/plain",
+          "Content-Length": "11"
+      }, "hello world");
+  }
+
+= Tests
+
+To run the tests, first install vows:
+
+  $ npm install vows
+
+Run all tests with:
+
+  $ ./node_modules/.bin/vows test/*_test.js
+
+Otherwise, run the tests for a specific module with:
+
+  $ ./node_modules/.bin/vows test/utils_test.js
+
+= Credits
+
+Link was inspired by similar efforts in the Python and Ruby communities, namely
+WSGI and Rack. It borrows many code patterns from these libraries, as well as
+the JSGI project. Link's multipart parser is based on the fast parser in the
+node-formidable project.
+
+My sincere thanks to the authors of each of these libraries for the excellent
+work they've done and graciously shared.
