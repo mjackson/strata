@@ -5,23 +5,49 @@ var assert = require("assert"),
 
 vows.describe("mock").addBatch({
     "A mock Stream": {
-        topic: function () {
-            this.content = "hello world!";
+        "with no encoding set": {
+            topic: function () {
+                this.content = "hello world!";
 
-            var stream = new mock.Stream(this.content),
-                content = "",
-                self = this;
+                var stream = new mock.Stream(this.content),
+                    content = "",
+                    self = this;
 
-            stream.on("data", function (buffer) {
-                content += buffer.toString("utf8");
-            });
+                stream.on("data", function (buffer) {
+                    assert.ok(buffer instanceof Buffer);
+                    content += buffer.toString("utf8");
+                });
 
-            stream.on("end", function () {
-                self.callback(null, content);
-            });
+                stream.on("end", function () {
+                    self.callback(null, content);
+                });
+            },
+            "should emit its contents as buffers": function (content) {
+                assert.equal(content, this.content);
+            }
         },
-        "should emit its contents": function (content) {
-            assert.equal(content, this.content);
+        "with an encoding set": {
+            topic: function () {
+                this.content = "hello world!";
+
+                var stream = new mock.Stream(this.content),
+                    content = "",
+                    self = this;
+
+                stream.setEncoding("utf8");
+
+                stream.on("data", function (chunk) {
+                    assert.ok(typeof chunk == "string");
+                    content += chunk;
+                });
+
+                stream.on("end", function () {
+                    self.callback(null, content);
+                });
+            },
+            "should emit its contents as strings": function (content) {
+                assert.equal(content, this.content);
+            }
         }
     },
     "A mock request to mock.empty": {
