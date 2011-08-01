@@ -11,8 +11,7 @@ the *environment* and a *callback*.
 == The Environment
 
 The environment is a JavaScript object that includes CGI-like properties. It
-must include the following properties except when they would be empty, but see
-below.
+must include the following:
 
   - protocol          The protocol used in the request (i.e. "http:" or
                       "https:"). This variable may never be an empty string and
@@ -42,7 +41,7 @@ below.
                       any. May be an empty string, but is always required.
   - http*             Variables corresponding to the client-supplied HTTP
                       request headers (i.e. variables whose names begin with
-                      http). The presence or absence of these variables should
+                      "http"). The presence or absence of these variables should
                       correspond with the presence or absence of the
                       appropriate HTTP header in the request. The remainder of
                       the property name will be the camel-cased version of the
@@ -52,8 +51,8 @@ below.
 The environment must not contain the properties httpContentType or
 httpContentLength (use contentType and contentLength instead).
 
-In addition to these, the environment must include the following Link-specific
-variables:
+In addition to these, the environment may include the following Link-specific
+properties:
 
   - link.version      The current version of the Link library.
   - link.input        An EventEmitter of data contained in the request body.
@@ -62,14 +61,16 @@ variables:
 
 There are the following restrictions:
 
-  - protocol must be either "http:" or "https:".
-  - requestMethod must be a valid token.
-  - scriptName, if not empty, should start with a "/".
-  - pathInfo, if not empty, should start with a "/".
-  - Both scriptName and pathInfo must be set. pathInfo should be "/" if
-    scriptName is empty. scriptName should never be "/" but instead be empty.
-  - contentLength, if given, must consist of digits only.
-  - link.version must be an array of integers [major, minor, patch].
+  - protocol must be either "http:" or "https:"
+  - requestMethod must be a valid HTTP verb as an uppercase String
+  - scriptName, if not empty, should start with a "/"
+  - pathInfo, if not empty, should start with a "/"
+  - pathInfo should be "/" if scriptName is empty
+  - scriptName should never be "/" but instead be empty
+  - contentLength, if given, must consist of digits only
+  - link.version must be an array of integers [major, minor, patch]
+  - link.input must be an EventEmitter of data contained in the request body
+  - link.error must be a writable Stream
 
 The application is free to modify the environment. Property names must contain
 at least one dot and should be prefixed uniquely. The prefix "link" is reserved
@@ -100,7 +101,8 @@ There must be a Content-Type header, except for when the status is 1xx, 204, or
 
 === The Content-Length
 
-There must not be a Content-Length header when the status is 1xx, 204, or 304.
+There must not be a Content-Length header when the status is 1xx, 204, or 304,
+or it must be "0".
 
 === The Body
 

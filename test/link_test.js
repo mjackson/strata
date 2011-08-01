@@ -5,7 +5,7 @@ var assert = require("assert"),
     mock = require("./../lib/link/mock");
 
 vows.describe("link").addBatch({
-    "envFor": {
+    "env": {
         topic: function () {
             this.protocol = "https:";
             this.protocolVersion = "1.1";
@@ -18,18 +18,16 @@ vows.describe("link").addBatch({
             this.content = "hello world!";
             this.contentLength = this.content.length.toString(10);
 
-            var uri = {
+            var input = new mock.Stream(this.content);
+            input.pause();
+
+            return link.env({
                 protocol: this.protocol,
                 hostname: this.hostname,
                 port: this.port,
                 pathname: this.pathname,
                 query: this.queryString
-            };
-
-            var input = new mock.Stream(this.content);
-            input.pause();
-
-            return link.envFor(uri, {
+            }, {
                 protocolVersion: this.protocolVersion,
                 method: this.requestMethod,
                 headers: {
