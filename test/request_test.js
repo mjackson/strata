@@ -1,38 +1,41 @@
 var assert = require("assert"),
     vows = require("vows"),
-    mock = require("./../lib/link/mock"),
-    Request = require("./../lib/link/request");
+    qs = require("querystring"),
+    Request = require("./../lib/link/request"),
+    mock = require("./../lib/link/mock");
 
 vows.describe("request").addBatch({
     "A Request": {
         "with cookies": {
             topic: function () {
+                this.cookie = "a=1, a=2,b=3";
+
                 var self = this;
                 mock.request(null, {
                     headers: {
-                        "Cookie": "a=1, a=2,b=3"
+                        "Cookie": this.cookie
                     }
-                }, function (env) {
+                }, function (env, callback) {
                     var req = new Request(env);
                     req.cookies(self.callback);
                 });
             },
-            "should parse correctly": function (cookies) {
-                assert.equal("1", cookies.a);
-                assert.equal("3", cookies.b);
+            "should parse them correctly": function (cookies) {
+                assert.deepEqual(cookies, {a: "1", b: "3"});
             }
         },
-        "with a query": {
+        "with a query string": {
             topic: function () {
+                this.query = "a=1&a=2&b=3";
+
                 var self = this;
-                mock.request("/?a=1&a=2&b=3", null, function (env) {
+                mock.request("/?" + this.query, null, function (env, callback) {
                     var req = new Request(env);
                     req.query(self.callback);
                 });
             },
-            "should parse correctly": function (query) {
-                assert.deepEqual(["1", "2"], query.a);
-                assert.equal("3", query.b);
+            "should parse it correctly": function (query) {
+                assert.deepEqual(query, qs.parse(this.query));
             }
         },
         "with a text/plain body": {
@@ -49,13 +52,13 @@ vows.describe("request").addBatch({
                         "Content-Length": this.body.length.toString(10)
                     },
                     input: input
-                }, function (env) {
+                }, function (env, callback) {
                     var req = new Request(env);
                     req.body(self.callback);
                 });
             },
             "should pass through unparsed": function (body) {
-                assert.equal(this.body, body);
+                assert.equal(body, this.body);
             }
         },
         "with an application/x-www-form-urlencoded body": {
@@ -72,23 +75,19 @@ vows.describe("request").addBatch({
                         "Content-Length": this.body.length.toString(10)
                     },
                     input: input
-                }, function (env) {
+                }, function (env, callback) {
                     var req = new Request(env);
                     req.body(self.callback);
                 });
             },
-            "should parse correctly": function (body) {
-                assert.deepEqual(["1", "2"], body.a);
+            "should parse it correctly": function (body) {
+                assert.deepEqual(body, qs.parse(this.body));
             }
         },
         "with a multipart/form-data body": {
             topic: function () {
                 var body = '--AaB03x\r\n\
 Content-Disposition: form-data; name="a"\r\n\
-\r\n\
-1\r\n\
---AaB03x\r\n\
-Content-Disposition: form-data; name="b"\r\n\
 \r\n\
 hello world\r\n\
 --AaB03x--\r';
@@ -103,14 +102,36 @@ hello world\r\n\
                         "Content-Length": body.length.toString(10)
                     },
                     input: input
-                }, function (env) {
+                }, function (env, callback) {
                     var req = new Request(env);
                     req.body(self.callback);
                 });
             },
-            "should parse correctly": function (body) {
-                assert.equal("1", body.a);
-                assert.equal("hello world", body.b);
+            "should parse it correctly": function (body) {
+                assert.equal(body.a, "hello world");
+            }
+        },
+        "with an application/json body": {
+            topic: function () {
+                this.body = '{"a": 1, "b": 2}';
+
+                var input = new mock.Stream(this.body);
+                input.pause();
+
+                var self = this;
+                mock.request(null, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Content-Length": this.body.length.toString(10)
+                    },
+                    input: input
+                }, function (env, callback) {
+                    var req = new Request(env);
+                    req.body(self.callback);
+                });
+            },
+            "should parse it correctly": function (body) {
+                assert.deepEqual(body, JSON.parse(this.body));
             }
         }
     }
