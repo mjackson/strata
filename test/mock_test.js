@@ -1,6 +1,5 @@
 var assert = require("assert"),
     vows = require("vows"),
-    link = require("./../lib/link"),
     mock = require("./../lib/link/mock");
 
 vows.describe("mock").addBatch({
@@ -46,6 +45,33 @@ vows.describe("mock").addBatch({
                 });
             },
             "should emit its contents as strings": function (content) {
+                assert.equal(content, this.content);
+            }
+        },
+        "that is paused": {
+            topic: function () {
+                this.content = "hello world!";
+
+                var stream = new mock.Stream(this.content),
+                    content = "",
+                    self = this;
+
+                stream.pause();
+
+                stream.on("data", function (buffer) {
+                    assert.ok(buffer instanceof Buffer);
+                    content += buffer.toString("utf8");
+                });
+
+                stream.on("end", function () {
+                    self.callback(null, content);
+                });
+
+                setTimeout(function () {
+                    stream.resume();
+                }, 10);
+            },
+            "should emit its contents when resumed": function (content) {
                 assert.equal(content, this.content);
             }
         }
