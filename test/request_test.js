@@ -16,10 +16,12 @@ vows.describe("request").addBatch({
             this.contentType = 'text/html; charset="utf-8"';
             this.contentLength = "0";
             this.userAgent = "test";
+            this.referrer = "http://example.com/phony";
             this.headers = {
                 "Content-Type": this.contentType,
                 "Content-Length": this.contentLength,
                 "User-Agent": this.userAgent,
+                "Referer": this.referrer,
                 "X-Requested-With": "XMLHttpRequest"
             };
 
@@ -36,7 +38,7 @@ vows.describe("request").addBatch({
 
             var req = new Request(env);
 
-            this.callback(null, req);
+            return req;
         },
         "should know its protocol": function (req) {
             assert.equal(req.protocol, this.protocol);
@@ -51,22 +53,31 @@ vows.describe("request").addBatch({
             assert.equal(req.scriptName, "");
         },
         "should be able to modify its script name": function (req) {
+            var old = req.scriptName;
             req.scriptName = "/another/path";
             assert.equal(req.scriptName, "/another/path");
+            req.scriptName = old;
+            assert.equal(req.scriptName, old);
         },
         "should know its path info": function (req) {
             assert.equal(req.pathInfo, this.pathname);
         },
         "should be able to modify its path info": function (req) {
+            var old = req.pathInfo;
             req.pathInfo = "/another/path";
             assert.equal(req.pathInfo, "/another/path");
+            req.pathInfo = old;
+            assert.equal(req.pathInfo, old);
         },
         "should know its query string": function (req) {
             assert.equal(req.queryString, this.query);
         },
         "should be able to modify its query string": function (req) {
+            var old = req.queryString;
             req.queryString = "a=2";
             assert.equal(req.queryString, "a=2");
+            req.queryString = old;
+            assert.equal(req.queryString, old);
         },
         "should know its content type": function (req) {
             assert.equal(req.contentType, this.contentType);
@@ -80,11 +91,60 @@ vows.describe("request").addBatch({
         "should know its user agent": function (req) {
             assert.equal(req.userAgent, this.userAgent);
         },
+        "should know its referrer": function (req) {
+            assert.equal(req.referrer, this.referrer);
+        },
         "should know if it is secure": function (req) {
             assert.ok(req.ssl);
         },
         "should know if it was made via XMLHttpRequest": function (req) {
             assert.ok(req.xhr);
+        },
+        "should know its host/port": function (req) {
+            assert.equal(req.hostWithPort, this.hostname + ":443");
+        },
+        "should know its host": function (req) {
+            assert.equal(req.host, this.hostname);
+        },
+        "should know its port": function (req) {
+            assert.equal(req.port, "443");
+        },
+        "should know its base URL": function (req) {
+            assert.equal(req.baseUrl, this.protocol + "//" + this.hostname);
+        },
+        "should know its path": function (req) {
+            assert.equal(req.path, this.pathname);
+        },
+        "should know its full path": function (req) {
+            assert.equal(req.fullPath, this.pathname + "?" + this.query);
+        },
+        "should know its URL": function (req) {
+            assert.equal(req.url, this.protocol + "//" + this.hostname + this.pathname + "?" + this.query);
+        },
+        "behind a reverse HTTP proxy": {
+            topic: function () {
+                this.headers = {
+                    "X-Forwarded-Ssl": "on",
+                    "X-Forwarded-Host": this.hostname
+                };
+
+                var env = mock.env("", {
+                    headers: this.headers
+                });
+
+                var req = new Request(env);
+
+                return req;
+            },
+            "should know its protocol": function (req) {
+                assert.equal(req.protocol, this.protocol);
+            },
+            "should know its host": function (req) {
+                assert.equal(req.host, this.hostname);
+            },
+            "should know its port": function (req) {
+                assert.equal(req.port, "443");
+            }
         },
         "with cookies": {
             topic: function () {
@@ -212,6 +272,37 @@ hello world\r\n\
             },
             "should parse it correctly": function (body) {
                 assert.deepEqual(body, JSON.parse(this.body));
+            }
+        },
+        "with a query string and a form-data body": {
+            topic: function () {
+                this.query = "a=1&a=2&b=3";
+
+                var body = '--AaB03x\r\n\
+Content-Disposition: form-data; name="a"\r\n\
+\r\n\
+hello world\r\n\
+--AaB03x--\r';
+
+                var input = new mock.Stream(body);
+                input.pause();
+
+                var self = this;
+                mock.request("/?" + this.query, {
+                    headers: {
+                        "Content-Type": 'multipart/form-data; boundary="AaB03x"',
+                        "Content-Length": body.length.toString(10)
+                    },
+                    input: input
+                }, function (env, callback) {
+                    var req = new Request(env);
+                    req.params(self.callback);
+                });
+            },
+            "should parse all params correctly": function (params) {
+                // The "a" parameter in the body should overwrite the value
+                // of the parameter with the same name in the query string.
+                assert.deepEqual(params, {a: "hello world", b: "3"});
             }
         }
     }
