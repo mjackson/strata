@@ -3,28 +3,35 @@ var assert = require("assert"),
     utils = require("./../lib/link/utils");
 
 vows.describe("utils").addBatch({
-    'An "Accept" header': headerContext("Accept", "Accept", "Accept", "httpAccept"),
-    'An "accept" header': headerContext("accept", "Accept", "Accept", "httpAccept"),
-    'A "Content-Type" header': headerContext("Content-Type", "Content-Type", "ContentType", "httpContentType"),
-    'A "content-type" header': headerContext("content-type", "Content-Type", "ContentType", "httpContentType"),
-    'An "X-Requested-With" header': headerContext("X-Requested-With", "X-Requested-With", "XRequestedWith", "httpXRequestedWith"),
-    'An "x-requested-with" header': headerContext("x-requested-with", "X-Requested-With", "XRequestedWith", "httpXRequestedWith"),
-    'An "X-Forwarded-SSL" header': headerContext("X-Forwarded-SSL", "X-Forwarded-Ssl", "XForwardedSsl", "httpXForwardedSsl"),
-    'An "x-forwarded-ssl" header': headerContext("x-forwarded-ssl", "X-Forwarded-Ssl", "XForwardedSsl", "httpXForwardedSsl")
+    'An "Accept" header': headerConversionContext("Accept", "accept", "Accept", "Accept", "httpAccept"),
+    'An "accept" header': headerConversionContext("accept", "accept", "Accept", "Accept", "httpAccept"),
+    'A "Content-Type" header': headerConversionContext("Content-Type", "content-type", "Content-Type", "ContentType", "httpContentType"),
+    'A "content-type" header': headerConversionContext("content-type", "content-type", "Content-Type", "ContentType", "httpContentType"),
+    'An "X-Forwarded-Ssl" header': headerConversionContext("X-Forwarded-Ssl", "x-forwarded-ssl", "X-Forwarded-Ssl", "XForwardedSsl", "httpXForwardedSsl"),
+    'An "x-forwarded-ssl" header': headerConversionContext("x-forwarded-ssl", "x-forwarded-ssl", "X-Forwarded-Ssl", "XForwardedSsl", "httpXForwardedSsl")
 }).export(module);
 
-function headerContext(header, canonicalName, capitalizedName, propertyName) {
+function headerConversionContext(header, normalized, canonical, capitalized, property) {
     var context = {};
 
     context.topic = header;
+
+    context["should be converted to the proper normalized name"] = function (header) {
+        assert.equal(utils.normalizedHeaderName(header), normalized);
+    }
     context["should be converted to the proper canonical name"] = function (header) {
-        assert.equal(utils.canonicalHeaderName(header), canonicalName);
+        assert.equal(utils.canonicalHeaderName(header), canonical);
     }
     context["should be converted to the proper capitalized name"] = function (header) {
-        assert.equal(utils.capitalizedHeaderName(header), capitalizedName);
+        assert.equal(utils.capitalizedHeaderName(header), capitalized);
     }
     context["should be converted to the proper http* property name"] = function (header) {
-        assert.equal(utils.httpPropertyName(header), propertyName);
+        assert.equal(utils.httpPropertyName(header), property);
+    }
+    context["should be converted to the proper reverse http* property name"] = function (header) {
+        var pName = utils.httpPropertyName(header);
+        assert.equal(pName, property);
+        assert.equal(utils.reverseHttpPropertyName(pName), normalized);
     }
 
     return context;
