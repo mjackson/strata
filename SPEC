@@ -63,10 +63,9 @@ There are the following restrictions:
 
   - protocol must be either "http:" or "https:"
   - requestMethod must be a valid HTTP verb as an uppercase String
-  - scriptName, if not empty, should start with a "/"
-  - pathInfo, if not empty, should start with a "/"
-  - pathInfo should be "/" if scriptName is empty
+  - scriptName and pathInfo, if not empty, should start with a "/"
   - scriptName should never be "/" but instead be empty
+  - pathInfo should be "/" if scriptName is empty
   - contentLength, if given, must consist of digits only
   - link.version must be an array of integers [major, minor, patch]
   - link.input must be an EventEmitter of data contained in the request body
