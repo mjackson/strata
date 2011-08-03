@@ -8,11 +8,11 @@ vows.describe("request").addBatch({
     "A Request": {
         topic: function () {
             this.protocol = "https:";
-            this.hostname = "example.org";
-            this.pathname = "/some/path";
-            this.query = "a=1&b=hello%20world";
             this.protocolVersion = "1.1";
-            this.method = "POST";
+            this.requestMethod = "POST";
+            this.serverName = "example.org";
+            this.pathInfo = "/some/path";
+            this.queryString = "a=1&b=hello%20world";
             this.contentType = 'text/html; charset="utf-8"';
             this.contentLength = "0";
             this.userAgent = "test";
@@ -27,12 +27,11 @@ vows.describe("request").addBatch({
 
             var env = mock.env({
                 protocol: this.protocol,
-                hostname: this.hostname,
-                pathname: this.pathname,
-                query: this.query
-            }, {
                 protocolVersion: this.protocolVersion,
-                method: this.method,
+                requestMethod: this.requestMethod,
+                serverName: this.serverName,
+                pathInfo: this.pathInfo,
+                queryString: this.queryString,
                 headers: this.headers
             });
 
@@ -47,7 +46,7 @@ vows.describe("request").addBatch({
             assert.equal(req.protocolVersion, this.protocolVersion);
         },
         "should know its method": function (req) {
-            assert.equal(req.method, this.method);
+            assert.equal(req.method, this.requestMethod);
         },
         "should know its script name": function (req) {
             assert.equal(req.scriptName, "");
@@ -60,7 +59,7 @@ vows.describe("request").addBatch({
             assert.equal(req.scriptName, old);
         },
         "should know its path info": function (req) {
-            assert.equal(req.pathInfo, this.pathname);
+            assert.equal(req.pathInfo, this.pathInfo);
         },
         "should be able to modify its path info": function (req) {
             var old = req.pathInfo;
@@ -70,7 +69,7 @@ vows.describe("request").addBatch({
             assert.equal(req.pathInfo, old);
         },
         "should know its query string": function (req) {
-            assert.equal(req.queryString, this.query);
+            assert.equal(req.queryString, this.queryString);
         },
         "should be able to modify its query string": function (req) {
             var old = req.queryString;
@@ -101,37 +100,34 @@ vows.describe("request").addBatch({
             assert.ok(req.xhr);
         },
         "should know its host/port": function (req) {
-            assert.equal(req.hostWithPort, this.hostname + ":443");
+            assert.equal(req.hostWithPort, this.serverName + ":443");
         },
         "should know its host": function (req) {
-            assert.equal(req.host, this.hostname);
+            assert.equal(req.host, this.serverName);
         },
         "should know its port": function (req) {
             assert.equal(req.port, "443");
         },
         "should know its base URL": function (req) {
-            assert.equal(req.baseUrl, this.protocol + "//" + this.hostname);
+            assert.equal(req.baseUrl, this.protocol + "//" + this.serverName);
         },
         "should know its path": function (req) {
-            assert.equal(req.path, this.pathname);
+            assert.equal(req.path, this.pathInfo);
         },
         "should know its full path": function (req) {
-            assert.equal(req.fullPath, this.pathname + "?" + this.query);
+            assert.equal(req.fullPath, this.pathInfo + "?" + this.queryString);
         },
         "should know its URL": function (req) {
-            assert.equal(req.url, this.protocol + "//" + this.hostname + this.pathname + "?" + this.query);
+            assert.equal(req.url, this.protocol + "//" + this.serverName + this.pathInfo + "?" + this.queryString);
         },
         "behind a reverse HTTP proxy": {
             topic: function () {
                 this.headers = {
                     "X-Forwarded-Ssl": "on",
-                    "X-Forwarded-Host": this.hostname
+                    "X-Forwarded-Host": this.serverName
                 };
 
-                var env = mock.env("", {
-                    headers: this.headers
-                });
-
+                var env = mock.env({headers: this.headers});
                 var req = new Request(env);
 
                 return req;
@@ -140,7 +136,7 @@ vows.describe("request").addBatch({
                 assert.equal(req.protocol, this.protocol);
             },
             "should know its host": function (req) {
-                assert.equal(req.host, this.hostname);
+                assert.equal(req.host, this.serverName);
             },
             "should know its port": function (req) {
                 assert.equal(req.port, "443");
@@ -151,7 +147,7 @@ vows.describe("request").addBatch({
                 this.cookie = "a=1, a=2,b=3";
 
                 var self = this;
-                mock.request(null, {
+                mock.request({
                     headers: {
                         "Cookie": this.cookie
                     }
@@ -166,16 +162,16 @@ vows.describe("request").addBatch({
         },
         "with a query string": {
             topic: function () {
-                this.query = "a=1&a=2&b=3";
+                this.queryString = "a=1&a=2&b=3";
 
                 var self = this;
-                mock.request("/?" + this.query, null, function (env, callback) {
+                mock.request("/?" + this.queryString, function (env, callback) {
                     var req = new Request(env);
                     req.query(self.callback);
                 });
             },
             "should parse it correctly": function (query) {
-                assert.deepEqual(query, qs.parse(this.query));
+                assert.deepEqual(query, qs.parse(this.queryString));
             }
         },
         "with a text/plain body": {
@@ -186,7 +182,7 @@ vows.describe("request").addBatch({
                 input.pause();
 
                 var self = this;
-                mock.request(null, {
+                mock.request({
                     headers: {
                         "Content-Type": "text/plain",
                         "Content-Length": this.body.length.toString(10)
@@ -209,7 +205,7 @@ vows.describe("request").addBatch({
                 input.pause();
 
                 var self = this;
-                mock.request(null, {
+                mock.request({
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
                         "Content-Length": this.body.length.toString(10)
@@ -236,7 +232,7 @@ hello world\r\n\
                 input.pause();
 
                 var self = this;
-                mock.request(null, {
+                mock.request({
                     headers: {
                         "Content-Type": 'multipart/form-data; boundary="AaB03x"',
                         "Content-Length": body.length.toString(10)
@@ -259,7 +255,7 @@ hello world\r\n\
                 input.pause();
 
                 var self = this;
-                mock.request(null, {
+                mock.request({
                     headers: {
                         "Content-Type": "application/json",
                         "Content-Length": this.body.length.toString(10)
@@ -276,7 +272,7 @@ hello world\r\n\
         },
         "with a query string and a form-data body": {
             topic: function () {
-                this.query = "a=1&a=2&b=3";
+                this.queryString = "a=1&a=2&b=3";
 
                 var body = '--AaB03x\r\n\
 Content-Disposition: form-data; name="a"\r\n\
@@ -288,7 +284,9 @@ hello world\r\n\
                 input.pause();
 
                 var self = this;
-                mock.request("/?" + this.query, {
+                mock.request({
+                    pathInfo: "/",
+                    queryString: this.queryString,
                     headers: {
                         "Content-Type": 'multipart/form-data; boundary="AaB03x"',
                         "Content-Length": body.length.toString(10)

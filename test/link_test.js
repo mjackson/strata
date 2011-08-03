@@ -10,9 +10,9 @@ vows.describe("link").addBatch({
             this.protocol = "https:";
             this.protocolVersion = "1.1";
             this.requestMethod = "POST";
-            this.hostname = "example.org";
-            this.port = "443";
-            this.pathname = "/some/path";
+            this.serverName = "example.org";
+            this.serverPort = "443";
+            this.pathInfo = "/some/path";
             this.queryString = "a=1&b=2";
             this.userAgent = "test suite";
             this.content = "hello world!";
@@ -23,15 +23,14 @@ vows.describe("link").addBatch({
 
             return link.env({
                 protocol: this.protocol,
-                hostname: this.hostname,
-                port: this.port,
-                pathname: this.pathname,
-                query: this.queryString
-            }, {
                 protocolVersion: this.protocolVersion,
-                method: this.requestMethod,
+                requestMethod: this.requestMethod,
+                serverName: this.serverName,
+                serverPort: this.serverPort,
+                pathInfo: this.pathInfo,
+                queryString: this.queryString,
                 headers: {
-                    "Host": this.hostname,
+                    "Host": this.serverName,
                     "User-Agent": this.userAgent,
                     "Content-Length": this.contentLength
                 },
@@ -48,22 +47,22 @@ vows.describe("link").addBatch({
             assert.equal(env.requestMethod, this.requestMethod);
         },
         "should have the correct serverName": function (env) {
-            assert.equal(env.serverName, this.hostname);
+            assert.equal(env.serverName, this.serverName);
         },
         "should have the correct serverPort": function (env) {
-            assert.equal(env.serverPort, this.port);
+            assert.equal(env.serverPort, this.serverPort);
         },
         "should have an empty scriptName": function (env) {
             assert.equal(env.scriptName, "");
         },
         "should have the correct pathInfo": function (env) {
-            assert.equal(env.pathInfo, this.pathname);
+            assert.equal(env.pathInfo, this.pathInfo);
         },
         "should have the correct queryString": function (env) {
             assert.equal(env.queryString, this.queryString);
         },
         "should have the correct headers": function (env) {
-            assert.equal(env.httpHost, this.hostname);
+            assert.equal(env.httpHost, this.serverName);
             assert.equal(env.httpUserAgent, this.userAgent);
         },
         "should not have an httpContentLength property": function (env) {

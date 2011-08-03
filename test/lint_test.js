@@ -70,7 +70,7 @@ vows.describe("lint").addBatch({
             }, /protocol must be/);
 
             assert.throws(function () {
-                var env = mock.env({}, {method: "123"});
+                var env = mock.env({requestMethod: "123"});
                 app(env, function (status, headers, body) {});
             }, /method must be/);
 
@@ -81,14 +81,12 @@ vows.describe("lint").addBatch({
             }, /scriptName must start with "\/"/);
 
             assert.throws(function () {
-                var env = mock.env();
-                env.scriptName = "/";
+                var env = mock.env({scriptName: "/"});
                 app(env, function (status, headers, body) {});
             }, /scriptName cannot be "\/"/);
 
             assert.throws(function () {
-                var env = mock.env();
-                env.pathInfo = "some/path";
+                var env = mock.env({pathInfo: "some/path"});
                 app(env, function (status, headers, body) {});
             }, /pathInfo must start with "\/"/);
 

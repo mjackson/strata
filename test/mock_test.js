@@ -79,7 +79,7 @@ vows.describe("mock").addBatch({
     "A mock request to mock.empty": {
         topic: function () {
             var self = this;
-            mock.request(null, null, mock.empty, function (status, headers, body) {
+            mock.request(null, mock.empty, function (status, headers, body) {
                 self.callback(null, status, headers, body);
             });
         },
