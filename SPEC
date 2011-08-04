@@ -1,7 +1,7 @@
 This specification aims to formalize the Link protocol for building web
 applications using the Node.js JavaScript platform. You can (and should) use
-the lint middleware to enforce it. When you develop middleware, be sure to add
-a lint before and after to catch all mistakes.
+the link.lint middleware to enforce it. When you develop middleware, be sure to
+add a link.lint before and after to catch all mistakes.
 
 = Link Applications
 
@@ -93,12 +93,12 @@ Header names may contain only letters, digits, "-", and "_" and must start with
 a letter and must not end with a "-" or "_". If more than one value for a header
 is required, the value for that property must be an array.
 
-=== The Content-Type
+==== The Content-Type
 
 There must be a Content-Type header, except for when the status is 1xx, 204, or
 304, in which case there must be none given.
 
-=== The Content-Length
+==== The Content-Length
 
 There must not be a Content-Length header when the status is 1xx, 204, or 304,
 or it must be "0".
