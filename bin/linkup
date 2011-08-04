@@ -1,3 +1,122 @@
 #!/usr/bin/env node
 
+var fs = require("fs"),
+    path = require("path"),
+    link = require("./../lib/link");
 
+var addr, cert, file, key, port = 1982, socket;
+
+var exit = false,
+    arg;
+
+for (var i = 2; i < process.argv.length; ++i) {
+    if (exit) {
+        break;
+    }
+
+    arg = process.argv[i];
+
+    function nextArg() {
+        var next = process.argv[++i];
+        if (!next) {
+            printUsage();
+            exit = true;
+        }
+        return next;
+    }
+
+    switch (arg) {
+    case "-a":
+    case "--address":
+        addr = nextArg();
+        break;
+    case "-c":
+    case "--cert":
+        cert = nextArg();
+        break;
+    case "-f":
+    case "--file":
+        file = nextArg();
+        break;
+    case "-h":
+    case "--help":
+        printUsage();
+        exit = true;
+        break;
+    case "-k":
+    case "--key":
+        key = nextArg();
+        break;
+    case "-p":
+    case "--port":
+        port = nextArg();
+        break;
+    case "-s":
+    case "--socket":
+        socket = nextArg();
+        break;
+    case "-v":
+    case "--version":
+        console.log(link.version.join("."));
+        exit = true;
+        break;
+    }
+}
+
+if (!exit) {
+    file = file || path.join(process.env.PWD, "app.lu");
+
+    if (path.existsSync(file)) {
+        var app = link.Builder.fromFile(file);
+
+        if (app) {
+            var options;
+            if (key && certificate) {
+                options = {
+                    key: fs.readFileSync(key),
+                    cert: fs.readFileSync(cert)
+                };
+            }
+
+            var server = link.createServer(app, options);
+
+            if (socket) {
+                server.listen(socket, function () {
+                    var a = server.address();
+                    console.log("Link server started at %s", a.address);
+                })
+            } else {
+                server.listen(port, addr, function () {
+                    var a = server.address();
+                    console.log("Link server started at %s:%s", a.address, a.port);
+                });
+            }
+        } else {
+            console.log("Error: Invalid app in file " + file);
+        }
+    } else {
+        console.log("Error: File " + file + " does not exist");
+    }
+}
+
+function printUsage() {
+    var s = [];
+
+    s.push("linkup v. " + link.version.join("."));
+    s.push("");
+    s.push("Usage: linkup [options]");
+    s.push("Options:");
+    s.push("  -a, --address   The address to bind to (defaults to INADDR_ANY)");
+    s.push("  -c, --cert      The name of the public key certificate file");
+    s.push("                  (HTTPS only)");
+    s.push("  -f, --file      The name of the linkup file to use (defaults to");
+    s.push("                  $PWD/app.lu)");
+    s.push("  -h, --help      Show this help message and exit");
+    s.push("  -k, --key       The name of the private key file (HTTPS only)");
+    s.push("  -p, --port      The port number to listen on (defaults to 1982)");
+    s.push("  -s, --socket    The unix socket to listen to. If this is given");
+    s.push("                  the -a and -p options are ignored.");
+    s.push("  -v, --version   Show the current version of Link and exit");
+
+    console.log(s);
+}
