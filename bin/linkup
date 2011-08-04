@@ -103,7 +103,6 @@ function printUsage() {
     var s = [];
 
     s.push("linkup v. " + link.version.join("."));
-    s.push("");
     s.push("Usage: linkup [options]");
     s.push("Options:");
     s.push("  -a, --address   The address to bind to (defaults to INADDR_ANY)");
@@ -118,5 +117,5 @@ function printUsage() {
     s.push("                  the -a and -p options are ignored.");
     s.push("  -v, --version   Show the current version of Link and exit");
 
-    console.log(s);
+    console.log(s.join("\n"));
 }
