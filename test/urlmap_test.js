@@ -4,7 +4,7 @@ var assert = require("assert"),
     mock = require("./../lib/link/mock");
 
 vows.describe("urlmap").addBatch({
-    "A urlMap": {
+    "A urlMap middleware": {
         "should dispatch paths correctly": function (map) {
             var app = function (env, callback) {
                 callback(200, {

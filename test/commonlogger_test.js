@@ -4,7 +4,7 @@ var assert = require("assert"),
     commonLogger = require("./../lib/link/commonlogger");
 
 vows.describe("commonlogger").addBatch({
-    "A commonLogger": {
+    "A commonLogger middleware": {
         topic: function () {
             this.output = "";
 

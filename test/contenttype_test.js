@@ -4,7 +4,7 @@ var assert = require("assert"),
     contentType = require("./../lib/link/contenttype");
 
 vows.describe("contenttype").addBatch({
-    "A contentType": {
+    "A contentType middleware": {
         "should automatically add a Content-Type header": function () {
             var type = "text/plain";
             var app = function (env, callback) {

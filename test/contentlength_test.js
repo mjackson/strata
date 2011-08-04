@@ -4,7 +4,7 @@ var assert = require("assert"),
     contentLength = require("./../lib/link/contentlength");
 
 vows.describe("contentlength").addBatch({
-    "A contentLength": {
+    "A contentLength middleware": {
         "should automatically add a Content-Length header": function () {
             var body = "Hello world!";
             var app = function (env, callback) {
