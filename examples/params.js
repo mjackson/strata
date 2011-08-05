@@ -1,5 +1,9 @@
 var link = require("./../lib/link");
 
+/**
+ * This app simply packages up the request parameters into a JSON object and
+ * sends them back in the response body.
+ */
 module.exports = function (env, callback) {
     var req = new link.Request(env);
 

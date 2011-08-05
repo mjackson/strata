@@ -127,6 +127,13 @@ nested. Using this mechanism, higher level errors can keep a reference to the
 lower level errors that caused them. This can be useful in a stack trace to see
 detailed information about each level of the stack trace.
 
+= Examples
+
+A number of examples are included in the examples directory in the root of the
+project source code. You can run any of these examples using the linkup command:
+
+  $ ./bin/linkup examples/hello.js
+
 = Tests
 
 To run the tests, first install vows:
