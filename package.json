@@ -1,8 +1,17 @@
 {
     "name": "link",
-    "description": "A modular web server interface for Node.js",
-    "version": "0.1.0",
-    "engines": ["0.5.0"],
+    "version": "0.1.1",
+    "description": "A modular web server interface",
+    "keywords": ["web", "server", "middleware", "rack", "jsgi", "wsgi"],
+    "engines": ["node >=0.5.0"],
     "author": "Michael Jackson <mjijackson@gmail.com>",
-    "repository": "git://github.com/mjijackson/link.git"
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/mjijackson/link.git"
+    },
+    "devDependencies": {
+        "vows": "0.5.9"
+    },
+    "main": "lib/link",
+    "bin": "./bin/linkup"
 }
