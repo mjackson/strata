@@ -129,10 +129,10 @@ detailed information about each level of the stack trace.
 
 = Examples
 
-A number of examples are included in the examples directory in the root of the
-project source code. You can run any of these examples using the linkup command:
+A number of examples are included in the example directory in the root of the
+project. You can run any of these examples using the linkup command:
 
-  $ ./bin/linkup examples/hello.js
+  $ ./bin/linkup example/hello.js
 
 = Tests
 
