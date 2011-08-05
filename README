@@ -152,8 +152,11 @@ Otherwise, run the tests for a specific module with:
 
 Link was inspired by similar efforts in the Python and Ruby communities, namely
 WSGI and Rack. It borrows many code patterns from these libraries, as well as
-the JSGI project. Link's multipart parser is based on the fast parser in the
-node-formidable project.
+the JSGI project.
+
+Link's multipart parser is based on the fast parser in the node-formidable
+project written by Felix Geisendörfer. It is included in Link under the terms of
+the MIT license.
 
 My sincere thanks to the authors of each of these libraries for the excellent
 work they've done and graciously shared.
