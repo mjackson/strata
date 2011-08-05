@@ -52,19 +52,6 @@ vows.describe("builder").addBatch({
             });
 
             mock.request("/", app, function (status, headers, body) {});
-        },
-        "should be able to build an app from a file": function () {
-            var file = path.join(__dirname, "_files/app.lu");
-            var app = Builder.fromFile(file);
-
-            mock.request("/", app, function (status, headers, body) {
-                assert.equal(status, 200);
-                assert.equal(headers["X-Position"], "root");
-            });
-            mock.request("/path", app, function (status, headers, body) {
-                assert.equal(status, 200);
-                assert.equal(headers["X-Position"], "path");
-            });
         }
     }
 }).export(module);

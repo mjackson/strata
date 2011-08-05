@@ -4,7 +4,12 @@ var fs = require("fs"),
     path = require("path"),
     link = require("./../lib/link");
 
-var addr, cert, file, key, port = 1982, socket;
+var addr,
+    cert,
+    appfile = path.resolve("./app.js"),
+    key,
+    port = 1982,
+    socket;
 
 var exit = false,
     arg;
@@ -34,10 +39,6 @@ for (var i = 2; i < process.argv.length; ++i) {
     case "--cert":
         cert = nextArg();
         break;
-    case "-f":
-    case "--file":
-        file = nextArg();
-        break;
     case "-h":
     case "--help":
         printUsage();
@@ -60,42 +61,40 @@ for (var i = 2; i < process.argv.length; ++i) {
         console.log(link.version.join("."));
         exit = true;
         break;
+    default:
+        appfile = path.resolve(arg);
     }
 }
 
 if (!exit) {
-    file = file || path.join(process.env.PWD, "app.lu");
+    if (path.existsSync(appfile)) {
+        var ext = path.extname(appfile);
+        var file = appfile.substring(0, appfile.length - ext.length);
+        var app = require(file);
 
-    if (path.existsSync(file)) {
-        var app = link.Builder.fromFile(file);
+        var options;
+        if (key && cert) {
+            options = {
+                key: fs.readFileSync(key),
+                cert: fs.readFileSync(cert)
+            };
+        }
 
-        if (app) {
-            var options;
-            if (key && certificate) {
-                options = {
-                    key: fs.readFileSync(key),
-                    cert: fs.readFileSync(cert)
-                };
-            }
+        var server = link.createServer(app, options);
 
-            var server = link.createServer(app, options);
-
-            if (socket) {
-                server.listen(socket, function () {
-                    var a = server.address();
-                    console.log("Link server started at %s", a.address);
-                })
-            } else {
-                server.listen(port, addr, function () {
-                    var a = server.address();
-                    console.log("Link server started at %s:%s", a.address, a.port);
-                });
-            }
+        if (socket) {
+            server.listen(socket, function () {
+                var a = server.address();
+                console.log("Link server started at %s", a.address);
+            })
         } else {
-            console.log("Error: Invalid app in file " + file);
+            server.listen(port, addr, function () {
+                var a = server.address();
+                console.log("Link server started at %s:%s", a.address, a.port);
+            });
         }
     } else {
-        console.log("Error: File " + file + " does not exist");
+        throw new link.Error("File " + appfile + " does not exist");
     }
 }
 
@@ -103,13 +102,15 @@ function printUsage() {
     var s = [];
 
     s.push("linkup v. " + link.version.join("."));
-    s.push("Usage: linkup [options]");
+    s.push("Usage: linkup [options] [appfile]");
+    s.push("");
+    s.push("  Starts the Link application contained in the given appfile. If");
+    s.push("  none is given, will use the file at $PWD/app.lu.");
+    s.push("");
     s.push("Options:");
     s.push("  -a, --address   The address to bind to (defaults to INADDR_ANY)");
     s.push("  -c, --cert      The name of the public key certificate file");
     s.push("                  (HTTPS only)");
-    s.push("  -f, --file      The name of the linkup file to use (defaults to");
-    s.push("                  $PWD/app.lu)");
     s.push("  -h, --help      Show this help message and exit");
     s.push("  -k, --key       The name of the private key file (HTTPS only)");
     s.push("  -p, --port      The port number to listen on (defaults to 1982)");
