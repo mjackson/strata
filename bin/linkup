@@ -105,7 +105,7 @@ function printUsage() {
     s.push("Usage: linkup [options] [appfile]");
     s.push("");
     s.push("  Starts the Link application contained in the given appfile. If");
-    s.push("  none is given, will use the file at $PWD/app.lu.");
+    s.push("  none is given, will use the file at $PWD/app.js.");
     s.push("");
     s.push("Options:");
     s.push("  -a, --address   The address to bind to (defaults to 0.0.0.0)");
