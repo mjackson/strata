@@ -7,17 +7,18 @@ var assert = require("assert"),
 vows.describe("builder").addBatch({
     "A Builder": {
         "should support mapping": function () {
+            var sync = false;
             var app = new Builder;
 
-            app.map("/", function (app) {
-                app.run(function (env, callback) {
-                    callback(200, {
-                        "Content-Type": "text/plain",
-                        "X-Position": "root"
-                    }, "");
-                });
-            });
             app.map("/sub", function (app) {
+                app.use(function (app) {
+                    return function (env, callback) {
+                        app(env, function (status, headers, body) {
+                            headers["X-Middleware"] = "called";
+                            callback(status, headers, body);
+                        });
+                    }
+                });
                 app.run(function (env, callback) {
                     callback(200, {
                         "Content-Type": "text/plain",
@@ -25,13 +26,23 @@ vows.describe("builder").addBatch({
                     }, "");
                 });
             });
+            app.run(function (env, callback) {
+                callback(200, {
+                    "Content-Type": "text/plain",
+                    "X-Position": "root"
+                }, "");
+            });
 
             mock.request("/", app, function (status, headers, body) {
                 assert.equal(headers["X-Position"], "root");
             });
             mock.request("/sub", app, function (status, headers, body) {
+                sync = true;
                 assert.equal(headers["X-Position"], "sub");
+                assert.equal(headers["X-Middleware"], "called");
             });
+
+            assert.ok(sync);
         },
         "should not dup env when mapping": function () {
             var key = "some_key";
