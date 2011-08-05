@@ -108,7 +108,7 @@ function printUsage() {
     s.push("  none is given, will use the file at $PWD/app.lu.");
     s.push("");
     s.push("Options:");
-    s.push("  -a, --address   The address to bind to (defaults to INADDR_ANY)");
+    s.push("  -a, --address   The address to bind to (defaults to 0.0.0.0)");
     s.push("  -c, --cert      The name of the public key certificate file");
     s.push("                  (HTTPS only)");
     s.push("  -h, --help      Show this help message and exit");
