@@ -1,6 +1,6 @@
 {
     "name": "link",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "description": "A modular web server interface",
     "keywords": ["web", "server", "middleware", "rack", "jsgi", "wsgi"],
     "engines": ["node >=0.5.0"],
