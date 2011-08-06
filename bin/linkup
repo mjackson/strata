@@ -2,7 +2,7 @@
 
 var fs = require("fs"),
     path = require("path"),
-    link = require("./../lib/link");
+    link = require("link");
 
 var addr,
     cert,

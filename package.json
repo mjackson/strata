@@ -13,5 +13,7 @@
         "vows": "0.5.9"
     },
     "main": "lib/link",
-    "bin": "./bin/linkup"
+    "bin": {
+        "linkup": "./bin/linkup"
+    }
 }
