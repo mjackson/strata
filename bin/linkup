@@ -86,7 +86,7 @@ if (!exit) {
             server.listen(socket, function () {
                 var a = server.address();
                 console.log("Link server started at %s", a.address);
-            })
+            });
         } else {
             server.listen(port, addr, function () {
                 var a = server.address();
