@@ -1,10 +1,10 @@
 var assert = require("assert"),
     vows = require("vows"),
-    urlMap = require("./../lib/link/urlmap"),
-    mock = require("./../lib/link/mock");
+    mock = require("./../lib/link/mock"),
+    Mapper = require("./../lib/link/mapper");
 
-vows.describe("urlmap").addBatch({
-    "A urlMap middleware": {
+vows.describe("mapper").addBatch({
+    "A Mapper": {
         "should dispatch paths correctly": function (map) {
             var app = function (env, callback) {
                 callback(200, {
@@ -14,18 +14,18 @@ vows.describe("urlmap").addBatch({
                 }, "");
             }
 
-            var map = urlMap({
+            var map = Mapper.fromMap({
                 "http://example.org/static": app,
                 "/path": app,
                 "/some/path": app
             });
 
             mock.request("/", map, function (status, headers, body) {
-                assert.equal(404, status);
+                assert.equal(status, 404);
             });
 
             mock.request("/foo", map, function (status, headers, body) {
-                assert.equal(404, status);
+                assert.equal(status, 404);
             });
 
             mock.request("/path", map, function (status, headers, body) {
@@ -90,7 +90,7 @@ vows.describe("urlmap").addBatch({
             });
         },
         "should dispatch hosts correctly": function () {
-            var map = urlMap({
+            var map = Mapper.fromMap({
                 "/": function (env, callback) {
                     callback(200, {
                         "Content-Type": "text/plain",
@@ -186,9 +186,9 @@ vows.describe("urlmap").addBatch({
             });
         },
         "should be nestable": function () {
-            var map = urlMap({
-                "/some": urlMap({
-                    "/path": urlMap({
+            var map = Mapper.fromMap({
+                "/some": Mapper.fromMap({
+                    "/path": Mapper.fromMap({
                         "/name": function (env, callback) {
                             callback(200, {
                                 "Content-Type": "text/plain",
@@ -197,8 +197,8 @@ vows.describe("urlmap").addBatch({
                                 "X-PathInfo": env.pathInfo
                             }, "");
                         }
-                    })
-                })
+                    }).toApp()
+                }).toApp()
             });
 
             mock.request("/some/path", map, function (status, headers, body) {
@@ -213,7 +213,7 @@ vows.describe("urlmap").addBatch({
             });
         },
         "should route root apps correctly": function () {
-            var map = urlMap({
+            var map = Mapper.fromMap({
                 "/": function (env, callback) {
                     callback(200, {
                         "Content-Type": "text/plain",
@@ -261,7 +261,7 @@ vows.describe("urlmap").addBatch({
             });
         },
         "should not squeeze slashes": function () {
-            var map = urlMap({
+            var map = Mapper.fromMap({
                 "/": function (env, callback) {
                     callback(200, {
                         "Content-Type": "text/plain",
