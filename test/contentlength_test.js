@@ -1,7 +1,7 @@
 var assert = require("assert"),
     vows = require("vows"),
-    mock = require("./../lib/link/mock"),
-    contentLength = require("./../lib/link/contentlength");
+    mock = require("./../lib/mock"),
+    contentLength = require("./../lib/contentlength");
 
 vows.describe("contentlength").addBatch({
     "A contentLength middleware": {

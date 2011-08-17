@@ -1,6 +1,6 @@
 var assert = require("assert"),
     vows = require("vows"),
-    mime = require("./../lib/link/mime");
+    mime = require("./../lib/mime");
 
 vows.describe("mime").addBatch({
     "A known mime type": {

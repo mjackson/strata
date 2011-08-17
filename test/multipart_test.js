@@ -2,7 +2,7 @@ var assert = require("assert"),
     vows = require("vows"),
     fs = require("fs"),
     path = require("path"),
-    multipart = require("./../lib/link/multipart");
+    multipart = require("./../lib/multipart");
 
 vows.describe("multipart").addBatch({
     "A Parser": {

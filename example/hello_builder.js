@@ -1,4 +1,4 @@
-var link = require("./../lib/link");
+var link = require("./../lib/index");
 
 /**
  * This app is constructed using a link.Builder. It uses several middlewares

@@ -1,6 +1,6 @@
 var assert = require("assert"),
     vows = require("vows"),
-    mock = require("./../lib/link/mock");
+    mock = require("./../lib/mock");
 
 vows.describe("mock").addBatch({
     "A mock Stream": {

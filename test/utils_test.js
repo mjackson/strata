@@ -1,6 +1,6 @@
 var assert = require("assert"),
     vows = require("vows"),
-    utils = require("./../lib/link/utils");
+    utils = require("./../lib/utils");
 
 vows.describe("utils").addBatch({
     'An "Accept" header': headerConversionContext("Accept", "accept", "Accept", "Accept", "httpAccept"),

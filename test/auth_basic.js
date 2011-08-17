@@ -1,7 +1,7 @@
 var assert = require("assert"),
     vows = require("vows"),
-    mock = require("./../lib/link/mock"),
-    authBasic = require("./../lib/link/auth/basic");
+    mock = require("./../lib/mock"),
+    authBasic = require("./../lib/auth/basic");
 
 vows.describe("auth_basic").addBatch({
     "An authBasic middleware": {

@@ -1,8 +1,8 @@
 var assert = require("assert"),
     vows = require("vows"),
     path = require("path"),
-    mock = require("./../lib/link/mock"),
-    Builder = require("./../lib/link/builder");
+    mock = require("./../lib/mock"),
+    Builder = require("./../lib/builder");
 
 vows.describe("builder").addBatch({
     "A Builder": {

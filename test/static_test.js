@@ -3,8 +3,8 @@ var assert = require("assert"),
     path = require("path"),
     fs = require("fs"),
     EventEmitter = require("events").EventEmitter,
-    mock = require("./../lib/link/mock"),
-    stat = require("./../lib/link/static");
+    mock = require("./../lib/mock"),
+    stat = require("./../lib/static");
 
 var root = path.join(__dirname, "_files");
 

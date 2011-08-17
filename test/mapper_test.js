@@ -1,7 +1,7 @@
 var assert = require("assert"),
     vows = require("vows"),
-    mock = require("./../lib/link/mock"),
-    Mapper = require("./../lib/link/mapper");
+    mock = require("./../lib/mock"),
+    Mapper = require("./../lib/mapper");
 
 vows.describe("mapper").addBatch({
     "A Mapper": {

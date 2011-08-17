@@ -1,8 +1,8 @@
 var assert = require("assert"),
     vows = require("vows"),
     qs = require("querystring"),
-    Request = require("./../lib/link/request"),
-    mock = require("./../lib/link/mock");
+    Request = require("./../lib/request"),
+    mock = require("./../lib/mock");
 
 vows.describe("request").addBatch({
     "A Request": {

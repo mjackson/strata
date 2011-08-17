@@ -1,8 +1,8 @@
 var assert = require("assert"),
     vows = require("vows"),
     EventEmitter = require("events").EventEmitter,
-    link = require("./../lib/link"),
-    mock = require("./../lib/link/mock");
+    link = require("./../lib/index"),
+    mock = require("./../lib/mock");
 
 vows.describe("link").addBatch({
     "env": {

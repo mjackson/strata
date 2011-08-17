@@ -1,6 +1,6 @@
 var assert = require("assert"),
     vows = require("vows"),
-    Response = require("./../lib/link/response");
+    Response = require("./../lib/response");
 
 vows.describe("response").addBatch({
     "A Response": {

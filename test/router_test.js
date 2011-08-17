@@ -1,7 +1,7 @@
 var assert = require("assert"),
     vows = require("vows"),
-    mock = require("./../lib/link/mock"),
-    Router = require("./../lib/link/router");
+    mock = require("./../lib/mock"),
+    Router = require("./../lib/router");
 
 vows.describe("router").addBatch({
     "Router.compileRoute": {

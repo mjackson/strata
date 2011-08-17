@@ -1,4 +1,4 @@
-var link = require("./../lib/link");
+var link = require("./../lib/index");
 
 /**
  * This app simply packages up the request parameters into a JSON string and

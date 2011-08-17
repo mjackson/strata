@@ -1,7 +1,7 @@
 var assert = require("assert"),
     vows = require("vows"),
-    Input = require("./../lib/link/input"),
-    mock = require("./../lib/link/mock");
+    Input = require("./../lib/input"),
+    mock = require("./../lib/mock");
 
 vows.describe("input").addBatch({
     "An Input": {
