@@ -3,7 +3,7 @@
     "version": "0.3.0",
     "description": "A modular web server interface",
     "keywords": ["web", "server", "middleware", "rack", "jsgi", "wsgi"],
-    "engines": ["node >=0.4.10"],
+    "engines": ["node >=0.4.7"],
     "author": "Michael Jackson <mjijackson@gmail.com>",
     "repository": {
         "type": "git",
