@@ -4,14 +4,9 @@ var fs = require("fs"),
     path = require("path"),
     link = require("link");
 
-var addr,
-    cert,
-    appfile = path.resolve("./app.js"),
-    key,
-    port = 1982,
-    socket;
-
-var exit = false,
+var appfile = path.resolve("./app.js"),
+    options = {},
+    exit = false,
     arg;
 
 for (var i = 2; i < process.argv.length; ++i) {
@@ -23,21 +18,28 @@ for (var i = 2; i < process.argv.length; ++i) {
 
     function nextArg() {
         var next = process.argv[++i];
+
         if (!next) {
             printUsage();
             exit = true;
         }
+
         return next;
     }
 
     switch (arg) {
     case "-a":
     case "--address":
-        addr = nextArg();
+        options.host = nextArg();
         break;
     case "-c":
     case "--cert":
-        cert = nextArg();
+        var certfile = nextArg();
+        if (path.existsSync(certfile)) {
+            options.cert = fs.readFileSync(certfile);
+        } else {
+            throw new link.Error('File "' + certfile + '" does not exist');
+        }
         break;
     case "-h":
     case "--help":
@@ -46,15 +48,20 @@ for (var i = 2; i < process.argv.length; ++i) {
         break;
     case "-k":
     case "--key":
-        key = nextArg();
+        var keyfile = nextArg();
+        if (path.existsSync(keyfile)) {
+            options.key = fs.readFileSync(keyfile);
+        } else {
+            throw new link.Error('File "' + keyfile + '" does not exist');
+        }
         break;
     case "-p":
     case "--port":
-        port = nextArg();
+        options.port = nextArg();
         break;
     case "-s":
     case "--socket":
-        socket = nextArg();
+        options.socket = nextArg();
         break;
     case "-v":
     case "--version":
@@ -68,33 +75,19 @@ for (var i = 2; i < process.argv.length; ++i) {
 
 if (!exit) {
     if (path.existsSync(appfile)) {
-        var ext = path.extname(appfile);
-        var file = appfile.substring(0, appfile.length - ext.length);
-        var app = require(file);
+        var app = require(appfile);
 
-        var options;
-        if (key && cert) {
-            options = {
-                key: fs.readFileSync(key),
-                cert: fs.readFileSync(cert)
-            };
-        }
+        var server = link.run(app, options, function () {
+            var addr = server.address();
 
-        var server = link.createServer(app, options);
-
-        if (socket) {
-            server.listen(socket, function () {
-                var a = server.address();
-                console.log("Link server started at %s", a.address);
-            });
-        } else {
-            server.listen(port, addr, function () {
-                var a = server.address();
-                console.log("Link server started at %s:%s", a.address, a.port);
-            });
-        }
+            if (options.socket) {
+                console.log("Link server started at %s", addr.address);
+            } else {
+                console.log("Link server started at %s:%s", addr.address, addr.port);
+            }
+        });
     } else {
-        throw new link.Error("File " + appfile + " does not exist");
+        throw new link.Error('File "' + appfile + '" does not exist');
     }
 }
 
