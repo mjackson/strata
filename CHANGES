@@ -1,0 +1,25 @@
+= 0.3.3 / HEAD
+
+  * Added link.run.
+
+  * Builder defaults to returning a 404.
+
+  * Fixed a bug that didn't allow authBasic to be required automatically.
+
+  * Added CHANGES document.
+
+= 0.3.2 / 2011-08-17
+
+  * Reorganized package structure.
+
+  * Fixed sessionCookie bug that did not call the downstream app in some cases.
+
+  * Changed minimum node requirement to 0.4.7.
+
+= 0.3.0 / 2011-08-16
+
+  * Added Router middleware.
+
+  * Replaced urlMap middleware with Mapper.
+
+  * Changed minimum node requirement to 0.4.10.
