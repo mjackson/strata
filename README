@@ -1,4 +1,4 @@
-Link is a modular web server interface for Node.js. Using Link, web developers
+Link is a modular web server interface for node.js. Using Link, web developers
 can build highly performant servers in a powerful, modular style that encourages
 readability and clean separation of responsibility. The core Link distribution
 consists of three things:
@@ -10,6 +10,9 @@ consists of three things:
   - An executable (see bin/linkup) for running Link applications from the
     command line
 
+Link is patterned after similar efforts in the Python and Ruby communities,
+namely WSGI and Rack.
+
 = Installation
 
 Using npm:
@@ -19,45 +22,40 @@ Using npm:
 You are also free to browse or download the source at
 https://github.com/mjijackson/link.
 
-= Features
-
-  - Completely non-blocking architecture
-  - Extensive test suite
-  - Support for streaming responses to the client
-  - Support for streaming multipart file uploads
-  - Support for application/json (read JSON) requests
-  - Session support via HTTP cookies
-  - Unified error handling mechanism
-  - Lint and mock modules for testing
-
-= Usage
+= Basic Usage
 
 Link reduces the complex task of building a web application to the simplest
 terms possible. A Link application is simply a JavaScript function that takes
 two arguments: the environment and a callback. The environment is a JavaScript
-object that contains information about the incoming request such as the request
-method that was used, any parameters that were sent, etc. When the application
-is ready to send the response to the client, it simply calls the callback with
-three arguments: the response status code, the HTTP headers, and the body.
+object that contains CGI-like information including the server environment, the
+method that was used in the request, any headers or parameters that were sent,
+etc. When the application is ready to send the response to the client, it calls
+the callback with three arguments: the response status code, the HTTP headers,
+and the body.
 
 A simple Hello World app looks like this:
 
-    function (env, callback) {
+    module.exports = function (env, callback) {
         callback(200, {
             "Content-Type": "text/plain",
             "Content-Length": "12"
         }, "Hello world!");
     }
 
+The linkup tool can be used to run files that export a Link app. Put the above
+code in a file called hello.js and run it from the command line with:
+
+    $ linkup hello.js
+
 == Request Parameters
 
 Request parameters found in both the query string and request body may be
 accessed easily using link.Request. The following sample app simply returns a
-response that contains the parameters object in the body as JSON.
+response that contains the parameters object in the body as pretty-printed JSON.
 
     var link = require("link");
 
-    function (env, callback) {
+    module.exports = function (env, callback) {
         var req = new link.Request(env);
 
         req.params(function (err, params) {
@@ -65,7 +63,7 @@ response that contains the parameters object in the body as JSON.
                 return;
             }
 
-            var content = JSON.stringify(params);
+            var content = JSON.stringify(params, null, 2);
 
             callback(200, {
                 "Content-Type": "application/json",
@@ -74,26 +72,45 @@ response that contains the parameters object in the body as JSON.
         });
     }
 
+Put that code in a file called params.js and run it with:
+
+    $ linkup params.js
+
 == Middleware
 
-Because Link applications are built according to a specification, we know
-exactly what parameters each expects to receive when it is called. This allows
-us to build higher level abstractions called middleware that can easily be
-inserted into and removed from the callback chain.
+Because Link applications are built according to a specification, the developer
+knows exactly what parameters an app expects to receive when it is called. This
+consistency permits the creation of higher level abstractions called middleware
+that can easily be inserted into and removed from the callback "chain".
 
 The pattern for building middleware typically looks something like this:
 
+    function (app, options) {
+        return function middleware(env, callback) {
+            // Do something with the env before calling the "downstream" app.
+            app(env, function (status, headers, body) {
+                // Or, do something here with the response before returning it
+                // to the "upstream" caller.
+                callback(status, headers, body);
+            });
+        }
+    }
+
+The outer function is used to enclose the downstream app and (optionally) any
+options for that piece of middleware. The inner function that is returned is
+just like any other Link app, except it has a reference to the next app in the
+callback chain. The example below illustrates a simple middleware that could be
+used to set a "myapp.username" variable in the environment before calling the
+downstream app.
+
     function setUsername(app) {
         return function (env, callback) {
-            // Modify the env for the "downstream" app...
             env["myapp.username"] = "Michael";
-
-            // Call the app.
             app(env, callback);
         }
     }
 
-This middleware can be used to wrap another Link application like this:
+This middleware might be used to wrap another Link application like this:
 
     var myApp = setUsername(function (env, callback) {
         // We know have access to the environment variable we
