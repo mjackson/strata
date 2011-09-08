@@ -54,13 +54,13 @@ vows.describe("lint").addBatch({
                 app(env, function (status, headers, body) {});
             }, /must not contain property "httpContentLength"/);
 
-            var requiredLinkProperties = [
-                "link.version",
-                "link.input",
-                "link.error"
+            var requiredStrataProperties = [
+                "strata.version",
+                "strata.input",
+                "strata.error"
             ];
 
-            requiredLinkProperties.forEach(function (p) {
+            requiredStrataProperties.forEach(function (p) {
                 assertRequiredProperty(p);
             });
 
@@ -92,21 +92,21 @@ vows.describe("lint").addBatch({
 
             assert.throws(function () {
                 var env = mock.env();
-                env["link.version"] = "1.0";
+                env["strata.version"] = "1.0";
                 app(env, function (status, headers, body) {});
-            }, /link.version must be an array/);
+            }, /strata.version must be an array/);
 
             assert.throws(function () {
                 var env = mock.env();
-                env["link.input"] = "";
+                env["strata.input"] = "";
                 app(env, function (status, headers, body) {});
-            }, /link.input must be/);
+            }, /strata.input must be/);
 
             assert.throws(function () {
                 var env = mock.env();
-                env["link.error"] = "";
+                env["strata.error"] = "";
                 app(env, function (status, headers, body) {});
-            }, /link.error must be/);
+            }, /strata.error must be/);
         },
         "should detect an invalid callback": function () {
             var app = lint(mock.empty);

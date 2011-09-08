@@ -43,7 +43,7 @@ vows.describe("router").addBatch({
     "A Router": {
         topic: function () {
             var app = function (env, callback) {
-                var route = env["link.route"];
+                var route = env["strata.route"];
 
                 assert.ok(route);
 

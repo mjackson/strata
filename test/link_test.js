@@ -1,10 +1,10 @@
 var assert = require("assert"),
     vows = require("vows"),
     EventEmitter = require("events").EventEmitter,
-    link = require("./../lib/index"),
+    strata = require("./../lib/index"),
     mock = require("./../lib/mock");
 
-vows.describe("link").addBatch({
+vows.describe("strata").addBatch({
     "env": {
         topic: function () {
             this.protocol = "https:";
@@ -21,7 +21,7 @@ vows.describe("link").addBatch({
             var input = new mock.Stream(this.content);
             input.pause();
 
-            return link.env({
+            return strata.env({
                 protocol: this.protocol,
                 protocolVersion: this.protocolVersion,
                 requestMethod: this.requestMethod,
@@ -73,15 +73,15 @@ vows.describe("link").addBatch({
         },
         "version": {
             topic: function (env) {
-                this.callback(null, env["link.version"]);
+                this.callback(null, env["strata.version"]);
             },
-            "should be the current version of Link": function (version) {
-                assert.deepEqual(version, link.version);
+            "should be the current version of Strata": function (version) {
+                assert.deepEqual(version, strata.version);
             }
         },
         "input": {
             topic: function (env) {
-                var input = env["link.input"],
+                var input = env["strata.input"],
                     content = "",
                     self = this;
 
@@ -103,7 +103,7 @@ vows.describe("link").addBatch({
         },
         "error": {
             topic: function (env) {
-                this.callback(null, env["link.error"]);
+                this.callback(null, env["strata.error"]);
             },
             "should be a writable Stream": function (error) {
                 assert.ok(error);
@@ -113,7 +113,7 @@ vows.describe("link").addBatch({
         }
     },
     "Error": {
-        topic: new link.Error("Bang!"),
+        topic: new strata.Error("Bang!"),
         "should be an instance of Error": function (err) {
             assert.instanceOf(err, Error);
         }

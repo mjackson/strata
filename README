@@ -1,39 +1,37 @@
-Link is a modular web server interface for node.js. Using Link, web developers
-can build highly performant servers in a powerful, modular style that encourages
-readability and clean separation of responsibility. The core Link distribution
-consists of three things:
+Strata is a modular, streaming web framework for node.js that is patterned after
+the WSGI and Rack efforts in the Python and Ruby communities. Using Strata,
+developers can build highly performant web servers in a powerful, modular style
+that encourages code readability and clean separation of responsibility.
+
+The core Strata distribution consists of three things:
 
   - A specification (see SPEC) for building applications and middleware
   - A library (see lib) with many useful utilities and middleware to aid
     developers in the common tasks of building applications that conform to
     the specification
-  - An executable (see bin/linkup) for running Link applications from the
+  - An executable (see bin/strata) for running Strata applications from the
     command line
-
-Link is patterned after similar efforts in the Python and Ruby communities,
-namely WSGI and Rack.
 
 = Installation
 
 Using npm:
 
-  $ npm install link
+  $ npm install strata
 
 You are also free to browse or download the source at
-https://github.com/mjijackson/link.
+https://github.com/mjijackson/strata.
 
 = Basic Usage
 
-Link reduces the complex task of building a web application to the simplest
-terms possible. A Link application is simply a JavaScript function that takes
-two arguments: the environment and a callback. The environment is a JavaScript
-object that contains CGI-like information including the server environment, the
-method that was used in the request, any headers or parameters that were sent,
-etc. When the application is ready to send the response to the client, it calls
-the callback with three arguments: the response status code, the HTTP headers,
-and the body.
+Strata reduces the complex task of building a web application to the simplest
+terms possible. A Strata application is simply a function that takes two
+arguments: the environment and a callback. The environment is an object that
+contains CGI-like information including the server environment, the method that
+was used in the request, any headers or parameters that were sent, etc. When the
+application is ready to send the response to the client, it calls the callback
+with three arguments: the response status code, the HTTP headers, and the body.
 
-A simple Hello World app looks like this:
+A simple "hello world" app looks like this:
 
     module.exports = function (env, callback) {
         callback(200, {
@@ -42,24 +40,24 @@ A simple Hello World app looks like this:
         }, "Hello world!");
     }
 
-The linkup tool can be used to run files that export a Link app. Put the above
+The strata tool can be used to run files that export a Strata app. Put the above
 code in a file called hello.js and run it from the command line with:
 
-    $ linkup hello.js
+    $ strata hello.js
 
 == Request Parameters
 
 Request parameters found in both the query string and request body may be
-accessed easily using link.Request. The following sample app simply returns a
+accessed easily using strata.Request. The following sample app simply returns a
 response that contains the parameters object in the body as pretty-printed JSON.
 
-    var link = require("link");
+    var strata = require("strata");
 
     module.exports = function (env, callback) {
-        var req = new link.Request(env);
+        var req = new strata.Request(env);
 
         req.params(function (err, params) {
-            if (err && link.handleError(err, env, callback)) {
+            if (err && strata.handleError(err, env, callback)) {
                 return;
             }
 
@@ -74,11 +72,11 @@ response that contains the parameters object in the body as pretty-printed JSON.
 
 Put that code in a file called params.js and run it with:
 
-    $ linkup params.js
+    $ strata params.js
 
 == Middleware
 
-Because Link applications are built according to a specification, the developer
+Because Strata applications are built according to a specification, the developer
 knows exactly what parameters an app expects to receive when it is called. This
 consistency permits the creation of higher level abstractions called middleware
 that can easily be inserted into and removed from the callback "chain".
@@ -98,7 +96,7 @@ The pattern for building middleware typically looks something like this:
 
 The outer function is used to enclose the downstream app and (optionally) any
 options for that piece of middleware. The inner function that is returned is
-just like any other Link app, except it has a reference to the next app in the
+just like any other Strata app, except it has a reference to the next app in the
 callback chain. The example below illustrates a simple middleware that could be
 used to set a "myapp.username" variable in the environment before calling the
 downstream app.
@@ -110,7 +108,7 @@ downstream app.
         }
     }
 
-This middleware might be used to wrap another Link application like this:
+This middleware might be used to wrap another Strata application like this:
 
     var myApp = setUsername(function (env, callback) {
         // We know have access to the environment variable we
@@ -124,22 +122,22 @@ This middleware might be used to wrap another Link application like this:
 Using this technique you can built complex applications in a modular style, each
 piece of which is easily testable.
 
-Several useful middlewares come packaged in the Link core distribution. See
-link.commonLogger, link.contentLength, and link.contentType for some examples.
+Several useful middlewares come packaged in the Strata core distribution. See
+strata.commonLogger, strata.contentLength, and strata.contentType for some examples.
 
 == Errors
 
 One of the typical pain points when building asynchronous applications is the
-proper handling of errors that may occur somewhere in the callback chain. Link
+proper handling of errors that may occur somewhere in the callback chain. Strata
 takes a simple and flexible approach to error handling. You may have noticed in
-the example above a call to link.handleError. This function takes three
+the example above a call to strata.handleError. This function takes three
 arguments: the error, the environment, and the response callback.
 
 The default error handler simply logs the error and calls the callback with a
 500 Server Error response. Your application may override this function to
 provide better error handling logic.
 
-Link also includes a special constructor for errors that allows them to be
+Strata also includes a special constructor for errors that allows them to be
 nested. Using this mechanism, higher level errors can keep a reference to the
 lower level errors that caused them. This can be useful in a stack trace to see
 detailed information about each level of the stack trace.
@@ -147,9 +145,9 @@ detailed information about each level of the stack trace.
 = Examples
 
 A number of examples are included in the example directory in the root of the
-project. You can run any of these examples using the linkup command:
+project. You can run any of these examples using the strata executable:
 
-  $ ./bin/linkup example/hello.js
+  $ ./bin/strata example/hello.js
 
 = Tests
 
@@ -167,13 +165,13 @@ Otherwise, run the tests for a specific module with:
 
 = Credits
 
-Link was inspired by similar efforts in the Python and Ruby communities, namely
-WSGI and Rack. It borrows many code patterns from these libraries, as well as
-the JSGI project.
+Strata was inspired by similar efforts in the Python and Ruby communities,
+namely WSGI and Rack. It borrows many code patterns from these libraries, as
+well as the JSGI project.
 
-Link's multipart parser is based on the fast parser in the node-formidable
-project written by Felix Geisendörfer. It is included in Link under the terms of
-the MIT license.
+Strata's multipart parser is based on the fast parser in the node-formidable
+project written by Felix Geisendörfer. It is included in Strata under the terms
+of the MIT license.
 
 My sincere thanks to the authors of each of these libraries for the excellent
 work they've done and graciously shared.

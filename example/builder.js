@@ -1,13 +1,13 @@
-var link = require("./../lib/index");
+var strata = require("./../lib/index");
 
 /**
- * This app is constructed using a link.Builder.
+ * This app is constructed using a strata.Builder.
  */
-var app = new link.Builder;
+var app = new strata.Builder;
 
-app.use(link.commonLogger);
-app.use(link.contentType, "text/plain");
-app.use(link.contentLength);
+app.use(strata.commonLogger);
+app.use(strata.contentType, "text/plain");
+app.use(strata.contentLength);
 
 /**
  * This call mounts a static file server at the "/example" location. Any
@@ -15,7 +15,7 @@ app.use(link.contentLength);
  * that file.
  */
 app.map("/example", function (app) {
-    app.use(link.static, __dirname);
+    app.use(strata.static, __dirname);
     app.run(function (env, callback) {
         callback(404, {}, "Not found: " + env.pathInfo);
     });
@@ -26,10 +26,10 @@ app.map("/example", function (app) {
  * the request body. Works for all request methods.
  */
 app.route("/params", function (env, callback) {
-    var req = new link.Request(env);
+    var req = new strata.Request(env);
 
     req.params(function (err, params) {
-        if (err && link.handleError(err, env, callback)) {
+        if (err && strata.handleError(err, env, callback)) {
             return;
         }
 

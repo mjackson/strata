@@ -11,7 +11,7 @@ vows.describe("session_cookie").addBatch({
 
             mock.request("", app, function (status, headers, body) {
                 assert.ok(headers["Set-Cookie"]);
-                var match = headers["Set-Cookie"].match(/(link\.session=[^;]+)/);
+                var match = headers["Set-Cookie"].match(/(strata\.session=[^;]+)/);
                 assert.ok(match);
                 assert.equal(body, '{"counter":1}');
 
@@ -34,7 +34,7 @@ vows.describe("session_cookie").addBatch({
 
             mock.request("", app, function (status, headers, body) {
                 assert.ok(headers["Set-Cookie"]);
-                var match = headers["Set-Cookie"].match(/(link\.session=[^;]+)/);
+                var match = headers["Set-Cookie"].match(/(strata\.session=[^;]+)/);
                 assert.ok(match);
                 assert.equal(body, '{"counter":1}');
 
@@ -77,7 +77,7 @@ vows.describe("session_cookie").addBatch({
 }).export(module);
 
 function stringify(env, callback) {
-    var content = JSON.stringify(env["link.session"] || {});
+    var content = JSON.stringify(env["strata.session"] || {});
 
     callback(200, {
         "Content-Type": "text/plain",
@@ -86,19 +86,19 @@ function stringify(env, callback) {
 }
 
 function increment(env, callback) {
-    assert.ok(env["link.session"]);
+    assert.ok(env["strata.session"]);
 
-    if (!("counter" in env["link.session"])) {
-        env["link.session"].counter = 0;
+    if (!("counter" in env["strata.session"])) {
+        env["strata.session"].counter = 0;
     }
 
-    env["link.session"].counter += 1;
+    env["strata.session"].counter += 1;
 
     stringify(env, callback);
 }
 
 function toobig(env, callback) {
-    assert.ok(env["link.session"]);
+    assert.ok(env["strata.session"]);
 
     var value = "";
 
@@ -106,7 +106,7 @@ function toobig(env, callback) {
         value += "a";
     }
 
-    env["link.session"].value = value;
+    env["strata.session"].value = value;
 
     stringify(env, callback);
 }

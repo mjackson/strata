@@ -17,7 +17,7 @@ vows.describe("contentlength").addBatch({
                 assert.strictEqual(headers["Content-Length"], body.length.toString(10));
             });
         },
-        "should write notify link.error when being used on a stream": function () {
+        "should write notify strata.error when being used on a stream": function () {
             var errors = "";
             var body = new mock.Stream("Hello world");
             var app = function (env, callback) {

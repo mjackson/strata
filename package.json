@@ -1,19 +1,21 @@
 {
-    "name": "link",
-    "version": "0.3.3",
-    "description": "A modular web server interface",
-    "keywords": ["web", "server", "middleware", "rack", "jsgi", "wsgi"],
-    "engines": ["node >=0.4.7"],
     "author": "Michael Jackson <mjijackson@gmail.com>",
+    "description": "A modular, streaming web framework",
+    "name": "strata",
+    "version": "0.3.3",
+    "keywords": ["web", "server", "middleware", "rack", "jsgi", "wsgi", "connect", "express"],
+    "engines": {
+        "node": "~0.4.7"
+    },
     "repository": {
         "type": "git",
-        "url": "git://github.com/mjijackson/link.git"
+        "url": "git://github.com/mjijackson/strata.git"
     },
     "devDependencies": {
         "vows": "0.5.9"
     },
     "main": "./lib",
     "bin": {
-        "linkup": "./bin/linkup"
+        "strata": "./bin/strata"
     }
 }

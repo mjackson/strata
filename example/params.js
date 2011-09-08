@@ -1,14 +1,14 @@
-var link = require("./../lib/index");
+var strata = require("./../lib/index");
 
 /**
  * This app simply packages up the request parameters into a JSON string and
  * sends them back in the response body.
  */
 module.exports = function (env, callback) {
-    var req = new link.Request(env);
+    var req = new strata.Request(env);
 
     req.params(function (err, params) {
-        if (err && link.handleError(err, env, callback)) {
+        if (err && strata.handleError(err, env, callback)) {
             return;
         }
 

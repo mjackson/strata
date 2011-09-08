@@ -1,12 +1,12 @@
-This specification aims to formalize the Link protocol for building web
-applications using the Node.js JavaScript platform. You can (and should) use
-the link.lint middleware to enforce it. When you develop middleware, be sure to
-add a link.lint before and after to catch all mistakes.
+This specification aims to formalize the Strata protocol for building web
+applications using the node.js JavaScript platform. You can (and should) use
+the strata.lint middleware to enforce it. When you develop middleware, be sure
+to add a strata.lint before and after to catch all mistakes.
 
-= Link Applications
+= Strata Applications
 
-A Link application is a JavaScript function that takes exactly two arguments:
-the *environment* and a *callback*.
+A Strata application is a function that takes exactly two arguments: the
+*environment* and a *callback*.
 
 == The Environment
 
@@ -51,13 +51,13 @@ must include the following:
 The environment must not contain the properties httpContentType or
 httpContentLength (use contentType and contentLength instead).
 
-In addition to these, the environment may include the following Link-specific
+In addition to these, the environment may include the following Strata-specific
 properties:
 
-  - link.version      The current version of the Link library.
-  - link.input        An EventEmitter of data contained in the request body.
-  - link.error        A writable Stream for error output.
-  - link.session      A JavaScript object containing session data.
+  - strata.version    The current version of Strata as [major, minor, patch].
+  - strata.input      An EventEmitter of data contained in the request body.
+  - strata.error      A writable Stream for error output.
+  - strata.session    An object containing session data.
 
 There are the following restrictions:
 
@@ -67,14 +67,14 @@ There are the following restrictions:
   - scriptName should never be "/" but instead be empty
   - pathInfo should be "/" if scriptName is empty
   - contentLength, if given, must consist of digits only
-  - link.version must be an array of integers [major, minor, patch]
-  - link.input must be an EventEmitter of data contained in the request body
-  - link.error must be a writable Stream
+  - strata.version must be an array of integers [major, minor, patch]
+  - strata.input must be an EventEmitter of data contained in the request body
+  - strata.error must be a writable Stream
 
 The application is free to modify the environment. Property names must contain
-at least one dot and should be prefixed uniquely. The prefix "link" is reserved
-for use within the Link core distribution and other accepted specifications and
-is not available for use elsewhere.
+at least one dot and should be prefixed uniquely. The prefix "strata" is
+reserved for use within the Strata core distribution and other accepted
+specifications and is not available for use elsewhere.
 
 == The Callback
 
@@ -87,10 +87,10 @@ The status must be an HTTP status code as a Number.
 
 === The Headers
 
-The headers must be a JavaScript object whose properties are the names of HTTP
-headers in their canonical form (i.e. "Content-Type" instead of "content-type").
-Header names may contain only letters, digits, "-", and "_" and must start with
-a letter and must not end with a "-" or "_". If more than one value for a header
+The headers must be an object whose properties are the names of HTTP headers in
+their canonical form (i.e. "Content-Type" instead of "content-type"). Header
+names may contain only letters, digits, "-", and "_" and must start with a
+letter and must not end with a "-" or "_". If more than one value for a header
 is required, the value for that property must be an array.
 
 ==== The Content-Type

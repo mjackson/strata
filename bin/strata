@@ -2,7 +2,7 @@
 
 var fs = require("fs"),
     path = require("path"),
-    link = require("link");
+    strata = require("strata");
 
 var appfile = path.resolve("./app.js"),
     options = {},
@@ -38,7 +38,7 @@ for (var i = 2; i < process.argv.length; ++i) {
         if (path.existsSync(certfile)) {
             options.cert = fs.readFileSync(certfile);
         } else {
-            throw new link.Error('File "' + certfile + '" does not exist');
+            throw new strata.Error('File "' + certfile + '" does not exist');
         }
         break;
     case "-h":
@@ -52,7 +52,7 @@ for (var i = 2; i < process.argv.length; ++i) {
         if (path.existsSync(keyfile)) {
             options.key = fs.readFileSync(keyfile);
         } else {
-            throw new link.Error('File "' + keyfile + '" does not exist');
+            throw new strata.Error('File "' + keyfile + '" does not exist');
         }
         break;
     case "-p":
@@ -65,7 +65,7 @@ for (var i = 2; i < process.argv.length; ++i) {
         break;
     case "-v":
     case "--version":
-        console.log(link.version.join("."));
+        console.log(strata.version.join("."));
         exit = true;
         break;
     default:
@@ -77,28 +77,28 @@ if (!exit) {
     if (path.existsSync(appfile)) {
         var app = require(appfile);
 
-        var server = link.run(app, options, function () {
+        var server = strata.run(app, options, function () {
             var addr = server.address();
 
             if (options.socket) {
-                console.log("Link server started at %s", addr.address);
+                console.log("Strata server started at %s", addr.address);
             } else {
-                console.log("Link server started at %s:%s", addr.address, addr.port);
+                console.log("Strata server started at %s:%s", addr.address, addr.port);
             }
         });
     } else {
-        throw new link.Error('File "' + appfile + '" does not exist');
+        throw new strata.Error('File "' + appfile + '" does not exist');
     }
 }
 
 function printUsage() {
     var s = [];
 
-    s.push("linkup v. " + link.version.join("."));
-    s.push("Usage: linkup [options] [appfile]");
+    s.push("strata v. " + strata.version.join("."));
+    s.push("Usage: strata [options] [appfile]");
     s.push("");
-    s.push("  Starts the Link application contained in the given appfile. If");
-    s.push("  none is given, will use the file at $PWD/app.js.");
+    s.push("  Starts the Strata application contained in the given appfile.");
+    s.push("  If none is given, will use the file at $PWD/app.js.");
     s.push("");
     s.push("Options:");
     s.push("  -a, --address   The address to bind to (defaults to 0.0.0.0)");
@@ -109,7 +109,7 @@ function printUsage() {
     s.push("  -p, --port      The port number to listen on (defaults to 1982)");
     s.push("  -s, --socket    The unix socket to listen to. If this is given");
     s.push("                  the -a and -p options are ignored.");
-    s.push("  -v, --version   Show the current version of Link and exit");
+    s.push("  -v, --version   Show the current version of Strata and exit");
 
     console.log(s.join("\n"));
 }
