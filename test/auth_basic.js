@@ -3,7 +3,7 @@ var assert = require("assert"),
     mock = require("./../lib/mock"),
     authBasic = require("./../lib/auth/basic");
 
-vows.describe("auth_basic").addBatch({
+vows.describe("auth/basic").addBatch({
     "An authBasic middleware": {
         "should return 401 when no validation function is given": function () {
             var sync = false;

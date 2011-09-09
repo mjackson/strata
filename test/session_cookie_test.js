@@ -3,7 +3,7 @@ var assert = require("assert"),
     mock = require("./../lib/mock"),
     sessionCookie = require("./../lib/session/cookie");
 
-vows.describe("session_cookie").addBatch({
+vows.describe("session/cookie").addBatch({
     "A sessionCookie middleware": {
         "should properly serialize and deserialize cookie data": function () {
             var sync = false;
