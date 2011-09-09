@@ -1,6 +1,7 @@
 var assert = require("assert"),
     vows = require("vows"),
-    mock = require("./../lib/mock");
+    mock = require("./../lib/mock"),
+    utils = require("./../lib/utils");
 
 vows.describe("mock").addBatch({
     "A mock Stream": {
@@ -76,18 +77,18 @@ vows.describe("mock").addBatch({
             }
         }
     },
-    "A mock request to mock.empty": {
+    "A mock request to utils.empty": {
         topic: function () {
-            mock.request(null, mock.empty, this.callback);
+            mock.request(null, utils.empty, this.callback);
         },
         "should return a correct status code": function (err, status, headers, body) {
-            assert.equal(status, mock.empty.status);
+            assert.equal(status, utils.empty.status);
         },
         "should return the correct headers": function (err, status, headers, body) {
-            assert.deepEqual(headers, mock.empty.headers);
+            assert.deepEqual(headers, utils.empty.headers);
         },
         "should return an empty body": function (err, status, headers, body) {
-            assert.equal(body, mock.empty.body);
+            assert.equal(body, utils.empty.body);
         }
     }
 }).export(module);

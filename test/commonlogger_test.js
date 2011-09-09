@@ -1,7 +1,8 @@
 var assert = require("assert"),
     vows = require("vows"),
     mock = require("./../lib/mock"),
-    commonLogger = require("./../lib/commonlogger");
+    commonLogger = require("./../lib/commonlogger"),
+    utils = require("./../lib/utils");
 
 vows.describe("commonlogger").addBatch({
     "A commonLogger middleware": {
@@ -9,7 +10,7 @@ vows.describe("commonlogger").addBatch({
             this.output = "";
 
             var self = this;
-            var app = commonLogger(mock.empty, {
+            var app = commonLogger(utils.empty, {
                 write: function (message) {
                     self.output += message;
                 }

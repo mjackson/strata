@@ -1,7 +1,8 @@
 var assert = require("assert"),
     vows = require("vows"),
     mock = require("./../lib/mock"),
-    authBasic = require("./../lib/auth/basic");
+    authBasic = require("./../lib/auth/basic"),
+    utils = require("./../lib/utils");
 
 vows.describe("auth/basic").addBatch({
     "An authBasic middleware": {
@@ -11,7 +12,7 @@ vows.describe("auth/basic").addBatch({
                 var pass = "s3krit";
                 var credentials = new Buffer(user + ":" + pass).toString("base64");
 
-                var app = authBasic(mock.empty);
+                var app = authBasic(utils.empty);
 
                 mock.request({
                     headers: {
@@ -30,7 +31,7 @@ vows.describe("auth/basic").addBatch({
                 var pass = "s3krit";
                 var credentials = new Buffer(user + ":" + pass).toString("base64");
 
-                var app = authBasic(mock.empty, function (user, pass, callback) {
+                var app = authBasic(utils.empty, function (user, pass, callback) {
                     callback(null, false);
                 });
 
