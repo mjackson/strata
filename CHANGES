@@ -2,6 +2,8 @@
 
   * Renamed project from link to strata.
 
+  * Added support for Accept* family of HTTP headers.
+
 = 0.3.3 / 2011-09-02
 
   * Added link.run.
