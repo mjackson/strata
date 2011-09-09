@@ -1,5 +1,5 @@
 Strata is a modular, streaming web framework for node.js that is patterned after
-the WSGI and Rack efforts in the Python and Ruby communities. Using Strata,
+the WSGI and Rack projects in the Python and Ruby communities. Using Strata,
 developers can build highly performant web servers in a powerful, modular style
 that encourages code readability and clean separation of responsibility.
 
@@ -153,15 +153,15 @@ project. You can run any of these examples using the strata executable:
 
 To run the tests, first install vows:
 
-  $ npm install vows
+  $ npm install -g vows
 
 Run all tests with:
 
-  $ ./node_modules/.bin/vows test/*_test.js
+  $ vows test/*_test.js
 
 Otherwise, run the tests for a specific module with:
 
-  $ ./node_modules/.bin/vows test/utils_test.js
+  $ vows test/utils_test.js
 
 = Credits
 
