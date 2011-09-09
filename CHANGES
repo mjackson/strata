@@ -4,6 +4,8 @@
 
   * Added support for Accept* family of HTTP headers.
 
+  * Added gzip support (requires node-compress).
+
 = 0.3.3 / 2011-09-02
 
   * Added link.run.

@@ -11,6 +11,9 @@
         "type": "git",
         "url": "git://github.com/mjijackson/strata.git"
     },
+    "dependencies": {
+        "compress": "0.1.9"
+    },
     "devDependencies": {
         "vows": "0.5.9"
     },
