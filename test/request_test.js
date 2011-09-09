@@ -22,7 +22,11 @@ vows.describe("request").addBatch({
                 "Content-Length": this.contentLength,
                 "User-Agent": this.userAgent,
                 "Referer": this.referrer,
-                "X-Requested-With": "XMLHttpRequest"
+                "X-Requested-With": "XMLHttpRequest",
+                "Accept": "text/html, */*",
+                "Accept-Charset": "iso-8859-1, *",
+                "Accept-Encoding": "gzip, *",
+                "Accept-Language": "en"
             };
 
             var env = mock.env({
@@ -92,6 +96,22 @@ vows.describe("request").addBatch({
         },
         "should know its referrer": function (req) {
             assert.equal(req.referrer, this.referrer);
+        },
+        "should know what content types are acceptable": function (req) {
+            assert.ok(req.accept("text/html"));
+            assert.ok(req.accept("application/json"));
+        },
+        "should know what character sets are acceptable": function (req) {
+            assert.ok(req.acceptCharset("iso-8859-1"));
+            assert.ok(req.acceptCharset("utf-8"));
+        },
+        "should know what content encodings are acceptable": function (req) {
+            assert.ok(req.acceptEncoding("gzip"));
+            assert.ok(req.acceptEncoding("compress"));
+        },
+        "should know what languages are acceptable": function (req) {
+            assert.ok(req.acceptLanguage("en"));
+            assert.ok(!req.acceptLanguage("jp"));
         },
         "should know if it is secure": function (req) {
             assert.ok(req.ssl);
