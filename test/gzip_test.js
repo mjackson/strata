@@ -67,7 +67,7 @@ vows.describe("gzip").addBatch({
                     callback(200, {"Content-Type": "text/plain"}, self.body);
                 });
 
-                mock.request({}, app, this.callback);
+                mock.request("", app, this.callback);
             },
             "should not encode the body": function (err, status, headers, body) {
                 assert.equal(headers["Content-Type"], "text/plain");
