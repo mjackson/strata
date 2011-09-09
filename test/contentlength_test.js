@@ -5,36 +5,43 @@ var assert = require("assert"),
 
 vows.describe("contentlength").addBatch({
     "A contentLength middleware": {
-        "should automatically add a Content-Length header": function () {
-            var body = "Hello world!";
-            var app = function (env, callback) {
-                callback(200, {}, body);
+        "with a string body": {
+            topic: function () {
+                this.body = "Hello world!";
+
+                var self = this;
+                var app = contentLength(function (env, callback) {
+                    callback(200, {}, self.body);
+                });
+
+                mock.request("", app, this.callback);
+            },
+            "should add a Content-Length header": function (err, status, headers, body) {
+                var length = this.body.length.toString();
+                assert.strictEqual(headers["Content-Length"], length);
             }
-
-            app = contentLength(app);
-
-            mock.request("", app, function (status, headers, body) {
-                assert.strictEqual(headers["Content-Length"], body.length.toString(10));
-            });
         },
-        "should write notify strata.error when being used on a stream": function () {
-            var errors = "";
-            var body = new mock.Stream("Hello world");
-            var app = function (env, callback) {
-                callback(200, {}, body);
-            }
+        "with a Stream body": {
+            topic: function () {
+                this.errors = "";
+                this.body = new mock.Stream("Hello world!");
 
-            app = contentLength(app);
+                var self = this;
+                var app = contentLength(function (env, callback) {
+                    callback(200, {}, self.body);
+                });
 
-            mock.request({
-                error: {
-                    write: function (message) {
-                        errors += message;
+                mock.request({
+                    error: {
+                        write: function (message) {
+                            self.errors += message;
+                        }
                     }
-                }
-            }, app, function (status, headers, body) {});
-
-            assert.match(errors, /body with no length/);
+                }, app, this.callback);
+            },
+            "should write to strata.error": function (err, status, headers, body) {
+                assert.match(this.errors, /body with no length/);
+            }
         }
     }
 }).export(module);

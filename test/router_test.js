@@ -42,6 +42,8 @@ vows.describe("router").addBatch({
     },
     "A Router": {
         topic: function () {
+            var router = new Router;
+
             var app = function (env, callback) {
                 var route = env["strata.route"];
 
@@ -54,56 +56,80 @@ vows.describe("router").addBatch({
                 }, "");
             }
 
-            var router = new Router;
-
             router.route(/\/users\/(\d+)/i, app);
             router.route("/posts/:id", app, "GET");
             router.route("/posts/:id", app, ["POST", "DELETE"]);
 
             return router;
         },
-        "should dispatch routes correctly": function (app) {
-            mock.request("/users/1", app, function (status, headers, body) {
+        "when /users/1 is requested": {
+            topic: function (app) {
+                mock.request("/users/1", app, this.callback);
+            },
+            "should call the correct app": function (err, status, headers, body) {
                 assert.ok(headers["X-Route"]);
                 assert.deepEqual(JSON.parse(headers["X-Route"]), ["/users/1", "1"]);
+            },
+            "should not set the id route parameter": function (err, status, headers, body) {
                 assert.ok(headers["X-Id"]);
                 assert.equal(headers["X-Id"], "undefined");
-            });
-
-            mock.request("/posts/1", app, function (status, headers, body) {
+            }
+        },
+        "when /posts/1 is requested": {
+            topic: function (app) {
+                mock.request("/posts/1", app, this.callback);
+            },
+            "should call the correct app": function (err, status, headers, body) {
                 assert.ok(headers["X-Route"]);
                 assert.deepEqual(JSON.parse(headers["X-Route"]), ["/posts/1", "1"]);
+            },
+            "should set the id route parameter": function (err, status, headers, body) {
                 assert.ok(headers["X-Id"]);
                 assert.equal(headers["X-Id"], "1");
-            });
-
-            mock.request({
-                requestMethod: "POST",
-                pathInfo: "/posts/2"
-            }, app, function (status, headers, body) {
+            }
+        },
+        "when POST /posts/2 is requested": {
+            topic: function (app) {
+                mock.request({
+                    requestMethod: "POST",
+                    pathInfo: "/posts/2"
+                }, app, this.callback);
+            },
+            "should call the correct app": function (err, status, headers, body) {
                 assert.ok(headers["X-Route"]);
                 assert.deepEqual(JSON.parse(headers["X-Route"]), ["/posts/2", "2"]);
+            },
+            "should set the id route parameter": function (err, status, headers, body) {
                 assert.ok(headers["X-Id"]);
                 assert.equal(headers["X-Id"], "2");
-            });
-
-            mock.request({
-                requestMethod: "DELETE",
-                pathInfo: "/posts/3"
-            }, app, function (status, headers, body) {
+            }
+        },
+        "when DELETE /posts/3 is requested": {
+            topic: function (app) {
+                mock.request({
+                    requestMethod: "DELETE",
+                    pathInfo: "/posts/3"
+                }, app, this.callback);
+            },
+            "should call the correct app": function (err, status, headers, body) {
                 assert.ok(headers["X-Route"]);
                 assert.deepEqual(JSON.parse(headers["X-Route"]), ["/posts/3", "3"]);
+            },
+            "should set the id route parameter": function (err, status, headers, body) {
                 assert.ok(headers["X-Id"]);
                 assert.equal(headers["X-Id"], "3");
-            });
-
-            // PUT is not part of the routes
-            mock.request({
-                requestMethod: "PUT",
-                pathInfo: "/posts/1"
-            }, app, function (status, headers, body) {
+            }
+        },
+        "when PUT /posts/1 is requested": {
+            topic: function (app) {
+                mock.request({
+                    requestMethod: "PUT",
+                    pathInfo: "/posts/1"
+                }, app, this.callback);
+            },
+            "should return 404": function (err, status, headers, body) {
                 assert.equal(status, 404);
-            });
+            }
         }
     }
 }).export(module);

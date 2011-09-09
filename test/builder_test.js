@@ -4,21 +4,27 @@ var assert = require("assert"),
     mock = require("./../lib/mock"),
     Builder = require("./../lib/builder");
 
+/**
+ * A simple middleware that increments the X-Count header when called.
+ */
+function count(app) {
+    return function (env, callback) {
+        app(env, function (status, headers, body) {
+            headers["X-Count"] = (parseInt(headers["X-Count"] || 0) + 1).toString();
+            callback(status, headers, body);
+        });
+    }
+}
+
 vows.describe("builder").addBatch({
     "A Builder": {
-        "should support mapping": function () {
-            var sync = false;
+        topic: function () {
             var app = new Builder;
 
+            app.use(count);
+
             app.map("/sub", function (app) {
-                app.use(function (app) {
-                    return function (env, callback) {
-                        app(env, function (status, headers, body) {
-                            headers["X-Middleware"] = "called";
-                            callback(status, headers, body);
-                        });
-                    }
-                });
+                app.use(count);
                 app.run(function (env, callback) {
                     callback(200, {
                         "Content-Type": "text/plain",
@@ -26,43 +32,21 @@ vows.describe("builder").addBatch({
                     }, "");
                 });
             });
-            app.run(function (env, callback) {
+
+            app.route("/route", function (env, callback) {
                 callback(200, {
                     "Content-Type": "text/plain",
-                    "X-Position": "root"
+                    "X-Position": "route"
                 }, "");
-            });
-
-            mock.request("/", app, function (status, headers, body) {
-                assert.equal(headers["X-Position"], "root");
-            });
-            mock.request("/sub", app, function (status, headers, body) {
-                sync = true;
-                assert.equal(headers["X-Position"], "sub");
-                assert.equal(headers["X-Middleware"], "called");
-            });
-
-            assert.ok(sync);
-        },
-        "should support routing": function () {
-            var sync = false;
-            var app = new Builder;
-
-            app.use(function (app) {
-                return function (env, callback) {
-                    app(env, function (status, headers, body) {
-                        headers["X-Middleware"] = "called";
-                        callback(status, headers, body);
-                    });
-                }
             });
 
             app.route("/sub", function (env, callback) {
                 callback(200, {
                     "Content-Type": "text/plain",
-                    "X-Position": "sub"
+                    "X-Position": "route-sub"
                 }, "");
             });
+
             app.run(function (env, callback) {
                 callback(200, {
                     "Content-Type": "text/plain",
@@ -70,64 +54,40 @@ vows.describe("builder").addBatch({
                 }, "");
             });
 
-            mock.request("/", app, function (status, headers, body) {
+            return app;
+        },
+        "when / is requested": {
+            topic: function (app) {
+                mock.request("/", app, this.callback);
+            },
+            "should call middleware": function (err, status, headers, body) {
+                assert.equal(headers["X-Count"], "1");
+            },
+            "should properly map to an app at the root of the server": function (err, status, headers, body) {
                 assert.equal(headers["X-Position"], "root");
-                assert.equal(headers["X-Middleware"], "called");
-            });
-            mock.request("/sub", app, function (status, headers, body) {
-                sync = true;
+            }
+        },
+        "when /sub is requested": {
+            topic: function (app) {
+                mock.request("/sub", app, this.callback);
+            },
+            "should call middleware mounted at /sub": function (err, status, headers, body) {
+                assert.equal(headers["X-Count"], "2");
+            },
+            "should properly map to an app at /sub": function (err, status, headers, body) {
                 assert.equal(headers["X-Position"], "sub");
-                assert.equal(headers["X-Middleware"], "called");
-            });
-
-            assert.ok(sync);
+            }
         },
-        "should favor map over route": function () {
-            var sync = false;
-            var app = new Builder;
-
-            app.map("/files", function (app) {
-                app.run(function (env, callback) {
-                    callback(200, {
-                        "X-Method": "map",
-                        "Content-Type": "text/plain"
-                    }, "");
-                });
-            });
-
-            app.route("/files", function (env, callback) {
-                callback(200, {
-                    "X-Method": "route",
-                    "Content-Type": "text/plain"
-                }, "");
-            });
-
-            mock.request("/files", app, function (status, headers, body) {
-                sync = true;
-                assert.equal(headers["X-Method"], "map");
-            });
-
-            assert.ok(sync);
-        },
-        "should not dup env when mapping": function () {
-            var key = "some_key";
-            var value = "a value";
-            var app = new Builder;
-
-            app.use(function (app) {
-                return function (env, callback) {
-                    app(env, callback);
-                    assert.equal(env[key], value);
-                }
-            });
-            app.map("/", function (app) {
-                app.run(function (env, callback) {
-                    env[key] = value;
-                    callback(200, {"Content-Type": "text/plain"}, "");
-                });
-            });
-
-            mock.request("/", app, function (status, headers, body) {});
+        "when /route is requsted": {
+            topic: function (app) {
+                mock.request("/route", app, this.callback);
+            },
+            "should call middleware": function (err, status, headers, body) {
+                assert.equal(headers["X-Count"], "1");
+            },
+            "should properly route": function (err, status, headers, body) {
+                assert.equal(headers["X-Position"], "route");
+            }
         }
     }
 }).export(module);

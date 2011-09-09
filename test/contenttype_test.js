@@ -5,17 +5,17 @@ var assert = require("assert"),
 
 vows.describe("contenttype").addBatch({
     "A contentType middleware": {
-        "should automatically add a Content-Type header": function () {
-            var type = "text/plain";
-            var app = function (env, callback) {
+        topic: function () {
+            this.type = "text/plain";
+
+            var app = contentType(function (env, callback) {
                 callback(200, {}, "");
-            }
+            }, this.type);
 
-            app = contentType(app, type);
-
-            mock.request("", app, function (status, headers, body) {
-                assert.strictEqual(headers["Content-Type"], type);
-            });
+            mock.request("", app, this.callback);
+        },
+        "should add a Content-Type header": function (err, status, headers, body) {
+            assert.strictEqual(headers["Content-Type"], this.type);
         }
     }
 }).export(module);

@@ -24,26 +24,26 @@ vows.describe("static").addBatch({
         "when a static file is requested": {
             topic: function (app) {
                 this.body = fs.readFileSync(path.join(root, "text"), "utf8");
-                mock.getBody("/text", app, this.callback);
+                mock.request("/text", app, this.callback);
             },
-            "should serve that file": function (body) {
+            "should serve that file": function (err, status, headers, body) {
                 assert.equal(body, this.body);
             }
         },
         "when a directory is requested": {
             topic: function (app) {
                 this.body = fs.readFileSync(path.join(root, "index.html"), "utf8");
-                mock.getBody("/", app, this.callback);
+                mock.request("/", app, this.callback);
             },
-            "should serve the index file": function (body) {
+            "should serve the index file": function (err, status, headers, body) {
                 assert.equal(body, this.body);
             }
         },
         "when a matching file cannot be found": {
             topic: function (app) {
-                mock.getStatus("/does-not-exist", app, this.callback);
+                mock.request("/does-not-exist", app, this.callback);
             },
-            "should forward the request to the downstream app": function (status) {
+            "should forward the request to the downstream app": function (err, status, headers, body) {
                 assert.equal(status, 404);
             }
         }

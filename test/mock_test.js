@@ -78,10 +78,7 @@ vows.describe("mock").addBatch({
     },
     "A mock request to mock.empty": {
         topic: function () {
-            var self = this;
-            mock.request(null, mock.empty, function (status, headers, body) {
-                self.callback(null, status, headers, body);
-            });
+            mock.request(null, mock.empty, this.callback);
         },
         "should return a correct status code": function (err, status, headers, body) {
             assert.equal(status, mock.empty.status);

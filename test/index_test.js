@@ -4,7 +4,7 @@ var assert = require("assert"),
     strata = require("./../lib/index"),
     mock = require("./../lib/mock");
 
-vows.describe("strata").addBatch({
+vows.describe("index").addBatch({
     "env": {
         topic: function () {
             this.protocol = "https:";

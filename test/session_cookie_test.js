@@ -9,7 +9,7 @@ vows.describe("session/cookie").addBatch({
             var sync = false;
             var app = sessionCookie(increment);
 
-            mock.request("", app, function (status, headers, body) {
+            mock.request("", app, function (err, status, headers, body) {
                 assert.ok(headers["Set-Cookie"]);
                 var match = headers["Set-Cookie"].match(/(strata\.session=[^;]+)/);
                 assert.ok(match);
@@ -19,7 +19,7 @@ vows.describe("session/cookie").addBatch({
                     headers: {
                         "Cookie": match[1]
                     }
-                }, app, function (status, headers, body) {
+                }, app, function (err, status, headers, body) {
                     sync = true;
                     assert.ok(headers["Set-Cookie"]);
                     assert.equal(body, '{"counter":2}');
@@ -32,7 +32,7 @@ vows.describe("session/cookie").addBatch({
             var sync = false;
             var app = sessionCookie(increment);
 
-            mock.request("", app, function (status, headers, body) {
+            mock.request("", app, function (err, status, headers, body) {
                 assert.ok(headers["Set-Cookie"]);
                 var match = headers["Set-Cookie"].match(/(strata\.session=[^;]+)/);
                 assert.ok(match);
@@ -45,7 +45,7 @@ vows.describe("session/cookie").addBatch({
                     headers: {
                         "Cookie": cookie
                     }
-                }, app, function (status, headers, body) {
+                }, app, function (err, status, headers, body) {
                     sync = true;
                     assert.ok(headers["Set-Cookie"]);
                     assert.equal(body, '{"counter":1}');
@@ -65,7 +65,7 @@ vows.describe("session/cookie").addBatch({
                         errors += message;
                     }
                 }
-            }, app, function (status, headers, body) {
+            }, app, function (err, status, headers, body) {
                 sync = true;
                 assert.isUndefined(headers["Set-Cookie"]);
             });

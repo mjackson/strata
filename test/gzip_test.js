@@ -9,20 +9,23 @@ vows.describe("gzip").addBatch({
     "A gzip middleware": {
         "with a string body": {
             topic: function () {
-                this.body = JSON.stringify({message: "Hello world!"});
+                this.body = "Hello world!";
 
                 var self = this;
                 var app = gzip(function (env, callback) {
-                    callback(200, {"Content-Type": "application/json"}, self.body);
+                    callback(200, {"Content-Type": "text/plain"}, self.body);
                 });
 
-                mock.getBody({
+                mock.request({
                     headers: {
                         "Accept-Encoding": "gzip, *"
                     }
                 }, app, this.callback);
             },
-            "should gzip encode it": function (body) {
+            "should gzip encode it": function (err, status, headers, body) {
+                assert.equal(headers["Content-Type"], "text/plain");
+                assert.equal(headers["Content-Encoding"], "gzip");
+
                 var compressor = new Gzip;
                 compressor.init();
                 var expect = compressor.deflate(this.body) + compressor.end();
@@ -32,20 +35,23 @@ vows.describe("gzip").addBatch({
         },
         "with a Stream body": {
             topic: function () {
-                this.body = JSON.stringify({message: "Hello world!"});
+                this.body = "Hello world!";
 
                 var self = this;
                 var app = gzip(function (env, callback) {
-                    callback(200, {"Content-Type": "application/json"}, new mock.Stream(self.body));
+                    callback(200, {"Content-Type": "text/plain"}, new mock.Stream(self.body));
                 });
 
-                mock.getBody({
+                mock.request({
                     headers: {
                         "Accept-Encoding": "gzip, *"
                     }
                 }, app, this.callback);
             },
-            "should gzip encode it": function (body) {
+            "should gzip encode it": function (err, status, headers, body) {
+                assert.equal(headers["Content-Type"], "text/plain");
+                assert.equal(headers["Content-Encoding"], "gzip");
+
                 var compressor = new Gzip;
                 compressor.init();
                 var expect = compressor.deflate(this.body) + compressor.end();
@@ -55,16 +61,18 @@ vows.describe("gzip").addBatch({
         },
         "when the client does not accept gzip encoding": {
             topic: function () {
-                this.body = JSON.stringify({message: "Hello world!"});
+                this.body = "Hello world!";
 
                 var self = this;
                 var app = gzip(function (env, callback) {
-                    callback(200, {"Content-Type": "application/json"}, self.body);
+                    callback(200, {"Content-Type": "text/plain"}, self.body);
                 });
 
-                mock.getBody({}, app, this.callback);
+                mock.request({}, app, this.callback);
             },
-            "should not encode the body": function (body) {
+            "should not encode the body": function (err, status, headers, body) {
+                assert.equal(headers["Content-Type"], "text/plain");
+                assert.isUndefined(headers["Content-Encoding"]);
                 assert.equal(body, this.body);
             }
         }
