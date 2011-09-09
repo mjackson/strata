@@ -1,6 +1,5 @@
 var assert = require("assert"),
     vows = require("vows"),
-    EventEmitter = require("events").EventEmitter,
     mock = require("./../lib/mock"),
     Gzip = require("compress").Gzip,
     gzip = require("./../lib/gzip");
