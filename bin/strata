@@ -81,9 +81,9 @@ if (!exit) {
             var addr = server.address();
 
             if (options.socket) {
-                console.log("Strata server started at %s", addr.address);
+                console.log("Strata started at %s", addr.address);
             } else {
-                console.log("Strata server started at %s:%s", addr.address, addr.port);
+                console.log("Strata started at %s:%s", addr.address, addr.port);
             }
         });
     } else {
