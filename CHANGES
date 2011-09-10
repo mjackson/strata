@@ -1,8 +1,10 @@
-= HEAD
+= 0.4.1 / 2011-09-09
 
   * Added jsonp support.
 
   * Refactored mock.request and entire test suite.
+
+  * Set proper Content-Encoding in gzip middleware.
 
 = 0.4 / 2011-09-09
 
