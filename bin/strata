@@ -108,7 +108,7 @@ function printUsage() {
     s.push("  -k, --key       The name of the private key file (HTTPS only)");
     s.push("  -p, --port      The port number to listen on (defaults to 1982)");
     s.push("  -s, --socket    The unix socket to listen to. If this is given");
-    s.push("                  the -a and -p options are ignored.");
+    s.push("                  the -a and -p options are ignored");
     s.push("  -v, --version   Show the current version of Strata and exit");
 
     console.log(s.join("\n"));

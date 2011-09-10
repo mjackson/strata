@@ -10,8 +10,8 @@ A Strata application is a function that takes exactly two arguments: the
 
 == The Environment
 
-The environment is a JavaScript object that includes CGI-like properties. It
-must include the following:
+The environment is an object that contains CGI-like properties. It must include
+the following:
 
   - protocol          The protocol used in the request (i.e. "http:" or
                       "https:"). This variable may never be an empty string and
