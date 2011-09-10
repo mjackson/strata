@@ -2,7 +2,7 @@ This directory contains example files that explain how to use various features
 of the Strata framework. All files contain detailed comments that explain the
 code and are runnable using the strata executable.
 
-For example, to run the 01_hello.js example use the following command:
+For example, to run 01_hello.js use the following command:
 
     $ strata 01_hello.js
 

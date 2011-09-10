@@ -1,7 +1,9 @@
-Strata is a modular, streaming web framework for node.js that is patterned after
-the WSGI and Rack projects in the Python and Ruby communities. Using Strata,
-developers can build highly performant web servers in a powerful, modular style
-that encourages code readability and clean separation of responsibility.
+Strata is a fast, streaming web framework for node.js that is patterned after
+time-honored and battle tested web application design principles pioneered in
+the Python and Ruby communities (see WSGI and Rack). Using Strata, developers
+can build highly performant web servers in a powerful, modular style that is
+easy to maintain and takes full advantage of the streaming capabilities and
+excellent I/O handling of node.js.
 
 The core Strata distribution consists of three things:
 
@@ -12,7 +14,7 @@ The core Strata distribution consists of three things:
   - An executable (see bin/strata) for running Strata applications from the
     command line
 
-= Installation
+# Installation
 
 Using npm:
 
@@ -21,135 +23,15 @@ Using npm:
 You are also free to browse or download the source at
 https://github.com/mjijackson/strata.
 
-= Basic Usage
+# Examples
 
-Strata reduces the complex task of building a web application to the simplest
-terms possible. A Strata application is simply a function that takes two
-arguments: the environment and a callback. The environment is an object that
-contains CGI-like information including the server environment, the method that
-was used in the request, any headers or parameters that were sent, etc. When the
-application is ready to send the response to the client, it calls the callback
-with three arguments: the response status code, the HTTP headers, and the body.
+The example directory contains many extensively-documented files written in a
+tutorial style that are also runnable. These should help you get up to speed
+quickly on how to use Strata.
 
-A simple "hello world" app looks like this:
+See example/README for more information.
 
-    module.exports = function (env, callback) {
-        callback(200, {
-            "Content-Type": "text/plain",
-            "Content-Length": "12"
-        }, "Hello world!");
-    }
-
-The strata tool can be used to run files that export a Strata app. Put the above
-code in a file called hello.js and run it from the command line with:
-
-    $ strata hello.js
-
-== Request Parameters
-
-Request parameters found in both the query string and request body may be
-accessed easily using strata.Request. The following sample app simply returns a
-response that contains the parameters object in the body as pretty-printed JSON.
-
-    var strata = require("strata");
-
-    module.exports = function (env, callback) {
-        var req = new strata.Request(env);
-
-        req.params(function (err, params) {
-            if (err && strata.handleError(err, env, callback)) {
-                return;
-            }
-
-            var content = JSON.stringify(params, null, 2);
-
-            callback(200, {
-                "Content-Type": "application/json",
-                "Content-Length": content.length.toString(10)
-            }, content);
-        });
-    }
-
-Put that code in a file called params.js and run it with:
-
-    $ strata params.js
-
-== Middleware
-
-Because Strata applications are built according to a specification, the developer
-knows exactly what parameters an app expects to receive when it is called. This
-consistency permits the creation of higher level abstractions called middleware
-that can easily be inserted into and removed from the callback "chain".
-
-The pattern for building middleware typically looks something like this:
-
-    function (app, options) {
-        return function middleware(env, callback) {
-            // Do something with the env before calling the "downstream" app.
-            app(env, function (status, headers, body) {
-                // Or, do something here with the response before returning it
-                // to the "upstream" caller.
-                callback(status, headers, body);
-            });
-        }
-    }
-
-The outer function is used to enclose the downstream app and (optionally) any
-options for that piece of middleware. The inner function that is returned is
-just like any other Strata app, except it has a reference to the next app in the
-callback chain. The example below illustrates a simple middleware that could be
-used to set a "myapp.username" variable in the environment before calling the
-downstream app.
-
-    function setUsername(app) {
-        return function (env, callback) {
-            env["myapp.username"] = "Michael";
-            app(env, callback);
-        }
-    }
-
-This middleware might be used to wrap another Strata application like this:
-
-    var myApp = setUsername(function (env, callback) {
-        // We know have access to the environment variable we
-        // set in the "upstream" middleware.
-        var username = env["myapp.username"];
-
-        // Welcome them to our site.
-        callback(200, {"Content-Type": "text/plain"}, "Welcome " + username);
-    });
-
-Using this technique you can built complex applications in a modular style, each
-piece of which is easily testable.
-
-Several useful middlewares come packaged in the Strata core distribution. See
-strata.commonLogger, strata.contentLength, and strata.contentType for some examples.
-
-== Errors
-
-One of the typical pain points when building asynchronous applications is the
-proper handling of errors that may occur somewhere in the callback chain. Strata
-takes a simple and flexible approach to error handling. You may have noticed in
-the example above a call to strata.handleError. This function takes three
-arguments: the error, the environment, and the response callback.
-
-The default error handler simply logs the error and calls the callback with a
-500 Server Error response. Your application may override this function to
-provide better error handling logic.
-
-Strata also includes a special constructor for errors that allows them to be
-nested. Using this mechanism, higher level errors can keep a reference to the
-lower level errors that caused them. This can be useful in a stack trace to see
-detailed information about each level of the stack trace.
-
-= Examples
-
-A number of examples are included in the example directory in the root of the
-project. You can run any of these examples using the strata executable:
-
-  $ ./bin/strata example/hello.js
-
-= Tests
+# Tests
 
 To run the tests, first install vows:
 
@@ -163,7 +45,7 @@ Otherwise, run the tests for a specific module with:
 
   $ vows test/utils_test.js
 
-= Credits
+# Credits
 
 Strata was inspired by similar efforts in the Python and Ruby communities,
 namely WSGI and Rack. It borrows many code patterns from these libraries, as
