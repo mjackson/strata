@@ -1,6 +1,6 @@
 {
     "author": "Michael Jackson <mjijackson@gmail.com>",
-    "description": "A modular, streaming web framework",
+    "description": "A fast, streaming web framework patterned after WSGI/Rack",
     "homepage": "http://stratajs.org",
     "name": "strata",
     "version": "0.4.1",
