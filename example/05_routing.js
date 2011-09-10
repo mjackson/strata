@@ -32,7 +32,7 @@ var app = new strata.Router;
 // GET /users
 // Shows a list of the users currently in the data store and a form for adding
 // another name to the store.
-app.route("/users", function (env, callback) {
+app.get("/users", function (env, callback) {
     var content;
     if (users.length == 0) {
         content = "<p>There are no users!</p>";
@@ -40,7 +40,7 @@ app.route("/users", function (env, callback) {
         content = "<p>The users are: " + users.join(", ") + "</p>";
     }
 
-    content += "<p>Create a new one:</p>";
+    content += "<p>Create a new user:</p>";
     content += "<p>";
     content += '<form method="post" action="/users">';
     content += '<input type="text" name="username" placeholder="username" width="200">';
@@ -52,11 +52,11 @@ app.route("/users", function (env, callback) {
         "Content-Type": "text/html",
         "Content-Length": Buffer.byteLength(content).toString()
     }, content);
-}, "GET");
+});
 
 // POST /users
 // Adds a username to the data store.
-app.route("/users", function (env, callback) {
+app.post("/users", function (env, callback) {
     var req = new strata.Request(env);
 
     req.params(function (err, params) {
@@ -74,6 +74,6 @@ app.route("/users", function (env, callback) {
             "Location": "/users"
         }, "");
     });
-}, "POST");
+});
 
 module.exports = app;
