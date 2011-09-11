@@ -13,7 +13,7 @@ vows.describe("request").addBatch({
             this.serverName = "example.org";
             this.pathInfo = "/some/path";
             this.queryString = "a=1&b=hello%20world";
-            this.contentType = 'text/html; charset="utf-8"';
+            this.contentType = 'application/json; charset="utf-8"';
             this.contentLength = "0";
             this.userAgent = "test";
             this.referrer = "http://example.com/phony";
@@ -89,7 +89,10 @@ vows.describe("request").addBatch({
             assert.equal(req.contentLength, this.contentLength);
         },
         "should know its media type": function (req) {
-            assert.equal(req.mediaType, "text/html");
+            assert.equal(req.mediaType, "application/json");
+        },
+        "should know if it's parseable": function (req) {
+            assert.ok(req.parseableData);
         },
         "should know its user agent": function (req) {
             assert.equal(req.userAgent, this.userAgent);
@@ -217,6 +220,29 @@ vows.describe("request").addBatch({
                 assert.equal(body, this.body);
             }
         },
+        "with an application/json body": {
+            topic: function () {
+                this.body = '{"a": 1, "b": 2}';
+
+                var input = new mock.Stream(this.body);
+                input.pause();
+
+                var self = this;
+                mock.request({
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Content-Length": this.body.length.toString(10)
+                    },
+                    input: input
+                }, function (env, callback) {
+                    var req = new Request(env);
+                    req.body(self.callback);
+                });
+            },
+            "should parse it correctly": function (body) {
+                assert.deepEqual(body, JSON.parse(this.body));
+            }
+        },
         "with an application/x-www-form-urlencoded body": {
             topic: function () {
                 this.body = "a=1&a=2";
@@ -267,30 +293,7 @@ hello world\r\n\
                 assert.equal(body.a, "hello world");
             }
         },
-        "with an application/json body": {
-            topic: function () {
-                this.body = '{"a": 1, "b": 2}';
-
-                var input = new mock.Stream(this.body);
-                input.pause();
-
-                var self = this;
-                mock.request({
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Content-Length": this.body.length.toString(10)
-                    },
-                    input: input
-                }, function (env, callback) {
-                    var req = new Request(env);
-                    req.body(self.callback);
-                });
-            },
-            "should parse it correctly": function (body) {
-                assert.deepEqual(body, JSON.parse(this.body));
-            }
-        },
-        "with a query string and a form-data body": {
+        "with a query string and a multipart/form-data body": {
             topic: function () {
                 this.queryString = "a=1&a=2&b=3";
 
@@ -305,7 +308,6 @@ hello world\r\n\
 
                 var self = this;
                 mock.request({
-                    pathInfo: "/",
                     queryString: this.queryString,
                     headers: {
                         "Content-Type": 'multipart/form-data; boundary="AaB03x"',
