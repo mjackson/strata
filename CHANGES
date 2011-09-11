@@ -1,6 +1,10 @@
-= HEAD
+= 0.4.2 / 2011-09-10
 
   * Added get/post/put/del/head/options convenience functions to Router/Builder.
+
+  * Added access to miscellaneous internal modules (e.g. mime, mock).
+
+  * Request.parseableData returns true when Request.formData is true.
 
   * Better examples.
 
