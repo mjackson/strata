@@ -5,6 +5,13 @@ var assert = require("assert"),
 
 vows.describe("mapper").addBatch({
     "A Mapper": {
+        topic: function () {
+            var app = new Mapper;
+            mock.request("", app, this.callback);
+        },
+        "should return 404 by default": function (err, status, headers, body) {
+            assert.equal(status, 404);
+        },
         "with path-based definitions": {
             topic: function () {
                 var app = function (env, callback) {
