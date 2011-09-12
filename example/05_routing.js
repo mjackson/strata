@@ -6,7 +6,7 @@
 //
 // A route consists of three things: a pattern, an app, and optionally a request
 // method(s). When a router is called, it searches through its routes and calls
-// the app of the first one that "matches" the request. A route matches the
+// the app of the first route that "matches" the request. A route matches the
 // request when its pattern matches the request URL and its request method
 // matches the method that was used in the request (e.g. GET or POST). A route
 // that has no request method(s) associated with it may match any method.
@@ -27,11 +27,21 @@ var strata = require("./../lib");
 // the HTTP methods exposed by the router.
 var users = [];
 
-var app = new strata.Router;
+// The app given to the Router constructor serves as the default app when none
+// of the routes match.
+var app = new strata.Router(function (env, callback) {
+    var content = 'Try <a href="/users">/users</a>.';
+
+    callback(200, {
+        "Content-Type": "text/html",
+        "Content-Length": Buffer.byteLength(content).toString()
+    }, content);
+});
 
 // GET /users
 // Shows a list of the users currently in the data store and a form for adding
 // another name to the store.
+// Note: app.get(pattern, app) is sugar for app.route(pattern, app, "GET")
 app.get("/users", function (env, callback) {
     var content;
     if (users.length == 0) {
@@ -56,6 +66,7 @@ app.get("/users", function (env, callback) {
 
 // POST /users
 // Adds a username to the data store.
+// Note: app.post(pattern, app) is sugar for app.route(pattern, app, "POST")
 app.post("/users", function (env, callback) {
     var req = new strata.Request(env);
 
@@ -71,6 +82,7 @@ app.post("/users", function (env, callback) {
         // Redirect to /users.
         callback(302, {
             "Content-Type": "text/plain",
+            "Content-Length": "0",
             "Location": "/users"
         }, "");
     });
