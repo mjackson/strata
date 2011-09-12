@@ -62,6 +62,14 @@ vows.describe("router").addBatch({
 
             return router;
         },
+        "when a match cannot be made": {
+            topic: function (app) {
+                mock.request("", app, this.callback);
+            },
+            "should return 404": function (err, status, headers, body) {
+                assert.equal(status, 404);
+            },
+        },
         "when /users/1 is requested": {
             topic: function (app) {
                 mock.request("/users/1", app, this.callback);
