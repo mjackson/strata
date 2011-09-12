@@ -3,7 +3,7 @@
     "description": "A fast, streaming web framework patterned after WSGI/Rack",
     "homepage": "http://stratajs.org",
     "name": "strata",
-    "version": "0.4.2",
+    "version": "0.4.3",
     "keywords": ["web", "server", "middleware", "rack", "jsgi", "wsgi", "connect", "express"],
     "engines": {
         "node": "~0.4.7"

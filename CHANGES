@@ -1,6 +1,8 @@
-= HEAD
+= 0.4.3 / 2011-09-12
 
   * Added redirect module.
+
+  * Added Mapper.run and Router.run to mimic Builder.run.
 
 = 0.4.2 / 2011-09-10
 
