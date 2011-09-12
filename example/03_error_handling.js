@@ -1,5 +1,5 @@
-// If you read through the source in 02_params.js, you may have noticed that
-// there was an error argument provided in the callback to the `req.params` call
+// If you read through the source in 02_request_params.js, you may have noticed
+// that there was an error argument provided in the callback to `req.params`
 // that was simply ignored. This style of passing errors as the first argument
 // to callback functions is very standard practice in node programs.
 //

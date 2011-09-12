@@ -9,11 +9,12 @@
 // parameters are merely encoded as JSON and returned to the client in an
 // application/json response.
 
-var strata = require("./../lib");
+var strata = require("./../lib"),
+    Request = strata.Request;
 
 module.exports = function (env, callback) {
     // A Request object is instantiated with one argument: the environment.
-    var req = new strata.Request(env);
+    var req = new Request(env);
 
     req.params(function (err, params) {
         // The params object is a union of query and body parameters. Lets
