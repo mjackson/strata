@@ -1,8 +1,12 @@
 var assert = require("assert"),
     vows = require("vows"),
+    path = require("path"),
+    fs = require("fs"),
     mock = require("./../lib/mock"),
-    Gzip = require("compress").Gzip,
-    gzip = require("./../lib/gzip");
+    Gzip = require("gzbz2").Gzip,
+    gzip = require("./../lib/gzip"),
+    stat = require("./../lib/static"),
+    utils = require("./../lib/utils");
 
 vows.describe("gzip").addBatch({
     "A gzip middleware": {
@@ -55,6 +59,27 @@ vows.describe("gzip").addBatch({
                 compressor.init();
                 var expect = compressor.deflate(this.body) + compressor.end();
 
+                assert.equal(body, expect);
+            }
+        },
+        "with a file Stream body": {
+            topic: function () {
+                this.file = path.resolve(__dirname, "_files/test.txt");
+
+                var app = utils.notFound;
+                app = stat(app, path.resolve(__dirname, "_files"));
+                app = gzip(app);
+
+                mock.request({
+                    pathInfo: "/test.txt",
+                    headers: {
+                        "Accept-Encoding": "gzip, *"
+                    }
+                }, app, this.callback);
+            },
+            "should gzip encode it": function (err, status, headers, body) {
+                var expect = fs.readFileSync(this.file + ".gz", "utf8");
+                fs.writeFileSync("sample.txt.gz", body);
                 assert.equal(body, expect);
             }
         },
