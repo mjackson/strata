@@ -3,7 +3,7 @@
     "version": "0.4.4",
     "author": "Michael Jackson <mjijackson@gmail.com>",
     "description": "A fast, streaming web framework patterned after WSGI/Rack",
-    "keywords": ["web", "server", "middleware", "rack", "jsgi", "wsgi", "connect", "express"],
+    "keywords": ["web", "server", "framework", "middleware", "rack", "jsgi", "wsgi", "connect", "express"],
     "homepage": "http://stratajs.org",
     "engines": {
         "node": "~0.4.7"
@@ -13,7 +13,7 @@
         "url": "git://github.com/mjijackson/strata.git"
     },
     "dependencies": {
-        "compress": "0.1.9"
+        "gzbz2": "0.1.0"
     },
     "devDependencies": {
         "vows": "0.5.9"
