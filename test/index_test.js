@@ -73,7 +73,7 @@ vows.describe("index").addBatch({
         },
         "version": {
             topic: function (env) {
-                this.callback(null, env["strata.version"]);
+                this.callback(null, env.strataVersion);
             },
             "should be the current version of Strata": function (version) {
                 assert.deepEqual(version, strata.version);
@@ -81,7 +81,7 @@ vows.describe("index").addBatch({
         },
         "input": {
             topic: function (env) {
-                var input = env["strata.input"],
+                var input = env.input,
                     content = "",
                     self = this;
 
@@ -103,7 +103,7 @@ vows.describe("index").addBatch({
         },
         "error": {
             topic: function (env) {
-                this.callback(null, env["strata.error"]);
+                this.callback(null, env.error);
             },
             "should be a writable Stream": function (error) {
                 assert.ok(error);

@@ -45,7 +45,7 @@ vows.describe("router").addBatch({
             var router = new Router;
 
             var app = function (env, callback) {
-                var route = env["strata.route"];
+                var route = env.route;
 
                 assert.ok(route);
 

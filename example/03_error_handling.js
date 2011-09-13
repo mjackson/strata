@@ -17,9 +17,9 @@
 // to the client without bringing the whole server down.
 //
 // The `strata.handleError` function handles the error by issuing a 500 Internal
-// Server Error to the client and logging the error to `strata.error`. This
-// function should be overwritten by users who wish to provide custom error
-// handling logic at the global level.
+// Server Error to the client and writing the error to env.error. This function
+// should be overridden by users who wish to provide custom error handling logic
+// at the global level.
 //
 // The return value of `strata.handleError` must be a boolean. True means that
 // the callback was used to issue a response to the client so the server may

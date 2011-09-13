@@ -4,10 +4,11 @@
 // soon be apparent.
 //
 // When a request comes in, the middleware is called first. A middleware
-// typically exists to do one (or both) of the following: 1) modify the
-// environment before calling the downstream app or 2) modify the status,
-// headers, or body received from calling the downstream app before passing
-// them "upstream".
+// typically exists to do one (or both) of the following:
+//
+//   - modify the environment before calling the downstream app
+//   - modify the status, headers, or body received from calling the downstream
+//     app before passing them "upstream"
 //
 // The simplest example of this is the `strata.contentType` middleware. This
 // middleware is a function that takes an app and an optional default content
@@ -26,7 +27,8 @@
 // the value of a request parameter "user" in a custom environment variable so
 // that it may be used by the downstream app.
 //
-// Tip: When running the app, try http://localhost:1982/?user=Michael
+// Tip: When running the app, try
+// [http://localhost:1982/?user=Michael](http://localhost:1982/?user=Michael)
 
 var strata = require("./../lib");
 
@@ -42,7 +44,7 @@ function setUser(app) {
                 return;
             }
 
-            env["myapp.user"] = params.user || "User";
+            env.myappUser = params.user || "User";
 
             // Call the downstream app.
             app(env, callback);
@@ -53,7 +55,7 @@ function setUser(app) {
 module.exports = setUser(function (env, callback) {
     // In the downstream app we have access to any custom variables that were
     // set by middleware upstream.
-    var content = "Welcome, " + env["myapp.user"] + "!";
+    var content = "Welcome, " + env.myappUser + "!";
 
     callback(200, {
         "Content-Type": "text/plain",

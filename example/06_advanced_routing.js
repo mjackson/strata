@@ -14,11 +14,11 @@
 // you with the most fine-grained control over the matching behavior of the
 // pattern.
 //
-// The way you retrieve segments of the URL that matched is through the
-// `strata.route` environment variable. This variable is an array that contains
-// the result of the match, including any captures. In the case of routes that
-// were defined as a named symbol, it also has getter/setter properties with the
-// same name as that symbol (minus the leading colon).
+// The way you retrieve segments of the URL that matched is through `env.route`.
+// This variable is an array that contains the result of the match, including
+// any captures. In the case of routes that were defined as a named symbol, it
+// also has getter/setter properties with the same name as that symbol (without
+// the leading colon).
 
 var strata = require("./../lib"),
     redirect = strata.redirect;
@@ -120,8 +120,7 @@ app.post("/users", function (env, callback) {
 // Shows details about the user with the given id.
 // Note: app.get(pattern, app) is sugar for app.route(pattern, app, "GET")
 app.get("/users/:id", function (env, callback) {
-    var route = env["strata.route"];
-    var id = route.id;
+    var id = env.route.id;
 
     var content;
     if (id in users) {
@@ -146,8 +145,7 @@ app.get("/users/:id", function (env, callback) {
 // Deletes the user with the given id.
 // Note: app.del(pattern, app) is sugar for app.route(pattern, app, "DELETE")
 app.del("/users/:id", function (env, callback) {
-    var route = env["strata.route"];
-    var id = route.id;
+    var id = env.route.id;
 
     if (id in users) {
         delete users[id];

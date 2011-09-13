@@ -39,7 +39,7 @@ vows.describe("contentlength").addBatch({
                     }
                 }, app, this.callback);
             },
-            "should write to strata.error": function (err, status, headers, body) {
+            "should write to error": function (err, status, headers, body) {
                 assert.match(this.errors, /body with no length/);
             }
         }

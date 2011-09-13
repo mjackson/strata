@@ -54,10 +54,10 @@ httpContentLength (use contentType and contentLength instead).
 In addition to these, the environment may include the following Strata-specific
 properties:
 
-  - strata.version    The current version of Strata as [major, minor, patch].
-  - strata.input      An EventEmitter of data contained in the request body.
-  - strata.error      A writable Stream for error output.
-  - strata.session    An object containing session data.
+  - input           An EventEmitter of data contained in the request body
+  - error           A writable Stream for error output
+  - session         An object containing session data
+  - strataVersion   The current version of Strata as [major, minor, patch]
 
 There are the following restrictions:
 
@@ -67,14 +67,14 @@ There are the following restrictions:
   - scriptName should never be "/" but instead be empty
   - pathInfo should be "/" if scriptName is empty
   - contentLength, if given, must consist of digits only
-  - strata.version must be an array of integers [major, minor, patch]
-  - strata.input must be an EventEmitter of data contained in the request body
-  - strata.error must be a writable Stream
+  - input must be an EventEmitter
+  - error must be a writable Stream
+  - strataVersion must be an array of integers
 
-The application is free to modify the environment. Property names must contain
-at least one dot and should be prefixed uniquely. The prefix "strata" is
-reserved for use within the Strata core distribution and other accepted
-specifications and is not available for use elsewhere.
+The application is free to modify the environment. Property names must be
+prefixed uniquely. The prefix "strata" is reserved for use within the Strata
+core distribution and other accepted specifications and is not available for
+use elsewhere.
 
 == The Callback
 

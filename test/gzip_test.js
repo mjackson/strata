@@ -79,7 +79,6 @@ vows.describe("gzip").addBatch({
             },
             "should gzip encode it": function (err, status, headers, body) {
                 var expect = fs.readFileSync(this.file + ".gz", "utf8");
-                fs.writeFileSync("sample.txt.gz", body);
                 assert.equal(body, expect);
             }
         },

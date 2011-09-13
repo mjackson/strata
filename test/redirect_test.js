@@ -30,7 +30,7 @@ vows.describe("redirect").addBatch({
             var recordLocation = function (app) {
                 return function (env, callback) {
                     app(env, function (status, headers, body) {
-                        var session = env["strata.session"];
+                        var session = env.session;
                         headers["X-Location"] = session["strata.location"];
                         callback(status, headers, body);
                     });
@@ -62,10 +62,10 @@ vows.describe("redirect").addBatch({
             var forwardLocation = function (app) {
                 return function (env, callback) {
                     // Simulate a redirect.forward.
-                    env["strata.session"] = {"strata.location": self.location};
+                    env.session = {"strata.location": self.location};
 
                     app(env, function (status, headers, body) {
-                        var session = env["strata.session"];
+                        var session = env.session;
                         headers["X-Location"] = session["strata.location"] || "";
                         callback(status, headers, body);
                     });

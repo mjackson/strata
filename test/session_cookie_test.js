@@ -77,7 +77,7 @@ vows.describe("session/cookie").addBatch({
 }).export(module);
 
 function stringify(env, callback) {
-    var content = JSON.stringify(env["strata.session"] || {});
+    var content = JSON.stringify(env.session || {});
 
     callback(200, {
         "Content-Type": "text/plain",
@@ -86,19 +86,19 @@ function stringify(env, callback) {
 }
 
 function increment(env, callback) {
-    assert.ok(env["strata.session"]);
+    assert.ok(env.session);
 
-    if (!("counter" in env["strata.session"])) {
-        env["strata.session"].counter = 0;
+    if (!("counter" in env.session)) {
+        env.session.counter = 0;
     }
 
-    env["strata.session"].counter += 1;
+    env.session.counter += 1;
 
     stringify(env, callback);
 }
 
 function toobig(env, callback) {
-    assert.ok(env["strata.session"]);
+    assert.ok(env.session);
 
     var value = "";
 
@@ -106,7 +106,7 @@ function toobig(env, callback) {
         value += "a";
     }
 
-    env["strata.session"].value = value;
+    env.session.value = value;
 
     stringify(env, callback);
 }
