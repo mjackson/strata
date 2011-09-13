@@ -1,3 +1,8 @@
+= 0.5 / 2011-09-13
+
+  * Changed environment variable naming scheme so that all may use the dot
+    syntax, instead of bracket syntax.
+
 = 0.4.5 / 2011-09-13
 
   * Switched to gzbz2 for gzip compression.
