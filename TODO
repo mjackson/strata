@@ -8,3 +8,4 @@ In the manual:
 - Gzip compression
 - Mocking/testing
 - JSONP
+- Middleware development/lint

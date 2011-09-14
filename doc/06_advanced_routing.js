@@ -1,33 +1,35 @@
-// # Advanced Routing
-//
-// Sometimes you need to be able to capture certain segments of the URL to use
-// in your application logic. For example, in a traditional REST app you might
-// have a URL that looks like `/users/:id` where the `:id` portion may be any
-// valid user id. Strata supports two similar routing mechanisms that allow you
-// to retrieve this data.
-//
-// The first is to use a Ruby-like symbol notation within a string, as is common
-// in the [Rails](http://rubyonrails.org/) and [Sinatra](http://www.sinatrarb.com/)
-// web frameworks. Strata recognizes any sequence of a colon followed by an
-// alpha character and any number of alpha-numeric characters or underscores as
-// one of these symbols. They match any non-empty sequence of characters in the
-// URL up to a `/`, `?`, or `#`.
-//
-// The second method is to use a pure regular expression. This method provides
-// you with the most fine-grained control over the matching behavior of the
-// pattern.
-//
-// When a pattern matches the URL, the results of the match are stored in the
-// `route` environment variable. This variable contains the original string that
-// matched as well as any captures that were present in the pattern. It also has
-// getter/setter properties for any segments of the URL that were defined as
-// symbols.
-//
-// The example below expands upon the example in the previous chapter and adds
-// support for viewing and deleting a user with a particular id. By now, some of
-// the common tasks of setting the `Content-Length` and `Content-Type` of every
-// response by hand is getting a bit tedious, so we'll use some middleware to
-// do these tasks for us.
+/*
+# Advanced Routing
+
+Sometimes you need to be able to capture certain segments of the URL to use
+in your application logic. For example, in a traditional REST app you might
+have a URL that looks like `/users/:id` where the `:id` portion may be any
+valid user id. Strata supports two similar routing mechanisms that allow you
+to retrieve this data.
+
+The first is to use a Ruby-like symbol notation within a string, as is common
+in the [Rails](http://rubyonrails.org/) and [Sinatra](http://www.sinatrarb.com/)
+web frameworks. Strata recognizes any sequence of a colon followed by an
+alpha character and any number of alpha-numeric characters or underscores as
+one of these symbols. They match any non-empty sequence of characters in the
+URL up to a `/`, `?`, or `#`.
+
+The second method is to use a pure regular expression. This method provides
+you with the most fine-grained control over the matching behavior of the
+pattern.
+
+When a pattern matches the URL, the results of the match are stored in the
+`route` environment variable. This variable contains the original string that
+matched as well as any captures that were present in the pattern. It also has
+getter/setter properties for any segments of the URL that were defined as
+symbols.
+
+The example below expands upon the example in the previous chapter and adds
+support for viewing and deleting a user with a particular id. By now, some of
+the common tasks of setting the `Content-Length` and `Content-Type` of every
+response by hand is getting a bit tedious, so we'll use some middleware to
+do these tasks for us.
+*/
 
 var strata = require("strata"),
     Request = strata.Request,
@@ -51,7 +53,9 @@ function deleteButton(id) {
 
 // Similarly to a Router, the app given to the Builder constructor serves as the
 // default app when none of the routes match. We're using a Builder instead of
-// a regular Router in this example because we'd like to use some middleware.
+// a regular Router in this example because it exposes the `use` method that
+// allows us to use middleware. Otherwise, it has the same routing methods as
+// a Router.
 var app = new Builder(function (env, callback) {
     callback(200, {}, 'Try <a href="/users">/users</a>.');
 });

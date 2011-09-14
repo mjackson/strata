@@ -1,32 +1,34 @@
-// # Routing
-//
-// One of the most common tasks in developing a web app is deciding which URL's
-// trigger which application logic. Up to this point in the examples, all of the
-// code samples have run only a single app, without regard for the URL that was
-// used in the request. In this chapter, we'll use a Router to call different
-// parts of our application based on the request URL.
-//
-// A route consists of three things: a pattern, an app, and optionally a request
-// method(s). When a router is called, it searches through its routes and calls
-// the app of the first route that "matches" the request. A route matches the
-// request when its pattern matches the request URL and its request method
-// matches the method that was used in the request (e.g. GET or POST). A route
-// that has no request method(s) associated with it may match any method.
-//
-// A router uses the following algorithm to find a matching route:
-//
-//   1. Try all routes whose request method matches the one used in the request
-//      in the order they were defined
-//   2. Try all routes that are not restricted to a request method in the order
-//      they were defined
-//
-// Once a router finds a route that matches, it calls the corresponding app and
-// stops trying other routes.
-//
-// The app below defines two routes, both at the /users URL path. The first is
-// registered only for GET requests, the second for POST.
-//
-// Tip: When running the app, try [http://localhost:1982/users](http://localhost:1982/users)
+/*
+# Routing
+
+One of the most common tasks in developing a web app is deciding which URL's
+trigger which application logic. Up to this point in the examples, all of the
+code samples have run only a single app, without regard for the URL that was
+used in the request. In this chapter, we'll use a Router to call different
+parts of our application based on the request URL.
+
+A route consists of three things: a pattern, an app, and optionally a request
+method(s). When a router is called, it searches through its routes and calls
+the app of the first route that "matches" the request. A route matches the
+request when its pattern matches the request URL and its request method
+matches the method that was used in the request (e.g. GET or POST). A route
+that has no request method(s) associated with it may match any method.
+
+A router uses the following algorithm to find a matching route:
+
+  1. Try all routes whose request method matches the one used in the request
+     in the order they were defined
+  2. Try all routes that are not restricted to a request method in the order
+     they were defined
+
+Once a router finds a route that matches, it calls the corresponding app and
+stops trying other routes.
+
+The app below defines two routes, both at the /users URL path. The first is
+registered only for GET requests, the second for POST.
+
+Tip: When running this app, try [http://localhost:1982/users](http://localhost:1982/users)
+*/
 
 var strata = require("strata"),
     Request = strata.Request,

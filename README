@@ -27,12 +27,12 @@ https://github.com/mjijackson/strata.
 
 The doc directory contains a number of files that make up the Strata user
 manual. Each file is a chapter of the manual written in JavaScript that contains
-documentation about a certain feature of the framework and a runnable example.
+documentation about a certain feature of the framework and a code example.
 
 Each chapter file is runnable using the Strata executable. For example, to run
 the first chapter, you can use the following command (after installing Strata):
 
-  $ strata 01_introduction.js
+  $ strata doc/01_introduction.js
 
 Then open your browser to http://localhost:1982/.
 
