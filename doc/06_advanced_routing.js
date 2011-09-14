@@ -1,33 +1,45 @@
+// # Advanced Routing
+//
 // Sometimes you need to be able to capture certain segments of the URL to use
 // in your application logic. For example, in a traditional REST app you might
-// have a URL that looks like "/users/:id" where the `:id` portion may be any
+// have a URL that looks like `/users/:id` where the `:id` portion may be any
 // valid user id. Strata supports two similar routing mechanisms that allow you
 // to retrieve this data.
 //
-// The first is to use a Ruby-like symbol notation, as is common in the Rails
-// and Sinatra web frameworks. Strata recognizes any sequence of a colon
-// followed by an alpha character and any number of alpha-numeric characters or
-// underscores as one of these symbols. They match any non-empty sequence of
-// characters in the URL up to a "/", "?", or "#".
+// The first is to use a Ruby-like symbol notation within a string, as is common
+// in the [Rails](http://rubyonrails.org/) and [Sinatra](http://www.sinatrarb.com/)
+// web frameworks. Strata recognizes any sequence of a colon followed by an
+// alpha character and any number of alpha-numeric characters or underscores as
+// one of these symbols. They match any non-empty sequence of characters in the
+// URL up to a `/`, `?`, or `#`.
 //
 // The second method is to use a pure regular expression. This method provides
 // you with the most fine-grained control over the matching behavior of the
 // pattern.
 //
-// The way you retrieve segments of the URL that matched is through `env.route`.
-// This variable is an array that contains the result of the match, including
-// any captures. In the case of routes that were defined as a named symbol, it
-// also has getter/setter properties with the same name as that symbol (without
-// the leading colon).
+// When a pattern matches the URL, the results of the match are stored in the
+// `route` environment variable. This variable contains the original string that
+// matched as well as any captures that were present in the pattern. It also has
+// getter/setter properties for any segments of the URL that were defined as
+// symbols.
+//
+// The example below expands upon the example in the previous chapter and adds
+// support for viewing and deleting a user with a particular id. By now, some of
+// the common tasks of setting the `Content-Length` and `Content-Type` of every
+// response by hand is getting a bit tedious, so we'll use some middleware to
+// do these tasks for us.
 
-var strata = require("./../lib"),
-    redirect = strata.redirect;
+var strata = require("strata"),
+    Request = strata.Request,
+    Builder = strata.Builder,
+    redirect = strata.redirect,
     utils = strata.utils;
 
+// This is our simple data store.
 var users = {},
     userId = 0;
 
-// Make a delete button for a user with the given id.
+// A templating function to make a delete button for a user with the given id.
 function deleteButton(id) {
     var html = '<form action="/users/' + id + '" method="POST" style="display:inline">';
     html += '<input type="hidden" name="_method" value="DELETE">';
@@ -40,7 +52,7 @@ function deleteButton(id) {
 // Similarly to a Router, the app given to the Builder constructor serves as the
 // default app when none of the routes match. We're using a Builder instead of
 // a regular Router in this example because we'd like to use some middleware.
-var app = new strata.Builder(function (env, callback) {
+var app = new Builder(function (env, callback) {
     callback(200, {}, 'Try <a href="/users">/users</a>.');
 });
 
@@ -92,7 +104,7 @@ app.get("/users", function (env, callback) {
 // Adds a user to the data store.
 // Note: app.post(pattern, app) is sugar for app.route(pattern, app, "POST")
 app.post("/users", function (env, callback) {
-    var req = new strata.Request(env);
+    var req = new Request(env);
 
     req.params(function (err, params) {
         if (err && strata.handleError(err, env, callback)) {

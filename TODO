@@ -1,0 +1,10 @@
+Middleware:
+
+- rewrite (similar to Apache's mod_rewrite)
+
+In the manual:
+
+- Multipart parsing/file uploads
+- Gzip compression
+- Mocking/testing
+- JSONP

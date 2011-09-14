@@ -23,13 +23,23 @@ Using npm:
 You are also free to browse or download the source at
 https://github.com/mjijackson/strata.
 
-# Examples
+# Manual
 
-The example directory contains many extensively-documented files written in a
-tutorial style that are also runnable. These should help you get up to speed
-quickly on how to use Strata.
+The doc directory contains a number of files that make up the Strata user
+manual. Each file is a chapter of the manual written in JavaScript that contains
+documentation about a certain feature of the framework and a runnable example.
 
-See example/README for more information.
+Each chapter file is runnable using the Strata executable. For example, to run
+the first chapter, you can use the following command (after installing Strata):
+
+  $ strata 01_introduction.js
+
+Then open your browser to http://localhost:1982/.
+
+The manual is written in such a way that the topics and examples discussed in
+higher numbered chapters build upon previous ones. Thus, it is recommended to
+start with lower numbered chapters when getting started with Strata and work
+your way up to higher ones.
 
 # Tests
 
