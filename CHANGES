@@ -1,3 +1,9 @@
+= HEAD
+
+  * Added rewrite middleware (similar to Apache's mod_rewrite)
+
+  * Renamed strata.location environment variable to strata.referrer
+
 = 0.5 / 2011-09-13
 
   * Changed environment variable naming scheme so that all may use the dot
