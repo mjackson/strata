@@ -18,7 +18,9 @@ The core Strata distribution consists of three things:
 
 Using npm:
 
-  $ npm install strata
+``` bash
+$ npm install strata
+```
 
 You are also free to browse or download the source at
 https://github.com/mjijackson/strata.
@@ -32,7 +34,9 @@ documentation about a certain feature of the framework and a code example.
 Each chapter file is runnable using the Strata executable. For example, to run
 the first chapter, you can use the following command (after installing Strata):
 
-  $ strata doc/01_introduction.js
+``` bash
+$ strata doc/01_introduction.js
+```
 
 Then open your browser to http://localhost:1982/.
 
@@ -45,15 +49,21 @@ your way up to higher ones.
 
 To run the tests, first install vows:
 
-  $ npm install -g vows
+``` bash
+$ npm install -g vows
+```
 
 Run all tests with:
 
-  $ vows test/*_test.js
+``` bash
+$ vows test/*_test.js
+```
 
 Otherwise, run the tests for a specific module with:
 
-  $ vows test/utils_test.js
+``` bash
+$ vows test/utils_test.js
+```
 
 # Credits
 
