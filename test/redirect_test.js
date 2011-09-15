@@ -31,7 +31,7 @@ vows.describe("redirect").addBatch({
                 return function (env, callback) {
                     app(env, function (status, headers, body) {
                         var session = env.session;
-                        headers["X-Location"] = session["strata.location"];
+                        headers["X-Referrer"] = session["strata.referrer"];
                         callback(status, headers, body);
                     });
                 }
@@ -51,7 +51,7 @@ vows.describe("redirect").addBatch({
             assert.equal(headers["Location"], this.location);
         },
         "should record the current location in the session": function (err, status, headers, body) {
-            assert.equal(headers["X-Location"], "/admin");
+            assert.equal(headers["X-Referrer"], "/admin");
         }
     },
     "redirect.back": {
@@ -62,11 +62,11 @@ vows.describe("redirect").addBatch({
             var forwardLocation = function (app) {
                 return function (env, callback) {
                     // Simulate a redirect.forward.
-                    env.session = {"strata.location": self.location};
+                    env.session = {"strata.referrer": self.location};
 
                     app(env, function (status, headers, body) {
                         var session = env.session;
-                        headers["X-Location"] = session["strata.location"] || "";
+                        headers["X-Referrer"] = session["strata.referrer"] || "";
                         callback(status, headers, body);
                     });
                 }
@@ -85,7 +85,7 @@ vows.describe("redirect").addBatch({
             assert.equal(headers["Location"], this.location);
         },
         "should delete the old location from the session": function (err, status, headers, body) {
-            assert.equal(headers["X-Location"], "");
+            assert.equal(headers["X-Referrer"], "");
         }
     }
 }).export(module);
