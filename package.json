@@ -13,7 +13,8 @@
         "url": "git://github.com/mjijackson/strata.git"
     },
     "dependencies": {
-        "gzbz2": "0.1.0"
+        "gzbz2": "0.1.0",
+        "mime": "1.2.3"
     },
     "devDependencies": {
         "vows": "0.5.9"

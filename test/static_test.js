@@ -28,6 +28,9 @@ vows.describe("static").addBatch({
             },
             "should serve that file": function (err, status, headers, body) {
                 assert.equal(body, this.body);
+            },
+            "should set the correct Content-Type": function (err, status, headers, body) {
+                assert.equal(headers["Content-Type"], "text/plain");
             }
         },
         "when a directory is requested": {
@@ -37,6 +40,9 @@ vows.describe("static").addBatch({
             },
             "should serve the index file": function (err, status, headers, body) {
                 assert.equal(body, this.body);
+            },
+            "should set the correct Content-Type": function (err, status, headers, body) {
+                assert.equal(headers["Content-Type"], "text/html");
             }
         },
         "when a matching file cannot be found": {

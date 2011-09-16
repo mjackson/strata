@@ -1,3 +1,7 @@
+= HEAD
+
+  * Removed mime module (using npm's mime package instead)
+
 = 0.5.1 / 2011-09-14
 
   * Added rewrite middleware (similar to Apache's mod_rewrite)

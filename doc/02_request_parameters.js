@@ -6,7 +6,7 @@ parameters that were sent by the client in either the URL query string or the
 request body. Strata provides access to both of these and much more via the
 `Request` object.
 
-You instantiate a `Request` object with one object: the environment.
+You instantiate a `Request` object with one argument: the environment.
 
     var req = new Request(env);
 
