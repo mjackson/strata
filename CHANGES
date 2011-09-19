@@ -1,5 +1,7 @@
 = HEAD
 
+  * Added dependency on markdown package for manual HTML formatting
+
   * Removed mime module (using npm's mime package instead)
 
 = 0.5.1 / 2011-09-14

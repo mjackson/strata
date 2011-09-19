@@ -14,7 +14,8 @@
     },
     "dependencies": {
         "gzbz2": "0.1.0",
-        "mime": "1.2.3"
+        "mime": "1.2.3",
+        "markdown": "0.2.1"
     },
     "devDependencies": {
         "vows": "0.5.9"
