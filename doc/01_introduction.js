@@ -11,62 +11,53 @@ the streaming capabilities and excellent I/O handling of node.js.
 
 The goal of this manual is to introduce you to the Strata web framework in a
 way that will help you get started quickly by providing clear, concise
-explanations and example code. The manual is designed to be read linearly.
-Earlier chapters cover the basic principles you should understand before
-proceeding to later chapters, so you should start with them if you're having
-trouble understanding more advanced concepts.
+explanations and example code. At the same time, the manual provides detailed
+descriptions of various components of the framework so that you're not left
+wondering how things actually work behind the scenes.
+
+The manual is designed to be read linearly. Earlier chapters cover the basic
+principles you should understand before proceeding to later chapters, so you
+should start with them if you're having trouble understanding more advanced
+concepts.
 
 ## Installation
 
-To install Strata, follow the instructions in the [README](https://github.com/mjijackson/strata/blob/master/README).
+Strata is a web framework for [node.js](http://nodejs.org). So, to install and
+use Strata you first need to install node.js and [npm](http://npmjs.org/) (the
+node.js package manager). Detailed instructions about how to do this are
+available [on the node.js wiki](https://github.com/joyent/node/wiki/Installation).
 
-This entire manual is actually written in JavaScript, so you can interact
-with the examples as you work your way through the code. After installing,
-you can run any of the chapters in this manual with the `strata` executable,
-e.g.:
+Once you've installed node.js and npm, you can use npm to install Strata:
 
-    $ strata 01_introduction.js
+    $ npm install strata
 
-## Application
+## Your First Application
 
-According to the Strata [SPEC](https://github.com/mjijackson/strata/blob/master/SPEC),
-a Strata application (app) is simply a function that takes two arguments: the
-environment and a callback.
-
-The environment is simply a plain object with several CGI-like properties that
-pertain to the environment the app is operating in. This object is not the same
-as `process.env`. Whereas `process.env` contains information about the machine
-environment the node process is running in, the Strata environment includes
-information about the request, HTTP headers, the server, etc. This object is
-unique to the current request.
-
-The callback is a function that is used to send the response when the app is
-ready to do so. It must be called with three arguments: the HTTP status code,
-an object containing HTTP headers and their values, and the response body.
-
-The body may be a string or a readable Stream. In the case of a Stream it is
-pumped through to the client as data becomes available.
-
-Both the environment and the callback are described in much greater detail in
-the Strata [SPEC](https://github.com/mjijackson/strata/blob/master/SPEC).
-
-## Hello World
-
-The following example demonstrates the simplest app possible. It does not
-make use of the environment because it doesn't need to. It simply sends a
-string of text in an HTTP 200 response.
+Now that you've installed Strata, copy and paste the code below into a file
+named `app.js`.
 */
 
-module.exports = function (env, callback) {
-    callback(200, {
-        "Content-Type": "text/plain",
-        "Content-Length": "12"
-    }, "Hello world!");
-}
+var strata = require("strata");
+var app = new strata.Builder;
+
+app.use(strata.commonLogger);
+app.use(strata.contentType, "text/plain");
+app.use(strata.contentLength);
+
+app.get("/", function (env, callback) {
+    callback(200, {}, "Hello world!");
+});
+
+module.exports = app;
 
 /*
-Remember that this file is runnable, so you can run this example if you have
-a local clone of [the code](https://github.com/mjijackson/strata) using:
+You can run the file using the Strata executable:
 
-    $ strata 01_introduction.js
+    $ strata app.js
+
+Now visit the app at [http://localhost:1982/](http://localhost:1982/).
+
+Congratulations! You just ran your first Strata app complete with middleware,
+logging, and custom routing capabilities. Keep reading the manual to understand
+more about what's going on in the above example.
 */
