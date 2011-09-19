@@ -1,4 +1,4 @@
-= HEAD
+= 0.5.2 / 2011-09-19
 
   * Added dependency on markdown package for manual HTML formatting
 
