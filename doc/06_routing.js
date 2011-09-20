@@ -24,10 +24,8 @@ A router uses the following algorithm to find a matching route:
 Once a router finds a route that matches, it calls the corresponding app and
 stops trying other routes.
 
-The app below defines two routes, both at the /users URL path. The first is
+The app below defines two routes, both at the `/users` URL path. The first is
 registered only for GET requests, the second for POST.
-
-Tip: When running this app, try [http://localhost:1982/users](http://localhost:1982/users)
 */
 
 var strata = require("strata"),
@@ -96,3 +94,12 @@ app.post("/users", function (env, callback) {
 });
 
 module.exports = app;
+
+/*
+As in previous chapters, you can save the above code to a file named `app.js`
+and run it with:
+
+    $ strata app.js
+
+Then view the app at [http://localhost:1982/users](http://localhost:1982/users).
+*/

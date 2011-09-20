@@ -18,8 +18,8 @@ ready to do so. It must be called with three arguments: the HTTP status code,
 an object containing HTTP headers and their values, and the response body.
 
 The body may be a string or a readable Stream. In the case of a string it is
-used as the entire request body. In the case of a Stream it is pumped through to
-the client as data becomes available.
+used as the response body. In the case of a Stream it is pumped through to the
+client as data becomes available.
 
 Both the environment and the callback are described in much greater detail in
 the Strata [SPEC](https://github.com/mjijackson/strata/blob/master/SPEC).

@@ -2,9 +2,12 @@
 # Middleware
 
 One of the most powerful concepts to understand when building apps with
-Strata is middleware. A middleware is an app that has a reference to another
-app. We call this other app the "downstream" app, for reasons that should
-soon be apparent.
+Strata is middleware. This concept should be familiar to anyone who has previous
+experience developing applications with [WSGI](http://www.wsgi.org/) or [Rack](http://rack.rubyforge.org/).
+This chapter explains what middleware looks like in Strata.
+
+A middleware is essentially an app that has a reference to another app. We call
+this other app the "downstream" app, for reasons that should soon be apparent.
 
 When a request comes in, the middleware is called first. A middleware
 typically exists to do one (or both) of the following:
@@ -34,22 +37,20 @@ This middleware is a function that takes an app and an optional default
 content type as arguments and returns a Strata app. When called, the
 middleware simply calls the downstream app. When it receives the status,
 headers, and body from downstream it checks to see if the `Content-Type`
-header exists in the response. If not, it adds its default content type.
-Then, it passes all three arguments upstream.
+[header](http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17) exists
+in the response. If not, it adds its default content type. Then, it passes all
+three arguments upstream.
 
 ## Modifying the Environment
 
 The `strata.contentType` middleware shown above modifies the response on
 its way upstream. Specifically, it sets a header in the response if it's not
-already set.
+already set. However, middleware can also be used to set various properties in
+the environment for the sake of *downstream* apps.
 
-However, middleware can also be used to set various properties in the
-environment for the sake of *downstream* apps. The example below demonstrates
-how to build a simple middleware that stores the value of a request parameter
-named "user" in a custom environment variable so that it may be used by the
-downstream app.
-
-Tip: When running this app, try [http://localhost:1982/?user=Michael](http://localhost:1982/?user=Michael)
+The example app below demonstrates how to build a simple middleware that stores
+the value of a request parameter named "user" in a custom environment variable
+so that it may be used by the downstream app.
 */
 
 var strata = require("strata"),
@@ -88,6 +89,16 @@ module.exports = setUser(function (env, callback) {
 });
 
 /*
+As in previous chapters, you can save the above code to a file named `app.js`
+and run it with:
+
+    $ strata app.js
+
+Then view the app at [http://localhost:1982/](http://localhost:1982/).
+
+Tip: When running this app, try [http://localhost:1982/?user=Michael](http://localhost:1982/?user=Michael)
+or something similar.
+
 ## Examples
 
 Strata ships with many middleware modules that allow you to do various things

@@ -21,8 +21,8 @@ of data is more than enough to work with.
 
 ## Usage
 
-Session cookies are enabled through the use of the `sessionCookie` middleware.
-You use it like this:
+Session cookies are enabled through the use of the `strata.sessionCookie`
+middleware. You use it like this:
 
     var app = strata.sessionCookie(app, options);
 
@@ -58,15 +58,17 @@ app.use(strata.sessionCookie, {
     name: "myapp.session"
 });
 
+// GET /login
+// Sets a userId variable in the session that lets us know the user
+// is logged in.
 app.get("/login", function (env, callback) {
-    // Set a userId variable in the session. This lets us know the user is
-    // logged in.
     env.session.userId = "1";
     redirect(env, callback, "/");
 });
 
+// GET /logout
+// Clears the session and redirects to /.
 app.get("/logout", function (env, callback) {
-    // Clear the session.
     env.session = {};
     redirect(env, callback, "/");
 });
@@ -85,3 +87,12 @@ app.run(function (env, callback) {
 });
 
 module.exports = app;
+
+/*
+As in previous chapters, you can save the above code to a file named `app.js`
+and run it with:
+
+    $ strata app.js
+
+Then view the app at [http://localhost:1982/](http://localhost:1982/).
+*/

@@ -2,9 +2,9 @@
 # Error Handling
 
 If you read through the example code in the previous chapter, you may have
-noticed that there was an error argument provided in the callback to
+noticed that there was an `err` argument provided in the callback to
 `req.params` that was simply ignored. This style of passing errors as the
-first argument to a callback is very standard practice in node programs.
+first argument to a callback is standard practice in node programs.
 
 Typically, error handling in an asynchronous environment is a pain point for
 programmers. The problem is that when you're in a callback you can't simply
@@ -31,14 +31,15 @@ a query using a primary key that is not present in the database. In this
 case, you could setup a global error handler that handles this specific type
 of error by returning a 404 to the client, instead of returning a 500.
 
-The return value of `strata.handleError` MUST always be a boolean. A `true`
+The return value of `strata.handleError` **must** always be a boolean. A `true`
 value means that the callback was used to issue a response to the client so
-the server may stop processing the request. False means that the error was
-not fatal and the request may continue processing. By default all errors are
+the server may stop processing the request, while `false` means that the error
+was not fatal and the request may continue processing. By default all errors are
 considered fatal, so `true` is returned.
 
-The following app is a clone of the example in the previous chapter that
-demonstrates how to use `strata.handleError` to handle errors gracefully.
+The following app is a clone of the example in the previous chapter, except this
+time any error that may be returned in the callback to `req.params` will be
+handled gracefully.
 */
 
 var strata = require("strata"),
@@ -66,4 +67,11 @@ module.exports = function (env, callback) {
 /*
 In this example, an error returned by `req.params` represents an error that
 Strata's request parser encountered when parsing the request query or body.
+
+As in previous chapters, you can save the above code to a file named `app.js`
+and run it with:
+
+    $ strata app.js
+
+Then view the app at [http://localhost:1982/](http://localhost:1982/).
 */

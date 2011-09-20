@@ -172,3 +172,12 @@ app.del("/users/:id", function (env, callback) {
 });
 
 module.exports = app;
+
+/*
+As in previous chapters, you can save the above code to a file named `app.js`
+and run it with:
+
+    $ strata app.js
+
+Then view the app at [http://localhost:1982/](http://localhost:1982/).
+*/

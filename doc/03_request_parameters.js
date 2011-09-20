@@ -19,7 +19,7 @@ You can use `req.params` to access the union of all parameters that were sent
 argument: a callback that is called with any error and an object containing
 the request parameters.
 
-In the example below the request parameters are simply encoded as JSON and
+In the example app below the request parameters are simply encoded as JSON and
 returned to the client in an `application/json` response.
 */
 
@@ -38,3 +38,16 @@ module.exports = function (env, callback) {
         }, content);
     });
 }
+
+/*
+As in the previous chapter, you can save the above code to a file named `app.js`
+and run it with:
+
+    $ strata app.js
+
+Then view the app at [http://localhost:1982/](http://localhost:1982/). To test
+out Strata's request parameter parsing capabilities, trying sending various
+parameters to the app in the query string and request body. Strata natively
+supports `application/json`, `application/x-www-url-formencoded`, and
+`multipart/form-data` parsing, as well as several other multipart subtypes.
+*/
