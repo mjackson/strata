@@ -3,12 +3,12 @@ applications using the node.js JavaScript platform. You can (and should) use
 the strata.lint middleware to enforce it. When you develop middleware, be sure
 to add a strata.lint before and after to catch all mistakes.
 
-= Strata Applications
+# Applications
 
 A Strata application is a function that takes exactly two arguments: the
 *environment* and a *callback*.
 
-== The Environment
+## The Environment
 
 The environment is an object that contains CGI-like properties. It must include
 the following:
@@ -76,16 +76,16 @@ prefixed uniquely. The prefix "strata" is reserved for use within the Strata
 core distribution and other accepted specifications and is not available for
 use elsewhere.
 
-== The Callback
+## The Callback
 
 The callback is used to issue a response to the client and must be called with
 exactly three arguments: the response *status*, HTTP *headers*, and *body*.
 
-=== The Status
+### The Status
 
 The status must be an HTTP status code as a Number.
 
-=== The Headers
+### The Headers
 
 The headers must be an object whose properties are the names of HTTP headers in
 their canonical form (i.e. "Content-Type" instead of "content-type"). Header
@@ -93,22 +93,18 @@ names may contain only letters, digits, "-", and "_" and must start with a
 letter and must not end with a "-" or "_". If more than one value for a header
 is required, the value for that property must be an array.
 
-==== The Content-Type
-
 There must be a Content-Type header, except for when the status is 1xx, 204, or
 304, in which case there must be none given.
-
-==== The Content-Length
 
 There must not be a Content-Length header when the status is 1xx, 204, or 304,
 or it must be "0".
 
-=== The Body
+### The Body
 
 The body must be either a string or a readable Stream. If it is a Stream, the
 response will be pumped through to the client.
 
-= Credits
+# Credits
 
 Some parts of this specification are adopted from PEP333: Python Web Server
 Gateway Interface v1.0 (http://www.python.org/dev/peps/pep-0333/) and the Rack
