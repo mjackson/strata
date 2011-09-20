@@ -21,6 +21,7 @@ the following:
                       required.
   - requestMethod     The request method (e.g. "GET" or "POST"). This cannot
                       ever be an empty string, and is always required.
+  - requestTime       A Date that indicates the time the request was received.
   - serverName,       When combined with scriptName and pathInfo these
     serverPort        variables may be used to reconstruct the original
                       request URL. Note, however, that if httpHost is present,
@@ -63,6 +64,7 @@ There are the following restrictions:
 
   - protocol must be either "http:" or "https:"
   - requestMethod must be a valid HTTP verb as an uppercase String
+  - requestTime must be a Date
   - scriptName and pathInfo, if not empty, should start with a "/"
   - scriptName should never be "/" but instead be empty
   - pathInfo should be "/" if scriptName is empty

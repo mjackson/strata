@@ -43,6 +43,8 @@ vows.describe("lint").addBatch({
                 assertStringProperty(p);
             });
 
+            assertRequiredProperty("requestTime");
+
             assert.throws(function () {
                 var env = mock.env();
                 env.httpContentType = "text/plain";
