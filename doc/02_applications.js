@@ -10,8 +10,9 @@ The environment is simply a plain object with several CGI-like properties that
 pertain to the environment the app is operating in. This object is not the same
 as `process.env`. Whereas `process.env` contains information about the machine
 environment the node process is running in, the Strata environment includes
-information about the request, HTTP headers, the server, etc. This object is
-unique to the current request.
+information about the request, HTTP headers, the server, etc., similar to PHP's
+special [$_SERVER](http://php.net/manual/en/reserved.variables.server.php)
+variable. This object is unique to the current request.
 
 The callback is a function that is used to send the response when the app is
 ready to do so. It must be called with three arguments: the HTTP status code,
