@@ -39,11 +39,15 @@ of an app that serves static files.
 var strata = require("strata"),
     Builder = strata.Builder;
 
+// For the sake of this example, the root directory where we store static files
+// is the current working directory (i.e. $PWD).
+var root = path.resolve(".");
+
 var app = new Builder;
 
 app.use(strata.commonLogger);
 app.use(strata.gzip);
-app.use(strata.static, __dirname);
+app.use(strata.static, root);
 
 module.exports = app;
 
@@ -53,13 +57,10 @@ and run it with:
 
     $ strata app.js
 
-The app will serve any static files that are in the same directory on disk. To
-observe the gzip compression, use a client that is capable of accepting gzip
+The app will serve any static files that are in the current working directory.
+To observe the gzip compression, use a client that is capable of accepting gzip
 encoding (i.e. sends an "Accept-Encoding: gzip" header in the request) and
 request a text or JavaScript file from the app.
 
-For example, to request the app file itself you could paste the following URL
-into your browser:
-
-    http://localhost:1982/app.js
+For example, to request the app file itself you could use [http://localhost:1982/app.js](http://localhost:1982/app.js).
 */
