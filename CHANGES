@@ -1,3 +1,10 @@
+= HEAD
+
+  * Refactored stream-like constructors to inherit from Stream so they can
+    take advantage of Stream#pipe.
+
+  * Removed all synchronous fs calls from static middleware.
+
 = 0.5.6 / 2011-09-20
 
   * Ensure all manual chapters are in the correct order.

@@ -75,6 +75,28 @@ vows.describe("mock").addBatch({
             "should emit its contents when resumed": function (content) {
                 assert.equal(content, this.content);
             }
+        },
+        "that is sourced from another stream": {
+            topic: function () {
+                this.content = "hello world!";
+                var source = new mock.Stream(this.content);
+
+                var stream = new mock.Stream(source),
+                    content = "",
+                    self = this;
+
+                stream.on("data", function (buffer) {
+                    assert.ok(buffer instanceof Buffer);
+                    content += buffer.toString("utf8");
+                });
+
+                stream.on("end", function () {
+                    self.callback(null, content);
+                });
+            },
+            "should emit the source's contents": function (content) {
+                assert.equal(content, this.content);
+            }
         }
     },
     "A mock request to utils.empty": {

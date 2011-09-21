@@ -10,6 +10,7 @@ vows.describe("index").addBatch({
             this.protocol = "https:";
             this.protocolVersion = "1.1";
             this.requestMethod = "POST";
+            this.requestTime = new Date;
             this.serverName = "example.org";
             this.serverPort = "443";
             this.pathInfo = "/some/path";
@@ -25,6 +26,7 @@ vows.describe("index").addBatch({
                 protocol: this.protocol,
                 protocolVersion: this.protocolVersion,
                 requestMethod: this.requestMethod,
+                requestTime: this.requestTime,
                 serverName: this.serverName,
                 serverPort: this.serverPort,
                 pathInfo: this.pathInfo,
@@ -45,6 +47,9 @@ vows.describe("index").addBatch({
         },
         "should have the correct requestMethod": function (env) {
             assert.equal(env.requestMethod, this.requestMethod);
+        },
+        "should have the correct requestTime": function (env) {
+            assert.equal(env.requestTime, this.requestTime);
         },
         "should have the correct serverName": function (env) {
             assert.equal(env.serverName, this.serverName);
