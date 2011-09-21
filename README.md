@@ -29,7 +29,8 @@ https://github.com/mjijackson/strata.
 
 The doc directory contains a number of files that make up the Strata user
 manual. Each file is a chapter of the manual written in JavaScript that contains
-documentation about a certain feature of the framework and a code example.
+documentation about a certain feature of the framework and a code example. You
+can view the manual online at http://stratajs.org/manual.
 
 Each chapter file is runnable using the Strata executable. For example, to run
 the first chapter, you can use the following command (after installing Strata):
@@ -38,7 +39,7 @@ the first chapter, you can use the following command (after installing Strata):
 $ strata doc/01_introduction.js
 ```
 
-Then open your browser to http://localhost:1982/.
+Then open your browser to http://localhost:1982.
 
 The manual is written in such a way that the topics and examples discussed in
 higher numbered chapters build upon previous ones. Thus, it is recommended to
@@ -64,6 +65,28 @@ Otherwise, run the tests for a specific module with:
 ``` bash
 $ vows test/utils_test.js
 ```
+
+# License
+
+Copyright 2010 Michael Jackson
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 
 # Credits
 
