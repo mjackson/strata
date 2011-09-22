@@ -23,5 +23,8 @@
     "main": "./lib",
     "bin": {
         "strata": "./bin/strata"
+    },
+    "scripts": {
+        "test": "vows test/*_test.js"
     }
 }
