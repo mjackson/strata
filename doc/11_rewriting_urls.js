@@ -1,5 +1,5 @@
 /*
-# Rewriting URL's
+# Rewriting URLs
 
 Occasionally your app may need to rewrite an incoming URL to be something else.
 For example, you may want to rewrite all requests for `/oldpage.html` to
