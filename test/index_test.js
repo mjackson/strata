@@ -116,11 +116,5 @@ vows.describe("index").addBatch({
                 assert.ok(error.writable);
             }
         }
-    },
-    "Error": {
-        topic: new strata.Error("Bang!"),
-        "should be an instance of Error": function (err) {
-            assert.instanceOf(err, Error);
-        }
     }
 }).export(module);

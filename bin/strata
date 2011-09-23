@@ -38,7 +38,7 @@ for (var i = 2; i < process.argv.length; ++i) {
         if (path.existsSync(certfile)) {
             options.cert = fs.readFileSync(certfile);
         } else {
-            throw new strata.Error('File "' + certfile + '" does not exist');
+            throw new Error('File "' + certfile + '" does not exist');
         }
         break;
     case "-h":
@@ -52,7 +52,7 @@ for (var i = 2; i < process.argv.length; ++i) {
         if (path.existsSync(keyfile)) {
             options.key = fs.readFileSync(keyfile);
         } else {
-            throw new strata.Error('File "' + keyfile + '" does not exist');
+            throw new Error('File "' + keyfile + '" does not exist');
         }
         break;
     case "-p":
@@ -87,7 +87,7 @@ if (!exit) {
             }
         });
     } else {
-        throw new strata.Error('File "' + appfile + '" does not exist');
+        throw new Error('File "' + appfile + '" does not exist');
     }
 }
 
