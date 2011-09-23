@@ -23,7 +23,7 @@ middleware *upstream* from any application logic. This prevents your app from
 wasting time processing a request that is only meant to serve a static file
 anyway.
 
-The app below demonstrates simply serves any file in the current working
+The app below demonstrates how to serve any file in the current working
 directory (or any of its subdirectories).
 */
 
