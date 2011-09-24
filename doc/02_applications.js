@@ -1,18 +1,22 @@
 /*
 # Applications
 
-The most basic unit in Strata is the application. According to the Strata
-[SPEC](https://github.com/mjijackson/strata/blob/master/SPEC), an application
-(app) is simply a function that takes two arguments: the environment and a
-callback.
+The most basic unit in Strata is the application. In Strata, an application is
+simply a *function* (see the [SPEC](https://github.com/mjijackson/strata/blob/master/SPEC))
+that accepts two arguments: the environment and a callback.
 
-The environment is simply a plain object with several CGI-like properties that
-pertain to the environment the app is operating in. This object is not the same
-as `process.env`. Whereas `process.env` contains information about the machine
-environment the node process is running in, the Strata environment includes
-information about the request, HTTP headers, the server, etc., similar to PHP's
-special [$_SERVER](http://php.net/manual/en/reserved.variables.server.php)
-variable. This object is unique to the current request.
+The environment is a plain object with several CGI-like properties that pertain
+to the environment the app is operating in. This object is not the same as
+`process.env`. Whereas `process.env` contains information about the environment
+the node process is running in, a Strata environment object contains information
+about an incoming HTTP request. It contains many of the same properties as
+[Apache's environment variables](http://httpd.apache.org/docs/2.2/env.html) or
+[PHP's special $_SERVER variable](http://php.net/manual/en/reserved.variables.server.php).
+
+It is important to remember that an environment object is always unique to the
+current request and is shared among all callbacks that are used in constructing
+the response. This provides a convenient concurrency primitive in an otherwise
+completely asynchronous environment.
 
 The callback is a function that is used to send the response when the app is
 ready to do so. It must be called with three arguments: the HTTP status code,
@@ -32,12 +36,14 @@ make use of the environment because it doesn't need to. It simply sends a
 string of text in an HTTP 200 response.
 */
 
-module.exports = function (env, callback) {
+function app(env, callback) {
     callback(200, {
         "Content-Type": "text/plain",
         "Content-Length": "12"
     }, "Hello world!");
 }
+
+module.exports = app;
 
 /*
 Save the above code to a file named `app.js` and run it with:

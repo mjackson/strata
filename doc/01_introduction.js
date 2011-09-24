@@ -22,14 +22,25 @@ principles you should understand before proceeding to later chapters, so you
 should start with them if you're having trouble understanding more advanced
 concepts.
 
+## Style
+
+The following style conventions are used throughout this manual when referring
+to code:
+
+  - A dot is used to denote a property of an object. For example, `req.params`
+    has reference to the `params` property of the `req` object.
+  - A hash is used to denote a property of an object's *prototype*. For example,
+    `Request#params` has reference to `Request.prototype.params`. Basically, you
+    can substitute `.prototype.` for a `#`.
+
 ## Installation
 
 Strata is a web framework for [node.js](http://nodejs.org). So, to install and
-use Strata you first need to install node.js and [npm](http://npmjs.org/) (the
-node.js package manager). Detailed instructions about how to do this are
-available [on the node.js wiki](https://github.com/joyent/node/wiki/Installation).
+use Strata you first need to install node and [npm](http://npmjs.org/) (node's
+package manager). Detailed instructions about how to do this are available
+[on the node.js wiki](https://github.com/joyent/node/wiki/Installation).
 
-Once you've installed node.js and npm, you can use npm to install Strata:
+Once you've installed npm, you can use it to install Strata:
 
     $ npm install strata
 
@@ -60,6 +71,6 @@ You can run the file using the Strata executable:
 Now visit the app at [http://localhost:1982/](http://localhost:1982/).
 
 Congratulations! You just ran your first Strata app complete with middleware,
-logging, and custom routing capabilities. Keep reading the manual to understand
-more about what's going on in the above example.
+logging, and custom routing capabilities. Continue reading the next chapter to
+understand more about what's going on in the example above.
 */
