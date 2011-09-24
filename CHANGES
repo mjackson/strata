@@ -1,5 +1,7 @@
 = HEAD
 
+  * Refactored mock.Stream into BufferedStream.
+
   * Created errors module.
 
 = 0.5.7 / 2011-09-22

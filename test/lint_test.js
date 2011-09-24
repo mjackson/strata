@@ -103,13 +103,13 @@ vows.describe("lint").addBatch({
                 var env = mock.env();
                 env.input = "";
                 app(env, function (status, headers, body) {});
-            }, /input must be/);
+            }, /input must be a Stream/);
 
             assert.throws(function () {
                 var env = mock.env();
                 env.error = "";
                 app(env, function (status, headers, body) {});
-            }, /error must be/);
+            }, /error must be a Stream/);
         },
         "should detect an invalid callback": function () {
             var app = lint(utils.empty);

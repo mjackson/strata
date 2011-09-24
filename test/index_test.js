@@ -2,7 +2,8 @@ var assert = require("assert"),
     vows = require("vows"),
     EventEmitter = require("events").EventEmitter,
     strata = require("./../lib/index"),
-    mock = require("./../lib/mock");
+    mock = require("./../lib/mock"),
+    BufferedStream = require("./../lib/bufferedstream");
 
 vows.describe("index").addBatch({
     "env": {
@@ -19,7 +20,7 @@ vows.describe("index").addBatch({
             this.content = "hello world!";
             this.contentLength = this.content.length.toString(10);
 
-            var input = new mock.Stream(this.content);
+            var input = new BufferedStream(this.content);
             input.pause();
 
             return strata.env({

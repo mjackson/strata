@@ -55,7 +55,7 @@ httpContentLength (use contentType and contentLength instead).
 In addition to these, the environment may include the following Strata-specific
 properties:
 
-  - input           An EventEmitter of data contained in the request body
+  - input           A readable Stream of data contained in the request body
   - error           A writable Stream for error output
   - session         An object containing session data
   - strataVersion   The current version of Strata as [major, minor, patch]
@@ -69,7 +69,7 @@ There are the following restrictions:
   - scriptName should never be "/" but instead be empty
   - pathInfo should be "/" if scriptName is empty
   - contentLength, if given, must consist of digits only
-  - input must be an EventEmitter
+  - input must be a readable Stream
   - error must be a writable Stream
   - strataVersion must be an array of integers
 

@@ -6,7 +6,8 @@ var assert = require("assert"),
     Gzip = require("gzbz2").Gzip,
     gzip = require("./../lib/gzip"),
     stat = require("./../lib/static"),
-    utils = require("./../lib/utils");
+    utils = require("./../lib/utils"),
+    BufferedStream = require("./../lib/bufferedstream");
 
 vows.describe("gzip").addBatch({
     "A gzip middleware": {
@@ -42,7 +43,8 @@ vows.describe("gzip").addBatch({
 
                 var self = this;
                 var app = gzip(function (env, callback) {
-                    callback(200, {"Content-Type": "text/plain"}, new mock.Stream(self.body));
+                    var stream = new BufferedStream(self.body);
+                    callback(200, {"Content-Type": "text/plain"}, stream);
                 });
 
                 mock.request({

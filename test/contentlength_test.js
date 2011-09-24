@@ -1,7 +1,8 @@
 var assert = require("assert"),
     vows = require("vows"),
     mock = require("./../lib/mock"),
-    contentLength = require("./../lib/contentlength");
+    contentLength = require("./../lib/contentlength"),
+    BufferedStream = require("./../lib/bufferedstream");
 
 vows.describe("contentlength").addBatch({
     "A contentLength middleware": {
@@ -24,7 +25,7 @@ vows.describe("contentlength").addBatch({
         "with a Stream body": {
             topic: function () {
                 this.errors = "";
-                this.body = new mock.Stream("Hello world!");
+                this.body = new BufferedStream("Hello world!");
 
                 var self = this;
                 var app = contentLength(function (env, callback) {

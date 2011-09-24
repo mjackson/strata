@@ -1,7 +1,8 @@
 var assert = require("assert"),
     vows = require("vows"),
     mock = require("./../lib/mock"),
-    jsonp = require("./../lib/jsonp");
+    jsonp = require("./../lib/jsonp"),
+    BufferedStream = require("./../lib/bufferedstream");
 
 vows.describe("gzip").addBatch({
     "A gzip middleware": {
@@ -18,9 +19,7 @@ vows.describe("gzip").addBatch({
             },
             "should wrap it in a JavaScript callback": function (err, status, headers, body) {
                 assert.equal(headers["Content-Type"], "application/javascript");
-
                 var expect = "callback(" + this.body + ")";
-
                 assert.equal(body, expect);
             }
         },
@@ -30,16 +29,15 @@ vows.describe("gzip").addBatch({
 
                 var self = this;
                 var app = jsonp(function (env, callback) {
-                    callback(200, {"Content-Type": "application/json"}, new mock.Stream(self.body));
+                    var stream = new BufferedStream(self.body);
+                    callback(200, {"Content-Type": "application/json"}, stream);
                 });
 
                 mock.request("", app, this.callback);
             },
             "should wrap it in a JavaScript callback": function (err, status, headers, body) {
                 assert.equal(headers["Content-Type"], "application/javascript");
-
                 var expect = "callback(" + this.body + ")";
-
                 assert.equal(body, expect);
             }
         }

@@ -2,7 +2,8 @@ var assert = require("assert"),
     vows = require("vows"),
     qs = require("querystring"),
     Request = require("./../lib/request"),
-    mock = require("./../lib/mock");
+    mock = require("./../lib/mock"),
+    BufferedStream = require("./../lib/bufferedstream");
 
 vows.describe("request").addBatch({
     "A Request": {
@@ -201,7 +202,7 @@ vows.describe("request").addBatch({
             topic: function () {
                 this.body = "This is some plain text.";
 
-                var input = new mock.Stream(this.body);
+                var input = new BufferedStream(this.body);
                 input.pause();
 
                 var self = this;
@@ -224,7 +225,7 @@ vows.describe("request").addBatch({
             topic: function () {
                 this.body = '{"a": 1, "b": 2}';
 
-                var input = new mock.Stream(this.body);
+                var input = new BufferedStream(this.body);
                 input.pause();
 
                 var self = this;
@@ -247,7 +248,7 @@ vows.describe("request").addBatch({
             topic: function () {
                 this.body = "a=1&a=2";
 
-                var input = new mock.Stream(this.body);
+                var input = new BufferedStream(this.body);
                 input.pause();
 
                 var self = this;
@@ -274,7 +275,7 @@ Content-Disposition: form-data; name="a"\r\n\
 hello world\r\n\
 --AaB03x--\r';
 
-                var input = new mock.Stream(body);
+                var input = new BufferedStream(body);
                 input.pause();
 
                 var self = this;
@@ -303,7 +304,7 @@ Content-Disposition: form-data; name="a"\r\n\
 hello world\r\n\
 --AaB03x--\r';
 
-                var input = new mock.Stream(body);
+                var input = new BufferedStream(body);
                 input.pause();
 
                 var self = this;
