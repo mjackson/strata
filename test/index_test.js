@@ -18,7 +18,7 @@ vows.describe("index").addBatch({
             this.queryString = "a=1&b=2";
             this.userAgent = "test suite";
             this.content = "hello world!";
-            this.contentLength = this.content.length.toString(10);
+            this.contentLength = Buffer.byteLength(this.content).toString(10);
 
             var input = new BufferedStream(this.content);
             input.pause();
@@ -116,6 +116,21 @@ vows.describe("index").addBatch({
                 assert.instanceOf(error, EventEmitter);
                 assert.ok(error.writable);
             }
+        }
+    },
+    "A strata.Error": {
+        topic: new strata.Error("Bang!"),
+        "should be an instance of Error": function (err) {
+            assert.instanceOf(err, Error);
+        }
+    },
+    "A strata.InvalidRequestBodyError": {
+        topic: new strata.InvalidRequestBodyError("Bang!"),
+        "should be an instance of Error": function (err) {
+            assert.instanceOf(err, Error);
+        },
+        "should be an instance of strata.Error": function (err) {
+            assert.instanceOf(err, strata.Error);
         }
     }
 }).export(module);
