@@ -12,6 +12,21 @@ vows.describe("stream").addBatch({
         "should be an instance of Stream": function (stream) {
             assert.instanceOf(stream, Stream);
         },
+        "after end() has been called": {
+            topic: function () {
+                var stream = new BufferedStream;
+                stream.end();
+                return stream;
+            },
+            "should not be writable": function (stream) {
+                assert.ok(!stream.writable);
+            },
+            "should throw an error when written to": function (stream) {
+                assert.throws(function () {
+                    stream.write("hello");
+                }, /not writable/);
+            }
+        },
         "with string contents and no encoding": {
             topic: function () {
                 var stream = new BufferedStream;
