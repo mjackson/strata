@@ -29,14 +29,12 @@ vows.describe("stream").addBatch({
         },
         "with string contents and no encoding": {
             topic: function () {
-                var stream = new BufferedStream;
+                var stream = new BufferedStream("hello");
                 var self = this;
 
                 stream.on("data", function (chunk) {
                     self.callback(null, chunk);
                 });
-
-                stream.proxy("Hello world");
             },
             "should emit buffers": function (chunk) {
                 assert.instanceOf(chunk, Buffer);
@@ -44,7 +42,7 @@ vows.describe("stream").addBatch({
         },
         "with string contents and an encoding": {
             topic: function () {
-                var stream = new BufferedStream;
+                var stream = new BufferedStream("hello");
                 var self = this;
 
                 stream.setEncoding("base64");
@@ -52,18 +50,39 @@ vows.describe("stream").addBatch({
                 stream.on("data", function (chunk) {
                     self.callback(null, chunk);
                 });
-
-                stream.proxy("Hello world");
             },
             "should emit strings": function (chunk) {
                 assert.equal(typeof chunk, "string");
             },
             "should use the proper encoding": function (chunk) {
-                var expect = new Buffer("Hello world").toString("base64");
+                var expect = new Buffer("hello").toString("base64");
                 assert.equal(chunk, expect);
             }
         },
-        "when sourced from a string": {
+        "when write() is called with a string in base64 encoding": {
+            topic: function () {
+                this.content = "hello";
+
+                var stream = new BufferedStream;
+                stream.write(new Buffer(this.content).toString("base64"), "base64");
+                stream.end();
+
+                var content = "",
+                    self = this;
+
+                stream.on("data", function (chunk) {
+                    content += chunk.toString();
+                });
+
+                stream.on("end", function () {
+                    self.callback(null, content);
+                });
+            },
+            "should use the proper encoding": function (content) {
+                assert.equal(content, this.content);
+            }
+        },
+        "when proxy for a string": {
             topic: function () {
                 this.content = "Hello world";
                 var source = this.content;
@@ -83,7 +102,7 @@ vows.describe("stream").addBatch({
                 }
             }
         },
-        "when sourced from a Buffer": {
+        "when proxy for a Buffer": {
             topic: function () {
                 this.content = "Hello world";
                 var source = new Buffer(this.content);
@@ -103,7 +122,7 @@ vows.describe("stream").addBatch({
                 }
             }
         },
-        "when sourced from another Stream": {
+        "when proxy for another Stream": {
             topic: function () {
                 this.content = "Hello world";
                 var source = new BufferedStream;
@@ -129,11 +148,10 @@ vows.describe("stream").addBatch({
 }).export(module);
 
 function bufferSource(source, callback) {
-    var stream = new BufferedStream;
+    var stream = new BufferedStream(source);
     var content = "";
 
     stream.on("data", function (chunk) {
-        assert.instanceOf(chunk, Buffer);
         content += chunk.toString();
     });
 
@@ -141,24 +159,13 @@ function bufferSource(source, callback) {
         callback(null, content);
     });
 
-    stream.proxy(source);
+    return stream;
 }
 
 function temporarilyPauseThenBufferSource(source, callback) {
-    var stream = new BufferedStream;
-    var content = "";
-
-    stream.on("data", function (chunk) {
-        assert.instanceOf(chunk, Buffer);
-        content += chunk.toString();
-    });
-
-    stream.on("end", function () {
-        callback(null, content);
-    });
+    var stream = bufferSource(source, callback);
 
     stream.pause();
-    stream.proxy(source);
 
     setTimeout(function () {
         stream.resume();
