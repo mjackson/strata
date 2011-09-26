@@ -1,3 +1,7 @@
+= HEAD
+
+  * Use Content-Length: 0 for HEAD requests.
+
 = 0.5.9 / 2011-09-26
 
   * Better docs around Error reporting and handling.

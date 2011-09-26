@@ -17,5 +17,27 @@ vows.describe("mock").addBatch({
         "should return an empty body": function (err, status, headers, body) {
             assert.equal(body, utils.empty.body);
         }
+    },
+    "A mock HEAD request": {
+        topic: function () {
+            var app = function (env, callback) {
+                assert.equal(env.requestMethod, "HEAD");
+                var content = "Hello world";
+                callback(200, {
+                    "Content-Type": "text/plain",
+                    "Content-Length": Buffer.byteLength(content).toString()
+                }, content);
+            }
+
+            mock.request({
+                requestMethod: "HEAD"
+            }, app, this.callback);
+        },
+        "should return a Content-Length of 0": function (err, status, headers, body) {
+            assert.equal(headers["Content-Length"], "0");
+        },
+        "should return an empty body": function (err, status, headers, body) {
+            assert.equal(body, "");
+        }
     }
 }).export(module);
