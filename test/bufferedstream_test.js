@@ -6,11 +6,23 @@ var assert = require("assert"),
 vows.describe("stream").addBatch({
     "A BufferedStream": {
         topic: new BufferedStream,
+        "should be an instance of Stream": function (stream) {
+            assert.instanceOf(stream, Stream);
+        },
         "should be empty": function (stream) {
             assert.ok(stream.empty);
         },
-        "should be an instance of Stream": function (stream) {
-            assert.instanceOf(stream, Stream);
+        "should not be full": function (stream) {
+            assert.ok(!stream.full);
+        },
+        "should be readable": function (stream) {
+            assert.ok(stream.readable);
+        },
+        "should be writable": function (stream) {
+            assert.ok(stream.writable);
+        },
+        "should not be ended": function (stream) {
+            assert.ok(!stream.ended);
         },
         "after end() has been called": {
             topic: function () {
@@ -18,8 +30,8 @@ vows.describe("stream").addBatch({
                 stream.end();
                 return stream;
             },
-            "should not be writable": function (stream) {
-                assert.ok(!stream.writable);
+            "should be ended": function (stream) {
+                assert.ok(stream.ended);
             },
             "should throw an error when written to": function (stream) {
                 assert.throws(function () {
@@ -82,7 +94,7 @@ vows.describe("stream").addBatch({
                 assert.equal(content, this.content);
             }
         },
-        "when proxy for a string": {
+        "when sourced from a string": {
             topic: function () {
                 this.content = "Hello world";
                 var source = this.content;
@@ -102,7 +114,7 @@ vows.describe("stream").addBatch({
                 }
             }
         },
-        "when proxy for a Buffer": {
+        "when sourced from a Buffer": {
             topic: function () {
                 this.content = "Hello world";
                 var source = new Buffer(this.content);
@@ -122,7 +134,7 @@ vows.describe("stream").addBatch({
                 }
             }
         },
-        "when proxy for another Stream": {
+        "when sourced from another Stream": {
             topic: function () {
                 this.content = "Hello world";
                 var source = new BufferedStream(this.content);
