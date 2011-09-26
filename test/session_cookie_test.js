@@ -54,24 +54,20 @@ vows.describe("session/cookie").addBatch({
 
             assert.ok(sync);
         },
-        "should drop content when the cookie size exceeds 4k": function () {
-            var sync = false;
-            var errors = "";
-            var app = sessionCookie(toobig);
+        "when the cookie size exceeds 4k": {
+            topic: function () {
+                var app = sessionCookie(toobig);
 
-            mock.request({
-                error: {
-                    write: function (message) {
-                        errors += message;
-                    }
-                }
-            }, app, function (err, status, headers, body) {
-                sync = true;
+                mock.request({
+                    error: mock.stream(this),
+                }, app, this.callback);
+            },
+            "should not set the cookie": function (err, status, headers, body) {
                 assert.isUndefined(headers["Set-Cookie"]);
-            });
-
-            assert.match(errors, /content dropped/i);
-            assert.ok(sync);
+            },
+            "should drop content": function (err, status, headers, body) {
+                assert.match(this.data, /content dropped/i);
+            }
         }
     }
 }).export(module);

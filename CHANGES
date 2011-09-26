@@ -2,6 +2,10 @@
 
   * Refactored mock.Stream into BufferedStream.
 
+  * Added mock.stream for collecting stream data.
+
+  * Ensured all tests pass lint.
+
 = 0.5.7 / 2011-09-22
 
   * Refactored stream-like constructors to inherit from Stream so they can

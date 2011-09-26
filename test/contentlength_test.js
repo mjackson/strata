@@ -12,7 +12,7 @@ vows.describe("contentlength").addBatch({
 
                 var self = this;
                 var app = contentLength(function (env, callback) {
-                    callback(200, {}, self.body);
+                    callback(200, {"Content-Type": "text/plain"}, self.body);
                 });
 
                 mock.request("", app, this.callback);
@@ -24,24 +24,19 @@ vows.describe("contentlength").addBatch({
         },
         "with a Stream body": {
             topic: function () {
-                this.errors = "";
                 this.body = new BufferedStream("Hello world!");
 
                 var self = this;
                 var app = contentLength(function (env, callback) {
-                    callback(200, {}, self.body);
+                    callback(200, {"Content-Type": "text/plain"}, self.body);
                 });
 
                 mock.request({
-                    error: {
-                        write: function (message) {
-                            self.errors += message;
-                        }
-                    }
+                    error: mock.stream(this),
                 }, app, this.callback);
             },
-            "should write to error": function (err, status, headers, body) {
-                assert.match(this.errors, /body with no length/);
+            "should write to error": function (err) {
+                assert.match(this.data, /body with no length/);
             }
         }
     }
