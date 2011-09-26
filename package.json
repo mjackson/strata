@@ -1,6 +1,6 @@
 {
     "name": "strata",
-    "version": "0.5.8",
+    "version": "0.5.9",
     "author": "Michael Jackson <mjijackson@gmail.com>",
     "description": "A fast, streaming web framework patterned after WSGI/Rack",
     "keywords": ["web", "server", "framework", "middleware", "rack", "jsgi", "wsgi", "connect", "express"],
