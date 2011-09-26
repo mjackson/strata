@@ -125,8 +125,7 @@ vows.describe("stream").addBatch({
         "when proxy for another Stream": {
             topic: function () {
                 this.content = "Hello world";
-                var source = new BufferedStream;
-                source.proxy(this.content);
+                var source = new BufferedStream(this.content);
                 bufferSource(source, this.callback);
             },
             "should emit that stream's content": function (content) {
@@ -135,8 +134,7 @@ vows.describe("stream").addBatch({
             "and temporarily paused": {
                 topic: function () {
                     this.content = "Hello world";
-                    var source = new BufferedStream;
-                    source.proxy(this.content);
+                    var source = new BufferedStream(this.content);
                     temporarilyPauseThenBufferSource(source, this.callback);
                 },
                 "should emit that stream's content": function (content) {
