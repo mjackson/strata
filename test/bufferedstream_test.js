@@ -24,6 +24,9 @@ vows.describe("stream").addBatch({
         "should not be ended": function (stream) {
             assert.ok(!stream.ended);
         },
+        "should not have an encoding": function (stream) {
+            assert.ok(!stream.encoding);
+        },
         "after end() has been called": {
             topic: function () {
                 var stream = new BufferedStream;
@@ -37,6 +40,11 @@ vows.describe("stream").addBatch({
                 assert.throws(function () {
                     stream.write("hello");
                 }, /not writable/);
+            },
+            "should throw an error when ended again": function (stream) {
+                assert.throws(function () {
+                    stream.end();
+                }, /already ended/);
             }
         },
         "with string contents and no encoding": {
