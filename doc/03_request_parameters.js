@@ -15,11 +15,11 @@ request and even cache the results of certain operations (e.g. parsing the
 request body) to speed up execution later. It has several methods for retrieving
 request parameters:
 
-    - `Request#query` provides parameters that were sent in the URL query string
-      (i.e. GET parameters)
-    - `Request#body` provides parameters that were sent in the request body
-      (i.e. POST parameters)
-    - `Request#params` provides the *union* of both query and body parameters
+  - `Request#query` provides parameters that were sent in the URL query string
+    (i.e. GET parameters)
+  - `Request#body` provides parameters that were sent in the request body
+    (i.e. POST parameters)
+  - `Request#params` provides the *union* of both query and body parameters
 
 Each of these functions requires a single callback that will be called with two
 arguments: any error that occured when parsing and an object of parameters.
