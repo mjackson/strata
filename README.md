@@ -27,10 +27,10 @@ https://github.com/mjijackson/strata.
 
 # Manual
 
-The doc directory contains a number of files that make up the Strata user
-manual. Each file is a chapter of the manual written in JavaScript that contains
-documentation about a certain feature of the framework and a code example. You
-can view the manual online at http://stratajs.org/manual.
+The doc directory contains files that make up the Strata user manual. Each file
+is a chapter of the manual written in JavaScript that contains documentation
+about a certain feature of the framework and a code example. You can view the
+manual online at http://stratajs.org/manual.
 
 Each chapter file is runnable using the Strata executable. For example, to run
 the first chapter, you can use the following command (after installing Strata):
@@ -47,6 +47,9 @@ start with lower numbered chapters when getting started with Strata and work
 your way up to higher ones.
 
 # Tests
+
+The test directory contains a comprehensive suite of unit tests for all of
+Strata's core modules.
 
 To run the tests, first install vows:
 
