@@ -29,7 +29,7 @@ functionality.
         strata.Error.call(this, message, cause);
     }
 
-    util.inherits(InvalidLoginError, strata.Error);
+    util.inherits(LoginFailedError, strata.Error);
 
 The `message` argument to the `strata.Error` constructor serves as that error's
 message. The `cause` argument is another Error object that was the cause of this
