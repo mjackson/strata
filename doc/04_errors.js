@@ -122,7 +122,7 @@ override `strata.handleError`.
 
 var strata = require("strata");
 
-// Perserve a reference to the original error handler.
+// Get a reference to the original error handler.
 var _handleError = strata.handleError;
 
 strata.handleError = function (err, env, callback) {
