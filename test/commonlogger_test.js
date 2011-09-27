@@ -16,10 +16,9 @@ vows.describe("commonlogger").addBatch({
                 }
             });
 
-            return app;
+            mock.request("", app, this.callback);
         },
-        "should log the request": function (app) {
-            mock.request("", app, function (status, headers, body) {});
+        "should log the request": function (err, status, headers, body) {
             assert.match(this.output, /GET \/.+200/);
         }
     }
