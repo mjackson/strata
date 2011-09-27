@@ -4,6 +4,8 @@
 
   * Added cascade middleware.
 
+  * Explicitly set "Transfer-Encoding: chunked" for stream response bodies.
+
 = 0.5.10 / 2011-09-26
 
   * Use Content-Length: 0 for HEAD requests.
