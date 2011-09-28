@@ -6,6 +6,8 @@
 
   * Explicitly set "Transfer-Encoding: chunked" for stream response bodies.
 
+  * Removed X-Cascade from utils.notFound.
+
 = 0.5.10 / 2011-09-26
 
   * Use Content-Length: 0 for HEAD requests.
