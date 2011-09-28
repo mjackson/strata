@@ -1,3 +1,7 @@
+= HEAD
+
+  * Added directory middleware.
+
 = 0.5.11 / 2011-09-27
 
   * Set Content-Type/Length in error responses from basic auth middleware.
