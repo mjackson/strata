@@ -69,7 +69,7 @@ function setUser(app) {
                 return;
             }
 
-            env.myappUser = params.user || "User";
+            env.myappUser = params.user || "Anonymous User";
 
             // Call the downstream app.
             app(env, callback);

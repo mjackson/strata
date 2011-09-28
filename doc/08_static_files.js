@@ -25,20 +25,60 @@ anyway.
 
 The app below demonstrates how to serve any file in the current working
 directory (or any of its subdirectories).
+
+    var path = require("path"),
+        strata = require("strata");
+
+    // Use the current working directory as document root for this example.
+    var root = path.resolve(".");
+
+    var app = new strata.Builder;
+
+    app.use(strata.commonLogger);
+    app.use(strata.static, root);
+
+    module.exports = app;
+
+## Indexes
+
+The `strata.static` middleware accepts an optional 3rd argument, `index` that
+allows you to specify the name of a file that should be served when a directory
+is the target of the request. This is typically used to display an "index.html"
+file, for example. Use it like this:
+
+    strata.static(app, root, "index.html");
+    strata.static(app, root, ["index.html", "index.htm"]);
+
+As you can see, the `index` may be the name of a single file or an array of file
+names to try. When searching for a file to return in response to a request for a
+directory, each file name is tried in order. If a match is found it is served.
+Otherwise the middleware passes the request downstream as usual.
+
+## Automatically Generating Indexes
+
+You can use the `strata.directory` middleware to automatically generate an HTML
+listing of the files in a directory, with basic information about and a link to
+each one. This middleware behaves similarly to
+[Apache's mod_autoindex](http://httpd.apache.org/docs/2.0/mod/mod_autoindex.html)
+and [nginx's autoindex module](http://wiki.nginx.org/HttpAutoindexModule).
+
+For example, to create a simple file server with an auto-generated directory
+listing of each directory's contents, you could modify the sample app provided
+above and add a `strata.directory` middleware immediately after `strata.static`
+in the middleware pipeline.
 */
 
 var path = require("path"),
-    strata = require("strata"),
-    Builder = strata.Builder;
+    strata = require("strata");
 
-// For the sake of this example, the root directory where we store static files
-// is the current working directory (i.e. $PWD).
+// Use the current working directory as document root for this example.
 var root = path.resolve(".");
 
-var app = new Builder;
+var app = new strata.Builder;
 
 app.use(strata.commonLogger);
 app.use(strata.static, root);
+app.use(strata.directory, root);
 
 module.exports = app;
 
