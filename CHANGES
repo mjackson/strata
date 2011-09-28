@@ -8,9 +8,12 @@
 
   * Removed X-Cascade from utils.notFound.
 
+  * Added "X-Cascade: pass" support to strata.Router. A response containing this
+    header will be ignored and subsequent routes will be tried.
+
 = 0.5.10 / 2011-09-26
 
-  * Use Content-Length: 0 for HEAD requests.
+  * Use "Content-Length: 0" for HEAD requests.
 
 = 0.5.9 / 2011-09-26
 

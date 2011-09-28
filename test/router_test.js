@@ -50,9 +50,9 @@ vows.describe("router").addBatch({
                 assert.ok(route);
 
                 callback(200, {
+                    "Content-Type": "text/plain",
                     "X-Route": JSON.stringify(route),
-                    "X-Id": String(route.id),
-                    "Content-Type": "text/plain"
+                    "X-Id": String(route.id)
                 }, "");
             }
 
@@ -138,6 +138,52 @@ vows.describe("router").addBatch({
             "should return 404": function (err, status, headers, body) {
                 assert.equal(status, 404);
             }
+        },
+        'with a route that returns an "X-Cascade: pass" header': {
+            topic: function () {
+                var app = new Router;
+
+                app.route("/path", pass(idApp("1")));
+                app.route("/path", idApp("2"));
+
+                return app;
+            },
+            "when that route matches": {
+                topic: function (app) {
+                    mock.request("/path", app, this.callback);
+                },
+                "should cascade to the next route": function (err, status, headers, body) {
+                    assert.ok(headers["X-Id"]);
+                    assert.equal(headers["X-Id"], "2");
+                }
+            },
+            "when no routes match": {
+                topic: function (app) {
+                    mock.request("/", app, this.callback);
+                },
+                "should return a 404 (default app)": function (err, status, headers, body) {
+                    assert.equal(status, 404);
+                }
+            }
         }
     }
 }).export(module);
+
+function idApp(id) {
+    return function (env, callback) {
+        callback(200, {
+            "Content-Type": "text/plain",
+            "X-Id": id
+        }, "");
+    }
+}
+
+// Inserts an "X-Cascade: pass" header in the response.
+function pass(app) {
+    return function (env, callback) {
+        app(env, function (status, headers, body) {
+            headers["X-Cascade"] = "pass";
+            callback(status, headers, body);
+        });
+    }
+}
