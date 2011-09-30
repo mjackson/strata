@@ -119,6 +119,25 @@ vows.describe("index").addBatch({
             }
         }
     },
+    "createServer": {
+        "when given a valid app": {
+            topic: function () {
+                var app = function (env, callback) {}
+                return app;
+            },
+            "should not throw": function (app) {
+                assert.ok(strata.createServer(app));
+            }
+        },
+        "when given an invalid app": {
+            topic: {},
+            "should throw": function (app) {
+                assert.throws(function () {
+                    strata.createServer(app);
+                }, /must be a function/);
+            }
+        }
+    },
     "A strata.Error": {
         topic: new strata.Error("Bang!"),
         "should be an instance of Error": function (err) {
