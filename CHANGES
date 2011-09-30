@@ -1,3 +1,7 @@
+= 0.5.13 / 2011-09-30
+
+  * Fixed a regression in strata.createServer.
+
 = 0.5.12 / 2011-09-29
 
   * Added directory middleware.
