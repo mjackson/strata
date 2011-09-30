@@ -24,7 +24,7 @@ of data is more than enough to work with.
 Session cookies are enabled through the use of the `strata.sessionCookie`
 middleware. You use it like this:
 
-    var app = strata.sessionCookie(app, options);
+    strata.sessionCookie(app, options);
 
 When using this middleware, the second parameter is an object of options that
 let you customize its behavior. Valid options are:
