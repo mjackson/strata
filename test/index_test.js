@@ -138,6 +138,42 @@ vows.describe("index").addBatch({
             }
         }
     },
+    "handleError": {
+        topic: function () {
+            var returnValue;
+
+            var env = {
+                error: mock.stream(this)
+            };
+
+            var innerApp = function (env, callback) {
+                var err = new strata.Error("Bang!");
+                returnValue = strata.handleError(err, env, callback);
+            }
+
+            var app = function (env, callback) {
+                innerApp(env, function (status, headers, body) {
+                    process.nextTick(function () {
+                        headers["X-ReturnType"] = typeof returnValue;
+                        callback(status, headers, body);
+                    });
+                });
+            }
+
+            mock.request(env, app, this.callback);
+        },
+        "should return a boolean": function (err, status, headers, body) {
+            assert.ok(headers["X-ReturnType"]);
+            assert.equal(headers["X-ReturnType"], "boolean");
+        },
+        "should set a 500 status": function (err, status, headers, body) {
+            assert.equal(status, 500);
+        },
+        "should write to env.error": function () {
+            assert.ok(this.data);
+            assert.match(this.data, /Unhandled error/);
+        }
+    },
     "A strata.Error": {
         topic: new strata.Error("Bang!"),
         "should be an instance of Error": function (err) {
