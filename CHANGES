@@ -1,8 +1,10 @@
-= HEAD
+= 0.5.14 / 2011-10-03
 
   * Added startup message to strata.run.
 
   * Fixed a regression in strata.handleError.
+
+  * Reworked manual code examples to use strata.run.
 
 = 0.5.13 / 2011-09-30
 
