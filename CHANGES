@@ -1,3 +1,9 @@
+= HEAD
+
+  * Added startup message to strata.run.
+
+  * Fixed a regression in strata.handleError.
+
 = 0.5.13 / 2011-09-30
 
   * Fixed a regression in strata.createServer.

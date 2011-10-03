@@ -76,16 +76,7 @@ for (var i = 2; i < process.argv.length; ++i) {
 if (!exit) {
     if (path.existsSync(appfile)) {
         var app = require(appfile);
-
-        var server = strata.run(app, options, function () {
-            var addr = server.address();
-
-            if (options.socket) {
-                console.log("Strata started at %s", addr.address);
-            } else {
-                console.log("Strata started at %s:%s", addr.address, addr.port);
-            }
-        });
+        strata.run(app, options);
     } else {
         throw new Error('Application file "' + appfile + '" does not exist');
     }
