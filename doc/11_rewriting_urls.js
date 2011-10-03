@@ -17,9 +17,9 @@ against the value of the environment's `pathInfo` and a replacement string. If
 the expression matches, the `pathInfo` is rewritten for all downstream apps with
 the replacement value using a simple [String#replace](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String/replace).
 
-## NGINX Rewrite Example
+## Nginx Rewrite Example
 
-If you've used the [NGINX](http://nginx.net/) web server before as a reverse
+If you've used the [nginx](http://nginx.net/) web server before as a reverse
 proxy, you may have used a rewrite directive similar the following in your
 `nginx.conf`:
 
@@ -38,8 +38,7 @@ The example app below performs the same function in Strata.
 */
 
 var path = require("path"),
-    strata = require("strata"),
-    Builder = strata.Builder;
+    strata = require("strata");
 
 // For the sake of this example, the root directory where we store static files
 // is the current working directory (i.e. $PWD).
@@ -65,19 +64,19 @@ function checkHtml(app, root) {
     }
 }
 
-var app = new Builder;
+var app = new strata.Builder;
 
 app.use(strata.commonLogger);
 app.use(checkHtml, root); // Check for .html in front of a static file server.
 app.use(strata.static, root);
 
-module.exports = app;
+strata.run(app);
 
 /*
 As in previous chapters, you can save the above code to a file named `app.js`
-and run it with:
+and run it with the `node` executable:
 
-    $ strata app.js
+    $ node app.js
 
 Make sure you run that command from a directory where you also have another file
 named `index.html`. Then view that file at [http://localhost:1982/index](http://localhost:1982/index).

@@ -32,8 +32,6 @@ do these tasks for us.
 */
 
 var strata = require("strata"),
-    Request = strata.Request,
-    Builder = strata.Builder,
     redirect = strata.redirect,
     utils = strata.utils;
 
@@ -56,7 +54,7 @@ function deleteButton(id) {
 // a regular Router in this example because it exposes the `use` method that
 // allows us to use middleware. Otherwise, it has the same routing methods as
 // a Router.
-var app = new Builder(function (env, callback) {
+var app = new strata.Builder(function (env, callback) {
     callback(200, {}, 'Try <a href="/users">/users</a>.');
 });
 
@@ -108,7 +106,7 @@ app.get("/users", function (env, callback) {
 // Adds a user to the data store.
 // Note: app.post(pattern, app) is sugar for app.route(pattern, app, "POST")
 app.post("/users", function (env, callback) {
-    var req = new Request(env);
+    var req = new strata.Request(env);
 
     req.params(function (err, params) {
         if (err && strata.handleError(err, env, callback)) {
@@ -171,13 +169,13 @@ app.del("/users/:id", function (env, callback) {
     redirect(env, callback, "/users");
 });
 
-module.exports = app;
+strata.run(app);
 
 /*
 As in previous chapters, you can save the above code to a file named `app.js`
-and run it with:
+and run it with the `node` executable:
 
-    $ strata app.js
+    $ node app.js
 
 Then view the app at [http://localhost:1982/](http://localhost:1982/).
 */

@@ -61,12 +61,12 @@ app.get("/", function (env, callback) {
     callback(200, {}, "Hello world!");
 });
 
-module.exports = app;
+strata.run(app);
 
 /*
-You can run the file using the Strata executable:
+You can run the file using the `node` executable:
 
-    $ strata app.js
+    $ node app.js
 
 Now visit the app at [http://localhost:1982/](http://localhost:1982/).
 

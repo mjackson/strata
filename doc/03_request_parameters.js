@@ -29,11 +29,10 @@ parameters in one call. After parsing out the parameters, they are simply
 encoded as JSON and returned to the client in an `application/json` response.
 */
 
-var strata = require("strata"),
-    Request = strata.Request;
+var strata = require("strata");
 
 function app(env, callback) {
-    var req = new Request(env);
+    var req = new strata.Request(env);
 
     req.params(function (err, params) {
         // Ignoring the err argument for now. See the next chapter!
@@ -47,20 +46,19 @@ function app(env, callback) {
     });
 }
 
-module.exports = app;
+strata.run(app);
 
 /*
 As in the previous chapter, you can save the above code to a file named `app.js`
-and run it with:
+and run it with the `node` executable:
 
-    $ strata app.js
+    $ node app.js
 
 Then view the app at [http://localhost:1982/](http://localhost:1982/).
 
-To fully test out Strata's request parameter parsing capabilities, trying
-sending various parameters to the app in the query string and request body. For
-example, to send an `application/x-www-url-formencoded` POST, you can use
-[cURL](http://curl.haxx.se/):
+To fully test out Strata's request parameter parsing capabilities, try sending
+various parameters to the app in the query string and request body. For example,
+to send an `application/x-www-url-formencoded` POST, you can use [cURL](http://curl.haxx.se/):
 
     $ curl -v --data "a=b&c=d" http://localhost:1982/
 

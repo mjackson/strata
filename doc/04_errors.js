@@ -74,11 +74,10 @@ To properly handle the error from the previous chapter, we could modify the app
 to look like this:
 */
 
-var strata = require("strata"),
-    Request = strata.Request;
+var strata = require("strata");
 
-module.exports = function (env, callback) {
-    var req = new Request(env);
+function app(env, callback) {
+    var req = new strata.Request(env);
 
     req.params(function (err, params) {
         // If there was an error and strata.handleError issued a response
@@ -95,6 +94,8 @@ module.exports = function (env, callback) {
         }, content);
     });
 }
+
+strata.run(app);
 
 /*
 The `strata.handleError` function handles the error by issuing a 500 Internal
@@ -136,9 +137,9 @@ strata.handleError = function (err, env, callback) {
 
 /*
 As in previous chapters, you can save the code in the examples above to a file
-named `app.js` and run it with:
+named `app.js` and run it with the `node` executable:
 
-    $ strata app.js
+    $ node app.js
 
 Then view the app at [http://localhost:1982/](http://localhost:1982/). To get
 this app to return a 400 response, send it some bad data. For example, send an

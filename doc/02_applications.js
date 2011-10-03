@@ -36,6 +36,8 @@ make use of the environment because it doesn't need to. It simply sends a
 string of text in an HTTP 200 response.
 */
 
+var strata = require("strata");
+
 function app(env, callback) {
     callback(200, {
         "Content-Type": "text/plain",
@@ -43,12 +45,13 @@ function app(env, callback) {
     }, "Hello world!");
 }
 
-module.exports = app;
+strata.run(app);
 
 /*
-Save the above code to a file named `app.js` and run it with:
+Save the above code to a file named `app.js` and run it with the `node`
+executable:
 
-    $ strata app.js
+    $ node app.js
 
 Then view the app at [http://localhost:1982/](http://localhost:1982/).
 */

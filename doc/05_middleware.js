@@ -53,13 +53,12 @@ the value of a request parameter named "user" in a custom environment variable
 so that it may be used by the downstream app.
 */
 
-var strata = require("strata"),
-    Request = strata.Request;
+var strata = require("strata");
 
 // This function is the middleware. It keeps a reference to the downstream app.
 function setUser(app) {
     return function (env, callback) {
-        var req = new Request(env);
+        var req = new strata.Request(env);
 
         // Get the value of the "user" request parameter and put it in the
         // myappUser environment variable. Names of environment variables should
@@ -77,7 +76,7 @@ function setUser(app) {
     }
 }
 
-module.exports = setUser(function (env, callback) {
+var app = setUser(function (env, callback) {
     // In the downstream app we have access to any custom variables that were
     // set by middleware upstream.
     var content = "Welcome, " + env.myappUser + "!";
@@ -88,11 +87,13 @@ module.exports = setUser(function (env, callback) {
     }, content);
 });
 
+strata.run(app);
+
 /*
 As in previous chapters, you can save the above code to a file named `app.js`
-and run it with:
+and run it with the `node` executable:
 
-    $ strata app.js
+    $ node app.js
 
 Then view the app at [http://localhost:1982/](http://localhost:1982/).
 

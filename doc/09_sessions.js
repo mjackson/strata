@@ -45,10 +45,9 @@ currently logged in user.
 */
 
 var strata = require("strata"),
-    Builder = strata.Builder,
     redirect = strata.redirect;
 
-var app = new Builder;
+var app = new strata.Builder;
 
 app.use(strata.commonLogger);
 app.use(strata.contentType, "text/html");
@@ -86,13 +85,13 @@ app.run(function (env, callback) {
     callback(200, {}, content);
 });
 
-module.exports = app;
+strata.run(app);
 
 /*
 As in previous chapters, you can save the above code to a file named `app.js`
-and run it with:
+and run it with the `node` executable:
 
-    $ strata app.js
+    $ node app.js
 
 Then view the app at [http://localhost:1982/](http://localhost:1982/).
 */

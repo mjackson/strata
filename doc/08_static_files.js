@@ -37,7 +37,7 @@ directory (or any of its subdirectories).
     app.use(strata.commonLogger);
     app.use(strata.static, root);
 
-    module.exports = app;
+    strata.run(app);
 
 ## Indexes
 
@@ -80,13 +80,13 @@ app.use(strata.commonLogger);
 app.use(strata.static, root);
 app.use(strata.directory, root);
 
-module.exports = app;
+strata.run(app);
 
 /*
 As in previous chapters, you can save the above code to a file named `app.js`
-and run it with:
+and run it with the `node` executable:
 
-    $ strata app.js
+    $ node app.js
 
 You can then view the app file (or, similarly, any other file in its same
 directory) at [http://localhost:1982/app.js](http://localhost:1982/app.js).

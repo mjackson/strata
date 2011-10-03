@@ -29,8 +29,6 @@ registered only for GET requests, the second for POST.
 */
 
 var strata = require("strata"),
-    Request = strata.Request,
-    Router = strata.Router,
     redirect = strata.redirect;
 
 // This is our simple data store.
@@ -38,7 +36,7 @@ var users = [];
 
 // The app given to the Router constructor serves as the default app when none
 // of the routes match.
-var app = new Router(function (env, callback) {
+var app = new strata.Router(function (env, callback) {
     var content = 'Try <a href="/users">/users</a>.';
 
     callback(200, {
@@ -77,7 +75,7 @@ app.get("/users", function (env, callback) {
 // Adds a username to the data store.
 // Note: app.post(pattern, app) is sugar for app.route(pattern, app, "POST")
 app.post("/users", function (env, callback) {
-    var req = new Request(env);
+    var req = new strata.Request(env);
 
     req.params(function (err, params) {
         if (err && strata.handleError(err, env, callback)) {
@@ -93,13 +91,13 @@ app.post("/users", function (env, callback) {
     });
 });
 
-module.exports = app;
+strata.run(app);
 
 /*
 As in previous chapters, you can save the above code to a file named `app.js`
-and run it with:
+and run it with the `node` executable:
 
-    $ strata app.js
+    $ node app.js
 
 Then view the app at [http://localhost:1982/users](http://localhost:1982/users).
 */

@@ -10,11 +10,10 @@ The basic pattern for an app that handles file uploads by streaming them to disk
 looks like this:
 
     var strata = require("strata"),
-        Request = strata.Request,
         multipart = strata.multipart;
 
     var app = function (env, callback) {
-        var req = new Request(env);
+        var req = new strata.Request(env);
 
         req.params(function (err, params) {
             for (var name in params) {
@@ -44,11 +43,9 @@ The app below demonstrates how you might build a simple form to upload an image.
 */
 
 var strata = require("strata"),
-    Builder = strata.Builder,
-    Request = strata.Request,
     multipart = strata.multipart;
 
-var app = new Builder;
+var app = new strata.Builder;
 
 app.use(strata.commonLogger);
 app.use(strata.contentType);
@@ -70,7 +67,7 @@ app.get("/", function (env, callback) {
 // POST /
 // Uploads a file to the server.
 app.post("/", function (env, callback) {
-    var req = new Request(env);
+    var req = new strata.Request(env);
 
     req.params(function (err, params) {
         if (err && strata.handleError(err, env, callback)) {
@@ -103,13 +100,13 @@ app.post("/", function (env, callback) {
     });
 });
 
-module.exports = app;
+strata.run(app);
 
 /*
 As in previous chapters, you can save the above code to a file named `app.js`
-and run it with:
+and run it with the `node` executable:
 
-    $ strata app.js
+    $ node app.js
 
 Then view the app at [http://localhost:1982/](http://localhost:1982/).
 */
