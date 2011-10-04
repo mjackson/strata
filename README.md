@@ -23,7 +23,7 @@ Connect/Express and JSGI. This section of this document explains why Strata was
 written despite the existence of these libraries.
 
 First, it is beneficial to provide a basic overview of how Strata works. The
-Strata [SPEC](https://github.com/mjijackson/strata/blob/master/SPEC) specifies
+Strata [SPEC](https://github.com/mjijackson/strata/blob/master/SPEC) defines
 two interfaces: 1) an interface for the HTTP server to communicate the request
 to the application and 2) an interface for the application to communicate the
 response back to the server.
@@ -72,7 +72,7 @@ slightly different implementation. Also, since promises have failed to gain very
 wide adoption in the node community many users are not familiar with using
 promises at all. This dependence on promises and a general lack of familiarity
 with the promises interface within the node community make JSGI a poor choice
-for a web framework that aims to gain wide adoption.
+for a node-specific web framework that aims to gain wide adoption.
 
 # Installation
 
