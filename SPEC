@@ -105,7 +105,7 @@ or it must be "0".
 The body must be either a string or a readable Stream. If it is a Stream, the
 response will be pumped through to the client.
 
-# Credits
+# Acknowledgements
 
 Some parts of this specification are adopted from PEP333: Python Web Server
 Gateway Interface v1.0 (http://www.python.org/dev/peps/pep-0333/) and the Rack
