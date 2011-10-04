@@ -65,14 +65,15 @@ that contains well-documented examples for many common use cases.
 
 The main difference between Strata and JSGI (which is only a specification, NOT
 an implementation) is that Strata uses a callback to serve responses
-asynchronously whereas JSGI uses promises. Since there is no promises module in
-the node core distribution, this requires any JSGI implementation for node to
-depend on a separate promises module, of which there are many, each with a
-slightly different implementation. Also, since promises have failed to gain very
-wide adoption in the node community many users are not familiar with using
-promises at all. This dependence on promises and a general lack of familiarity
-with the promises interface within the node community make JSGI a poor choice
-for a node-specific web framework that aims to gain wide adoption.
+asynchronously whereas JSGI uses [promises](http://en.wikipedia.org/wiki/Futures_and_promises).
+Since there is no promises module in the node core distribution, this requires
+any JSGI implementation for node to depend on a separate promises module, of
+which there are many, each with a slightly different implementation. Also, since
+promises have failed to gain very wide adoption in the node community many users
+are not familiar with using promises at all. This dependence on promises and a
+general lack of familiarity with the promises interface within the node
+community make JSGI a poor choice for a node-specific web framework that aims to
+gain wide adoption.
 
 # Installation
 
