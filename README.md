@@ -29,11 +29,11 @@ to the application and 2) an interface for the application to communicate the
 response back to the server.
 
 A Strata application is a JavaScript function. The server communicates with the
-application by calling it with two arguments: the *environment* and a
-*callback*. The environment is an object that has CGI-like properties
-(`requestMethod`, `serverName`, `pathInfo`, etc.), some Strata-specific
-properties, and may also include application-specific extension properties. The
-callback is a function the application uses to send the response.
+application by calling it with two arguments: the **environment** and a
+**callback**. The environment is an object that has CGI-like properties
+(`requestMethod`, `serverName`, `scriptName`, `pathInfo`, etc.), some
+Strata-specific properties, and may also include application-specific extension
+properties. The callback is a function the application uses to send the response.
 
 The application communicates with the server by calling the callback with three
 arguments: the response **status** code, an object containing HTTP **headers**,
@@ -77,41 +77,31 @@ gain wide adoption.
 
 # Installation
 
-Using npm:
+The easiest way to install Strata is by using [npm](http://npmjs.org/):
 
 ``` bash
 $ npm install strata
 ```
 
-You are also free to browse or download the source at https://github.com/mjijackson/strata.
+You are also free to [browse or download the source](https://github.com/mjijackson/strata).
 
 # Manual
 
 The doc directory contains files that make up the Strata user manual. Each file
 is a chapter of the manual written in JavaScript that contains documentation
-about a certain feature of the framework and a code example. You can view the
-manual online at http://stratajs.org/manual.
-
-Each chapter file is runnable using the Strata executable. For example, to run
-the first chapter, you can use the following command (after installing Strata):
-
-``` bash
-$ strata doc/01_introduction.js
-```
-
-Then open your browser to http://localhost:1982.
+about a certain feature of the framework and a code example.
 
 The manual is written in such a way that the topics and examples discussed in
 higher numbered chapters build upon previous ones. Thus, it is recommended to
 start with lower numbered chapters when getting started with Strata and work
 your way up to higher ones.
 
+You can [read the manual online](http://stratajs.org/manual).
+
 # Tests
 
 The test directory contains a comprehensive suite of unit tests for all of
-Strata's core modules.
-
-To run the tests, first install vows:
+Strata's core modules. To run the tests, first install vows:
 
 ``` bash
 $ npm install -g vows
@@ -154,8 +144,9 @@ the software.
 # Acknowledgements
 
 Strata was inspired by similar efforts in the Python and Ruby communities,
-namely WSGI and Rack. It borrows many code patterns from these libraries, as
-well as the JSGI project.
+namely [WSGI](http://www.wsgi.org/) and [Rack](http://rack.rubyforge.org/). It
+borrows many code patterns from these libraries, as well as the [JSGI](http://jackjs.org/jsgi-spec.html)
+project.
 
 Strata's multipart parser is based on the fast parser in the node-formidable
 project written by Felix Geisendörfer. It is included in Strata under the terms
