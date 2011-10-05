@@ -22,7 +22,7 @@ principles you should understand before proceeding to later chapters, so you
 should start with them if you're having trouble understanding more advanced
 concepts.
 
-## Style
+## Style Conventions
 
 The following style conventions are used throughout this manual when referring
 to code:

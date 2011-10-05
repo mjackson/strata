@@ -57,7 +57,7 @@ Then view the app at [http://localhost:1982/](http://localhost:1982/).
 
 ## Running Strata Applications
 
-You run Strata applications using `strata.run`. This function takes the `app` as
+You run Strata applications using `strata.run`. This function takes an app as
 its first argument and any options needed to create the HTTP server and run the
 app as a second argument. Valid options include the following:
 
@@ -69,6 +69,10 @@ app as a second argument. Valid options include the following:
 
 A callback function may be given as the final argument. This will be called when
 the application is booted and the server is listening for incoming connections.
+
+For example, to run an app on port 3000 you could do the following:
+
+    strata.run(app, { port: 3000 });
 
 ## Using the `strata` Executable
 
