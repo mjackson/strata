@@ -1,5 +1,7 @@
 = HEAD
 
+  * Permit a function to be used as the second argument to strata.run.
+
   * Clarified the use of the serverName and serverPort environment variables.
 
   * Eliminated use of the SERVER_PORT and HTTPS process environment variables.
