@@ -12,6 +12,7 @@ vows.describe("request").addBatch({
             this.protocolVersion = "1.1";
             this.requestMethod = "POST";
             this.serverName = "example.org";
+            this.serverPort = "1234";
             this.pathInfo = "/some/path";
             this.queryString = "a=1&b=hello%20world";
             this.contentType = 'application/json; charset="utf-8"';
@@ -35,6 +36,7 @@ vows.describe("request").addBatch({
                 protocolVersion: this.protocolVersion,
                 requestMethod: this.requestMethod,
                 serverName: this.serverName,
+                serverPort: this.serverPort,
                 pathInfo: this.pathInfo,
                 queryString: this.queryString,
                 headers: this.headers
@@ -123,17 +125,17 @@ vows.describe("request").addBatch({
         "should know if it was made via XMLHttpRequest": function (req) {
             assert.ok(req.xhr);
         },
-        "should know its host/port": function (req) {
-            assert.equal(req.hostWithPort, this.serverName + ":443");
+        "should know its host and port": function (req) {
+            assert.equal(req.hostWithPort, this.serverName + ":" + this.serverPort);
         },
         "should know its host": function (req) {
             assert.equal(req.host, this.serverName);
         },
         "should know its port": function (req) {
-            assert.equal(req.port, "443");
+            assert.equal(req.port, this.serverPort);
         },
         "should know its base URL": function (req) {
-            assert.equal(req.baseUrl, this.protocol + "//" + this.serverName);
+            assert.equal(req.baseUrl, this.protocol + "//" + this.serverName + ":" + this.serverPort);
         },
         "should know its path": function (req) {
             assert.equal(req.path, this.pathInfo);
@@ -142,7 +144,7 @@ vows.describe("request").addBatch({
             assert.equal(req.fullPath, this.pathInfo + "?" + this.queryString);
         },
         "should know its URL": function (req) {
-            assert.equal(req.url, this.protocol + "//" + this.serverName + this.pathInfo + "?" + this.queryString);
+            assert.equal(req.url, this.protocol + "//" + this.serverName + ":" + this.serverPort + this.pathInfo + "?" + this.queryString);
         },
         "behind a reverse HTTP proxy": {
             topic: function () {

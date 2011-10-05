@@ -13,17 +13,15 @@ A Strata application is a function that takes exactly two arguments: the
 The environment is an object that contains CGI-like properties. It MUST include
 the following:
 
-  - protocol          The request protocol (i.e. "http:" or "https:"). Will
-                      always be "https:" if the value of process.env.HTTPS is
-                      "on".
+  - protocol          The request protocol (i.e. "http:" or "https:")
   - protocolVersion   The version of the protocol used in the request
   - requestMethod     The request method (e.g. "GET" or "POST")
   - requestTime       A Date that indicates the time the request was received
   - serverName        The host name of the server. Defaults to the value of
                       process.env.SERVER_NAME or the bound address of the server
                       as reported by the operating system.
-  - serverPort        The TCP port being used by the client. May be overridden
-                      by the value of process.env.SERVER_PORT.
+  - serverPort        The TCP port the server is bound to. May be an empty
+                      string when the server is using a UNIX socket.
   - scriptName        The initial portion of the request URL's "path" that
                       corresponds to the application, so that it knows its
                       virtual "location". This may be an empty string, if the
@@ -50,7 +48,11 @@ the following:
 
 In addition to these, the environment MAY include the following properties:
 
-  - session           An object containing session data
+  - session           An object containing session data. Available to all
+                      applications downstream from a strata.sessionCookie
+  - route             An object containing information about the route that was
+                      triggered. Available to all applications downstream from a
+                      strata.Router
 
 When combined with scriptName and pathInfo, the serverName and serverPort
 variables may be used to reconstruct the original request URL. Note, however,

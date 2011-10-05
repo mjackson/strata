@@ -1,5 +1,9 @@
 = HEAD
 
+  * Clarified the use of the serverName and serverPort environment variables.
+
+  * Eliminated use of the SERVER_PORT and HTTPS process environment variables.
+
   * Added rationale to README.
 
 = 0.5.14 / 2011-10-03
