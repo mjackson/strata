@@ -47,8 +47,11 @@ app.use(strata.sessionCookie);
 // can view it.
 app.get("/", function (env, callback) {
     if (env.session.loggedIn) {
-        var content = "<p>You can now access the restricted section!</p>";
-        content += '<p><a href="/logout">Logout</a></p>';
+        var content = [
+            '<p>You can now access the restricted section!</p>',
+            '<p><a href="/logout">Logout</a></p>'
+        ].join("\n");
+
         callback(200, {}, content);
     } else {
         // This call stores the current request URL in the session and redirects
@@ -60,12 +63,12 @@ app.get("/", function (env, callback) {
 // GET /login
 // Shows the login form.
 app.get("/login", function (env, callback) {
-    var content = "";
-
-    content += "<p>You are trying to view a restricted page. Please login.</p>";
-    content += '<form action="/login" method="post">';
-    content += "<button>Login</button>";
-    content += "</form>";
+    var content = [
+        '<p>You are trying to view a restricted page. Please login.</p>',
+        '<form action="/login" method="post">',
+        '<button>Login</button>',
+        '</form>'
+    ].join("\n");
 
     callback(200, {}, content);
 });

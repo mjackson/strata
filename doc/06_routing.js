@@ -4,12 +4,12 @@
 One of the most common tasks in developing a web app is deciding which URL's
 trigger which application logic. Up to this point in the examples, all of the
 code samples have run only a single app, without regard for the URL that was
-used in the request. In this chapter, we'll use a Router to call different
+used in the request. In this chapter, we'll use a router to call different
 parts of our application based on the request URL.
 
-A route consists of three things: a pattern, an app, and optionally a request
-method(s). When a router is called, it searches through its routes and calls
-the app of the first route that "matches" the request. A route matches the
+A route consists of three things: a **pattern**, an **app**, and optionally a
+**request method**. When a router is called, it searches through its routes and
+calls the app of the first route that "matches" the request. A route matches the
 request when its pattern matches the request URL and its request method
 matches the method that was used in the request (e.g. GET or POST). A route
 that has no request method(s) associated with it may match any method.
@@ -35,16 +35,11 @@ var strata = require("strata"),
 // This is our simple data store.
 var users = [];
 
-// The app given to the Router constructor serves as the default app when none
-// of the routes match.
-var app = new strata.Router(function (env, callback) {
-    var content = 'Try <a href="/users">/users</a>.';
+var app = new strata.Builder;
 
-    callback(200, {
-        "Content-Type": "text/html",
-        "Content-Length": Buffer.byteLength(content).toString()
-    }, content);
-});
+app.use(strata.commonLogger);
+app.use(strata.contentType, "text/html");
+app.use(strata.contentLength);
 
 // GET /users
 // Shows a list of the users currently in the data store and a form for adding
@@ -67,13 +62,7 @@ app.get("/users", function (env, callback) {
         '</p>'
     ].join("\n");
 
-
-    var content = view.render(template, {users: users});
-
-    callback(200, {
-        "Content-Type": "text/html",
-        "Content-Length": Buffer.byteLength(content).toString()
-    }, content);
+    callback(200, {}, view.render(template, {users: users}));
 });
 
 // POST /users
@@ -96,6 +85,10 @@ app.post("/users", function (env, callback) {
     });
 });
 
+app.run(function (env, callback) {
+    callback(200, {}, 'Try <a href="/users">/users</a>.');
+});
+
 strata.run(app);
 
 /*
@@ -105,4 +98,19 @@ and run it with the `node` executable:
     $ node app.js
 
 Then view the app at [http://localhost:1982/users](http://localhost:1982/users).
+
+## Using Multiple Methods
+
+You can easily configure an app to be used for several different routes by using
+the slightly more verbose `Router#route` method. This function takes the same
+first two arguments as `Router#get` and `Router#post`, but also takes an
+additional argument that may specify any number of request methods to use for
+the app. For example, both of the following are perfectly valid.
+
+    app.route("/users", function (env, callback) { ... }, "GET");
+    app.route("/users", function (env, callback) { ... }, ["GET", "POST"]);
+
+If no request method is given when using `Router#route`, the router will
+consider that route valid for all requests whose pattern match the URL in the
+request, regardless of request method.
 */

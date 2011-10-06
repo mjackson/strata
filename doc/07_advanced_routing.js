@@ -40,16 +40,8 @@ var strata = require("strata"),
 var users = {},
     userId = 0;
 
-// Similarly to a Router, the app given to the Builder constructor serves as the
-// default app when none of the routes match. We're using a Builder instead of
-// a regular Router in this example because it exposes the `use` method that
-// allows us to use middleware. Otherwise, it has the same routing methods as
-// a Router.
-var app = new strata.Builder(function (env, callback) {
-    callback(200, {}, 'Try <a href="/users">/users</a>.');
-});
+var app = new strata.Builder;
 
-// Setup the middleware pipeline.
 app.use(strata.commonLogger);
 app.use(strata.contentType, "text/html");
 app.use(strata.contentLength);
@@ -170,6 +162,10 @@ app.del("/users/:id", function (env, callback) {
 
     // Redirect to /users.
     redirect(env, callback, "/users");
+});
+
+app.run(function (env, callback) {
+    callback(200, {}, 'Try <a href="/users">/users</a>.');
 });
 
 strata.run(app);
