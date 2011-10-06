@@ -74,11 +74,11 @@ For example, to run an app on port 3000 you could do the following:
 
     strata.run(app, { port: 3000 });
 
-## Using the `strata` Executable
+## Using the strata Executable
 
-Strata comes bundled with an executable that may be used to easily run Strata
-apps from the command line. It's basically a wrapper for `strata.run` that
-accepts the various options that function expects as command line options (try
+Strata comes bundled with an executable that may be used to easily run apps from
+the command line. It's basically a wrapper for `strata.run` that accepts the
+various options that function expects as command line options (try
 `strata --help` from the command line for more information).
 
 The main argument the executable expects is the path to a JavaScript module file
@@ -93,4 +93,9 @@ this:
 
 If no path is given, the executable will look in the current working directory
 for a file named `app.js`.
+
+For example, if you wanted to run an app in a file `web.js` on port 3000, you
+would invoke `strata` like this:
+
+    $ strata -p 3000 web.js
 */
