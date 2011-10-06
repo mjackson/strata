@@ -29,7 +29,8 @@ registered only for GET requests, the second for POST.
 */
 
 var strata = require("strata"),
-    redirect = strata.redirect;
+    redirect = strata.redirect,
+    view = strata.view;
 
 // This is our simple data store.
 var users = [];
@@ -50,20 +51,24 @@ var app = new strata.Router(function (env, callback) {
 // another name to the store.
 // Note: app.get(pattern, app) is sugar for app.route(pattern, app, "GET")
 app.get("/users", function (env, callback) {
-    var content;
-    if (users.length == 0) {
-        content = "<p>There are no users!</p>";
-    } else {
-        content = "<p>The users are: " + users.join(", ") + "</p>";
-    }
+    // This would be probably be loaded from a static template file.
+    var template = [
+        '<% if (users.length == 0) { %>',
+        '<p>There are no users!</p>',
+        '<% } else { %>',
+        '<p>The users are: <%= users.join(", ") %></p>',
+        '<% } %>',
+        '<p>Create a new user:</p>',
+        '<p>',
+        '<form method="post" action="/users">',
+        '<input type="text" name="username" placeholder="username" width="200">',
+        '<input type="submit" value="Submit">',
+        '</form>',
+        '</p>'
+    ].join("\n");
 
-    content += "<p>Create a new user:</p>";
-    content += "<p>";
-    content += '<form method="post" action="/users">';
-    content += '<input type="text" name="username" placeholder="username" width="200">';
-    content += '<input type="submit" value="Submit">';
-    content += "</form>";
-    content += "</p>";
+
+    var content = view.render(template, {users: users});
 
     callback(200, {
         "Content-Type": "text/html",

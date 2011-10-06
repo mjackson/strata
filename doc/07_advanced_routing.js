@@ -33,21 +33,12 @@ do these tasks for us.
 
 var strata = require("strata"),
     redirect = strata.redirect,
-    utils = strata.utils;
+    utils = strata.utils,
+    view = strata.view;
 
 // This is our simple data store.
 var users = {},
     userId = 0;
-
-// A templating function to make a delete button for a user with the given id.
-function deleteButton(id) {
-    var html = '<form action="/users/' + id + '" method="POST" style="display:inline">';
-    html += '<input type="hidden" name="_method" value="DELETE">';
-    html += '<button>Delete</button>';
-    html += '</form>';
-
-    return html;
-}
 
 // Similarly to a Router, the app given to the Builder constructor serves as the
 // default app when none of the routes match. We're using a Builder instead of
@@ -69,35 +60,41 @@ app.use(strata.methodOverride);
 // another to the store.
 // Note: app.get(pattern, app) is sugar for app.route(pattern, app, "GET")
 app.get("/users", function (env, callback) {
-    var content;
-    if (utils.isEmptyObject(users)) {
-        content = "<p>There are no users!</p>";
-    } else {
-        content = "<p>The users are:</p>";
-        content += "<ul>\n";
+    // This would be probably be loaded from a static template file.
+    var template = [
+        '<% if (isEmptyObject(users)) { %>',
+        '<p>There are no users!</p>',
+        '<% } else { %>',
+        '<p>The users are:</p>',
+        '<ul>',
+        '<%   for (var id in users) { %>',
+        '<%     var user = users[id]; %>',
+        '  <li>',
+        '  Name: <%= user.firstName %> <%= user.lastName %>',
+        '  (<a href="/users/<%= id %>"><%= user.username %></a>)',
+        '  <form action="/users/<%= id %>" method="POST" style="display:inline">',
+        '    <input type="hidden" name="_method" value="DELETE">',
+        '    <button>Delete</button>',
+        '  </form>',
+        '  </li>',
+        '<%   } %>',
+        '</ul>',
+        '<% } %>',
+        '<p>Create a new user:</p>',
+        '<p>',
+        '<form method="post" action="/users">',
+        '<input type="text" name="first_name" placeholder="first name" width="200">',
+        '<input type="text" name="last_name" placeholder="last name" width="200">',
+        '<input type="text" name="username" placeholder="username" width="200">',
+        '<input type="submit" value="Submit">',
+        '</form>',
+        '</p>'
+    ].join("\n");
 
-        var user;
-        for (var id in users) {
-            user = users[id];
-            content += "<li>"
-            content += "Name: " + user.firstName + " " + user.lastName;
-            content += ' (<a href="/users/' + id + '">details</a>';
-            content += ', ' + deleteButton(id) + ')';
-            content += "</li>\n";
-        }
-
-        content += "</ul>";
-    }
-
-    content += "<p>Create a new user:</p>";
-    content += "<p>";
-    content += '<form method="post" action="/users">';
-    content += '<input type="text" name="first_name" placeholder="first name" width="200">';
-    content += '<input type="text" name="last_name" placeholder="last name" width="200">';
-    content += '<input type="text" name="username" placeholder="username" width="200">';
-    content += '<input type="submit" value="Submit">';
-    content += "</form>";
-    content += "</p>";
+    var content = view.render(template, {
+        users: users,
+        isEmptyObject: utils.isEmptyObject
+    });
 
     callback(200, {}, content);
 });
@@ -116,13 +113,12 @@ app.post("/users", function (env, callback) {
         // Weak validation, but sufficient for the example.
         if (params.first_name && params.last_name && params.username) {
             var id = userId++;
-            var user = {
+
+            users[id] = {
                 firstName: params.first_name,
                 lastName: params.last_name,
                 username: params.username
             };
-
-            users[id] = user;
         }
 
         // Redirect to /users.
@@ -136,21 +132,28 @@ app.post("/users", function (env, callback) {
 app.get("/users/:id", function (env, callback) {
     var id = env.route.id;
 
-    var content;
-    if (id in users) {
-        var user = users[id];
-        content = '<p>Details for user with id "' + id + '":</p>';
-        content += "<dl>";
-        content += "<dt>First name</dt><dd>" + user.firstName + "</dd>";
-        content += "<dt>Last name</dt><dd>" + user.lastName + "</dd>";
-        content += "<dt>Username</dt><dd>" + user.username + "</dd>";
-        content += "</dl>";
-        content += deleteButton(id);
-    } else {
-        content = '<p>There is no user with id "' + id + '".</p>';
-    }
+    // This would be probably be loaded from a static template file.
+    var template = [
+        '<% if (user) { %>',
+        '<p>Details for user with id "<%= id %>":</p>',
+        '<dl>',
+        '  <dt>First name</dt><dd><%= user.firstName %></dd>',
+        '  <dt>Last name</dt><dd><%= user.lastName %></dd>',
+        '  <dt>Username</dt><dd><%= user.username %></dd>',
+        '</dl>',
+        '<form action="/users/<%= id %>" method="POST" style="display:inline">',
+        '  <input type="hidden" name="_method" value="DELETE">',
+        '  <button>Delete</button>',
+        '</form>',
+        '<% } else { %>',
+        '<p>There is no user with id "<%= id %>".</p>',
+        '<% } %>'
+    ].join("\n");
 
-    content += '<p><a href="/users">View all users</a></p>';
+    var content = view.render(template, {
+        id: id,
+        user: users[id]
+    });
 
     callback(200, {}, content);
 });

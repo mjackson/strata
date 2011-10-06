@@ -1,6 +1,10 @@
 = HEAD
 
+  * Added view module (supports erb-style templating).
+
   * Permit a function to be used as the second argument to strata.run.
+
+  * Added option to prevent server from writing to console on startup.
 
   * Clarified the use of the serverName and serverPort environment variables.
 
