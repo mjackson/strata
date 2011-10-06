@@ -1,4 +1,4 @@
-= HEAD
+= 0.6.0 / 2011-10-05
 
   * Added view module (supports erb-style templating).
 
