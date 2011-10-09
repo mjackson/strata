@@ -1,3 +1,8 @@
+= 0.6.1 / 2011-10-08
+
+  * Removed Error#fullStack and fixed a bug with printing stack traces for
+    errors that do not inherit from Error.
+
 = 0.6.0 / 2011-10-05
 
   * Added view module (supports erb-style templating).
