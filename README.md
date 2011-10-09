@@ -5,7 +5,7 @@ can build highly performant web servers in a powerful, modular style that is
 easy to maintain and takes full advantage of the streaming capabilities and
 excellent I/O handling of node.js.
 
-The core Strata distribution consists of three things:
+The core Strata distribution consists of four things:
 
   - A specification (see SPEC) for building applications and middleware
   - A library (see lib) with many useful utilities and middleware to aid
@@ -13,6 +13,8 @@ The core Strata distribution consists of three things:
     the specification
   - An executable (see bin/strata) for running Strata applications from the
     command line
+  - A user manual (see doc) that contains detailed documentation and code
+    examples
 
 # Installation
 
@@ -26,14 +28,25 @@ You are also free to [browse or download the source](https://github.com/mjijacks
 
 # Usage
 
-The doc directory contains files that make up the Strata user manual. Each file
-is a chapter of the manual that contains documentation about a certain feature
-of the framework and a code example.
+The simplest possible Strata app looks like this:
+
+    function app(env, callback) {
+        callback(200, {}, "Hello world!");
+    }
+
+    require("strata").run(app);
+
+# Documentation
+
+The Strata user manual (see doc) is designed to teach you how to get up and
+running with the framework as quickly as possible. Each chapter of the manual
+contains documentation about a certain feature of the framework and a code
+example.
 
 The manual is written in such a way that the topics and examples discussed in
 higher numbered chapters build upon previous ones. Thus, it is recommended to
-start with lower numbered chapters when getting started with Strata and work
-your way up to higher ones.
+start with lower numbered chapters when getting started and work your way up to
+higher ones.
 
 You can also [read the manual online](http://stratajs.org/manual).
 
