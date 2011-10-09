@@ -30,11 +30,13 @@ You are also free to [browse or download the source](https://github.com/mjijacks
 
 The simplest possible Strata app looks like this:
 
-    function app(env, callback) {
-        callback(200, {}, "Hello world!");
-    }
+``` javascript
+function app(env, callback) {
+    callback(200, {}, "Hello world!");
+}
 
-    require("strata").run(app);
+require("strata").run(app);
+```
 
 # Documentation
 
