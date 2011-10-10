@@ -1,3 +1,8 @@
+= HEAD
+
+  * Provide as much information as possible in the default error handler for
+    errors that do not have a proper stack trace.
+
 = 0.6.1 / 2011-10-08
 
   * Removed Error#fullStack and fixed a bug with printing stack traces for
