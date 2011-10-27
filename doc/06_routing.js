@@ -26,14 +26,39 @@ stops trying other routes.
 
 The app below defines two routes, both at the `/users` URL path. The first is
 registered only for GET requests, the second for POST.
+
+Note: This example uses [Mustache](https://github.com/janl/mustache.js) for
+template rendering. To install it, use `npm install mustache`.
 */
 
 var strata = require("strata"),
     redirect = strata.redirect,
-    view = strata.view;
+    mustache = require("mustache");
 
 // This is our simple data store.
 var users = [];
+
+// Define a template.
+var userListTemplate = [
+    '{{^users}}',
+    '<p>There are no users!</p>',
+    '{{/users}}',
+    '{{#hasUsers}}',
+    '<p>The users are:</p>',
+    '<ul>',
+    '{{#users}}',
+    '  <li>{{.}}</li>',
+    '{{/users}}',
+    '</ul>',
+    '{{/hasUsers}}',
+    '<p>Create a new user:</p>',
+    '<p>',
+    '<form method="post" action="/users">',
+    '<input type="text" name="username" placeholder="username" width="200">',
+    '<input type="submit" value="Submit">',
+    '</form>',
+    '</p>'
+].join("\n");
 
 var app = new strata.Builder;
 
@@ -46,23 +71,12 @@ app.use(strata.contentLength);
 // another name to the store.
 // Note: app.get(pattern, app) is sugar for app.route(pattern, app, "GET")
 app.get("/users", function (env, callback) {
-    // This would be probably be loaded from a static template file.
-    var template = [
-        '<% if (users.length == 0) { %>',
-        '<p>There are no users!</p>',
-        '<% } else { %>',
-        '<p>The users are: <%= users.join(", ") %></p>',
-        '<% } %>',
-        '<p>Create a new user:</p>',
-        '<p>',
-        '<form method="post" action="/users">',
-        '<input type="text" name="username" placeholder="username" width="200">',
-        '<input type="submit" value="Submit">',
-        '</form>',
-        '</p>'
-    ].join("\n");
+    var content = mustache.to_html(userListTemplate, {
+        hasUsers: users.length != 0,
+        users: users
+    });
 
-    callback(200, {}, view.render(template, {users: users}));
+    callback(200, {}, content);
 });
 
 // POST /users

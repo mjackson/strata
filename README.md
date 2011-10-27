@@ -106,8 +106,5 @@ Strata's multipart parser is based on the fast parser in the node-formidable
 project written by Felix Geisendörfer. It is included in Strata under the terms
 of the MIT license.
 
-Strata's view module is based on the ejs templating system developed by TJ
-Holowaychuk. It is included in Strata under the terms of the MIT license.
-
 My sincere thanks to the authors of each of these libraries for the excellent
 work they've done and graciously shared.

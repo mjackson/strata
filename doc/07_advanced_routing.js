@@ -29,16 +29,67 @@ support for viewing and deleting a user with a particular id. By now, some of
 the common tasks of setting the `Content-Length` and `Content-Type` of every
 response by hand is getting a bit tedious, so we'll use some middleware to
 do these tasks for us.
+
+Note: This example uses [Mustache](https://github.com/janl/mustache.js) for
+template rendering. To install it, use `npm install mustache`.
 */
 
 var strata = require("strata"),
     redirect = strata.redirect,
-    utils = strata.utils,
-    view = strata.view;
+    mustache = require("mustache");
 
 // This is our simple data store.
 var users = {},
     userId = 0;
+
+// Define some templates.
+var userListTemplate = [
+    '{{^users}}',
+    '<p>There are no users!</p>',
+    '{{/users}}',
+    '{{#hasUsers}}',
+    '<p>The users are:</p>',
+    '<ul>',
+    '{{#users}}',
+    '  <li>',
+    '  Name: {{firstName}} {{lastName}}',
+    '  (<a href="/users/{{id}}">{{username}}</a>)',
+    '  <form action="/users/{{id}}" method="POST" style="display:inline">',
+    '    <input type="hidden" name="_method" value="DELETE">',
+    '    <button>Delete</button>',
+    '  </form>',
+    '  </li>',
+    '{{/users}}',
+    '</ul>',
+    '{{/hasUsers}}',
+    '<p>Create a new user:</p>',
+    '<p>',
+    '<form method="post" action="/users">',
+    '<input type="text" name="first_name" placeholder="first name" width="200">',
+    '<input type="text" name="last_name" placeholder="last name" width="200">',
+    '<input type="text" name="username" placeholder="username" width="200">',
+    '<input type="submit" value="Submit">',
+    '</form>',
+    '</p>'
+].join("\n");
+
+var userDetailTemplate = [
+    '{{^user}}',
+    '<p>There is no user with id "{{id}}".</p>',
+    '{{/user}}',
+    '{{#user}}',
+    '<p>Details for user with id "{{id}}":</p>',
+    '<dl>',
+    '  <dt>First name</dt><dd>{{firstName}}</dd>',
+    '  <dt>Last name</dt><dd>{{lastName}}</dd>',
+    '  <dt>Username</dt><dd>{{username}}</dd>',
+    '</dl>',
+    '<form action="/users/{{id}}" method="POST" style="display:inline">',
+    '  <input type="hidden" name="_method" value="DELETE">',
+    '  <button>Delete</button>',
+    '</form>',
+    '{{/user}}'
+].join("\n");
 
 var app = new strata.Builder;
 
@@ -52,40 +103,15 @@ app.use(strata.methodOverride);
 // another to the store.
 // Note: app.get(pattern, app) is sugar for app.route(pattern, app, "GET")
 app.get("/users", function (env, callback) {
-    // This would be probably be loaded from a static template file.
-    var template = [
-        '<% if (isEmptyObject(users)) { %>',
-        '<p>There are no users!</p>',
-        '<% } else { %>',
-        '<p>The users are:</p>',
-        '<ul>',
-        '<%   for (var id in users) { %>',
-        '<%     var user = users[id]; %>',
-        '  <li>',
-        '  Name: <%= user.firstName %> <%= user.lastName %>',
-        '  (<a href="/users/<%= id %>"><%= user.username %></a>)',
-        '  <form action="/users/<%= id %>" method="POST" style="display:inline">',
-        '    <input type="hidden" name="_method" value="DELETE">',
-        '    <button>Delete</button>',
-        '  </form>',
-        '  </li>',
-        '<%   } %>',
-        '</ul>',
-        '<% } %>',
-        '<p>Create a new user:</p>',
-        '<p>',
-        '<form method="post" action="/users">',
-        '<input type="text" name="first_name" placeholder="first name" width="200">',
-        '<input type="text" name="last_name" placeholder="last name" width="200">',
-        '<input type="text" name="username" placeholder="username" width="200">',
-        '<input type="submit" value="Submit">',
-        '</form>',
-        '</p>'
-    ].join("\n");
+    var userList = [];
 
-    var content = view.render(template, {
-        users: users,
-        isEmptyObject: utils.isEmptyObject
+    for (var id in users) {
+        userList.push(users[id]);
+    }
+
+    var content = mustache.to_html(userListTemplate, {
+        hasUsers: userList.length != 0,
+        users: userList
     });
 
     callback(200, {}, content);
@@ -107,6 +133,7 @@ app.post("/users", function (env, callback) {
             var id = userId++;
 
             users[id] = {
+                id: id,
                 firstName: params.first_name,
                 lastName: params.last_name,
                 username: params.username
@@ -123,26 +150,7 @@ app.post("/users", function (env, callback) {
 // Note: app.get(pattern, app) is sugar for app.route(pattern, app, "GET")
 app.get("/users/:id", function (env, callback) {
     var id = env.route.id;
-
-    // This would be probably be loaded from a static template file.
-    var template = [
-        '<% if (user) { %>',
-        '<p>Details for user with id "<%= id %>":</p>',
-        '<dl>',
-        '  <dt>First name</dt><dd><%= user.firstName %></dd>',
-        '  <dt>Last name</dt><dd><%= user.lastName %></dd>',
-        '  <dt>Username</dt><dd><%= user.username %></dd>',
-        '</dl>',
-        '<form action="/users/<%= id %>" method="POST" style="display:inline">',
-        '  <input type="hidden" name="_method" value="DELETE">',
-        '  <button>Delete</button>',
-        '</form>',
-        '<% } else { %>',
-        '<p>There is no user with id "<%= id %>".</p>',
-        '<% } %>'
-    ].join("\n");
-
-    var content = view.render(template, {
+    var content = mustache.to_html(userDetailTemplate, {
         id: id,
         user: users[id]
     });

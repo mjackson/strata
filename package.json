@@ -19,7 +19,8 @@
         "error": "0.0.0"
     },
     "devDependencies": {
-        "vows": "0.5.9"
+        "vows": "0.5.9",
+        "mustache": "0.3.1"
     },
     "main": "./lib",
     "bin": {
