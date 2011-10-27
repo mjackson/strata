@@ -17,6 +17,9 @@ the following:
   - protocolVersion   The version of the protocol used in the request
   - requestMethod     The request method (e.g. "GET" or "POST")
   - requestTime       A Date that indicates the time the request was received
+  - remoteAddr        The IP address of the client
+  - remotePort        The port on the client machine being used to communicate
+                      with the server
   - serverName        The host name of the server. Defaults to the value of
                       process.env.SERVER_NAME or the bound address of the server
                       as reported by the operating system.

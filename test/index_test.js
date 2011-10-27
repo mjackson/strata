@@ -13,6 +13,8 @@ vows.describe("index").addBatch({
             this.protocolVersion = "1.1";
             this.requestMethod = "POST";
             this.requestTime = new Date;
+            this.remoteAddr = "127.0.0.1";
+            this.remotePort = "8888";
             this.serverName = "example.org";
             this.serverPort = "443";
             this.pathInfo = "/some/path";
@@ -29,6 +31,8 @@ vows.describe("index").addBatch({
                 protocolVersion: this.protocolVersion,
                 requestMethod: this.requestMethod,
                 requestTime: this.requestTime,
+                remoteAddr: this.remoteAddr,
+                remotePort: this.remotePort,
                 serverName: this.serverName,
                 serverPort: this.serverPort,
                 pathInfo: this.pathInfo,
@@ -52,6 +56,12 @@ vows.describe("index").addBatch({
         },
         "should have the correct requestTime": function (env) {
             assert.equal(env.requestTime, this.requestTime);
+        },
+        "should have the correct remoteAddr": function (env) {
+            assert.equal(env.remoteAddr, this.remoteAddr);
+        },
+        "should have the correct remotePort": function (env) {
+            assert.equal(env.remotePort, this.remotePort);
         },
         "should have the correct serverName": function (env) {
             assert.equal(env.serverName, this.serverName);

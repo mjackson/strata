@@ -3,6 +3,8 @@
   * Provide as much information as possible in the default error handler for
     errors that do not have a proper stack trace.
 
+  * Added remoteAddr and remotePort environment variables.
+
   * Extracted base error class into its own package.
 
   * Removed view module.

@@ -31,6 +31,8 @@ vows.describe("lint").addBatch({
                 "protocol",
                 "protocolVersion",
                 "requestMethod",
+                "remoteAddr",
+                "remotePort",
                 "serverName",
                 "serverPort",
                 "scriptName",
