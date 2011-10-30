@@ -14,7 +14,7 @@ vows.describe("response").addBatch({
                 "Content-Length": this.contentLength
             };
 
-            var res = new Response(this.status, this.headers, this.body);
+            var res = new Response(this.body, this.headers, this.status);
 
             return res;
         },

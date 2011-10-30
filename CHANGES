@@ -5,6 +5,8 @@
 
   * Added remoteAddr and remotePort environment variables.
 
+  * Reversed order of arguments to Response constructor.
+
   * Extracted base error class into its own package.
 
   * Removed view module.
