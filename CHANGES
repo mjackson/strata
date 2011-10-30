@@ -7,6 +7,10 @@
 
   * Reversed order of arguments to Response constructor.
 
+  * Values in Response#headers are always strings.
+
+  * Don't send the old cookie value when removing cookies.
+
   * Extracted base error class into its own package.
 
   * Removed view module.
