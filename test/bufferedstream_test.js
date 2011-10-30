@@ -27,6 +27,12 @@ vows.describe("stream").addBatch({
         "should not have an encoding": function (stream) {
             assert.ok(!stream.encoding);
         },
+        "with a maxSize of 0": {
+            topic: new BufferedStream(0),
+            "should not be full": function (stream) {
+                assert.ok(!stream.full);
+            }
+        },
         "after end() has been called": {
             topic: function () {
                 var stream = new BufferedStream;
