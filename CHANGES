@@ -1,4 +1,4 @@
-= HEAD
+= 0.7.0 / 2011-10-30
 
   * Provide as much information as possible in the default error handler for
     errors that do not have a proper stack trace.
