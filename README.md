@@ -18,11 +18,9 @@ The core Strata distribution consists of four things:
 
 # Installation
 
-The easiest way to install Strata is by using [npm](http://npmjs.org/):
+Install Strata using [npm](http://npmjs.org/):
 
-``` bash
-$ npm install strata
-```
+    $ npm install strata
 
 You are also free to [browse or download the source](https://github.com/mjijackson/strata).
 
@@ -55,23 +53,13 @@ You can also [read the manual online](http://stratajs.org/manual).
 # Tests
 
 The test directory contains a comprehensive suite of unit tests for all of
-Strata's core modules. To run the tests, first install vows:
+Strata's core modules. Use [vows](http://vowsjs.org) to run all tests:
 
-``` bash
-$ npm install -g vows
-```
+    $ vows test/*_test.js
 
-Run all tests with:
+Run the tests for a specific module with:
 
-``` bash
-$ vows test/*_test.js
-```
-
-Otherwise, run the tests for a specific module with:
-
-``` bash
-$ vows test/utils_test.js
-```
+    $ vows test/utils_test.js
 
 # License
 
