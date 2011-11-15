@@ -3,7 +3,7 @@ var assert = require("assert"),
     EventEmitter = require("events").EventEmitter,
     strata = require("./../lib/index"),
     mock = require("./../lib/mock"),
-    BufferedStream = require("./../lib/bufferedstream"),
+    BufferedStream = require("bufferedstream"),
     utils = require("./../lib/utils");
 
 vows.describe("index").addBatch({

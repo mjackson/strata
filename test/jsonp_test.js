@@ -2,7 +2,7 @@ var assert = require("assert"),
     vows = require("vows"),
     mock = require("./../lib/mock"),
     jsonp = require("./../lib/jsonp"),
-    BufferedStream = require("./../lib/bufferedstream");
+    BufferedStream = require("bufferedstream");
 
 vows.describe("gzip").addBatch({
     "A gzip middleware": {

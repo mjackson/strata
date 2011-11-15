@@ -3,7 +3,7 @@ var assert = require("assert"),
     qs = require("querystring"),
     Request = require("./../lib/request"),
     mock = require("./../lib/mock"),
-    BufferedStream = require("./../lib/bufferedstream");
+    BufferedStream = require("bufferedstream");
 
 vows.describe("request").addBatch({
     "A Request": {

@@ -1,3 +1,7 @@
+= HEAD
+
+  * Refactored BufferedStream into its own module.
+
 = 0.7.0 / 2011-10-30
 
   * Provide as much information as possible in the default error handler for

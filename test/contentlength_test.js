@@ -2,7 +2,7 @@ var assert = require("assert"),
     vows = require("vows"),
     mock = require("./../lib/mock"),
     contentLength = require("./../lib/contentlength"),
-    BufferedStream = require("./../lib/bufferedstream");
+    BufferedStream = require("bufferedstream");
 
 vows.describe("contentlength").addBatch({
     "A contentLength middleware": {

@@ -7,7 +7,7 @@ var assert = require("assert"),
     gzip = require("./../lib/gzip"),
     stat = require("./../lib/static"),
     utils = require("./../lib/utils"),
-    BufferedStream = require("./../lib/bufferedstream");
+    BufferedStream = require("bufferedstream");
 
 vows.describe("gzip").addBatch({
     "A gzip middleware": {
