@@ -204,16 +204,13 @@ vows.describe("request").addBatch({
             topic: function () {
                 this.body = "This is some plain text.";
 
-                var input = new BufferedStream(this.body);
-                input.pause();
-
                 var self = this;
                 mock.request({
                     headers: {
                         "Content-Type": "text/plain",
                         "Content-Length": this.body.length.toString(10)
                     },
-                    input: input
+                    input: new BufferedStream(this.body)
                 }, function (env, callback) {
                     var req = new Request(env);
                     req.body(self.callback);
@@ -227,16 +224,13 @@ vows.describe("request").addBatch({
             topic: function () {
                 this.body = '{"a": 1, "b": 2}';
 
-                var input = new BufferedStream(this.body);
-                input.pause();
-
                 var self = this;
                 mock.request({
                     headers: {
                         "Content-Type": "application/json",
                         "Content-Length": this.body.length.toString(10)
                     },
-                    input: input
+                    input: new BufferedStream(this.body)
                 }, function (env, callback) {
                     var req = new Request(env);
                     req.body(self.callback);
@@ -250,16 +244,13 @@ vows.describe("request").addBatch({
             topic: function () {
                 this.body = "a=1&a=2";
 
-                var input = new BufferedStream(this.body);
-                input.pause();
-
                 var self = this;
                 mock.request({
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
                         "Content-Length": this.body.length.toString(10)
                     },
-                    input: input
+                    input: new BufferedStream(this.body)
                 }, function (env, callback) {
                     var req = new Request(env);
                     req.body(self.callback);
@@ -277,16 +268,13 @@ Content-Disposition: form-data; name="a"\r\n\
 hello world\r\n\
 --AaB03x--\r';
 
-                var input = new BufferedStream(body);
-                input.pause();
-
                 var self = this;
                 mock.request({
                     headers: {
                         "Content-Type": 'multipart/form-data; boundary="AaB03x"',
                         "Content-Length": body.length.toString(10)
                     },
-                    input: input
+                    input: new BufferedStream(body)
                 }, function (env, callback) {
                     var req = new Request(env);
                     req.body(self.callback);
@@ -306,9 +294,6 @@ Content-Disposition: form-data; name="a"\r\n\
 hello world\r\n\
 --AaB03x--\r';
 
-                var input = new BufferedStream(body);
-                input.pause();
-
                 var self = this;
                 mock.request({
                     queryString: this.queryString,
@@ -316,7 +301,7 @@ hello world\r\n\
                         "Content-Type": 'multipart/form-data; boundary="AaB03x"',
                         "Content-Length": body.length.toString(10)
                     },
-                    input: input
+                    input: new BufferedStream(body)
                 }, function (env, callback) {
                     var req = new Request(env);
                     req.params(self.callback);

@@ -1,5 +1,9 @@
 = HEAD
 
+  * Support for node 0.6.
+
+  * Removed dependency on gzbz2 in favor of native zlib support in node.
+
   * Refactored BufferedStream into its own module.
 
   * Added remoteUser environment variable when using basic auth.

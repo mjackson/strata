@@ -3,7 +3,6 @@ var assert = require("assert"),
     path = require("path"),
     fs = require("fs"),
     mock = require("./../lib/mock"),
-    Gzip = require("gzbz2").Gzip,
     gzip = require("./../lib/gzip"),
     stat = require("./../lib/static"),
     utils = require("./../lib/utils"),
@@ -13,11 +12,13 @@ vows.describe("gzip").addBatch({
     "A gzip middleware": {
         "with a string body": {
             topic: function () {
-                this.body = "Hello world!";
+                this.file = path.resolve(__dirname, "_files/test.txt");
+                this.body = fs.readFileSync(this.file + ".gz", "utf8");
 
                 var self = this;
                 var app = gzip(function (env, callback) {
-                    callback(200, {"Content-Type": "text/plain"}, self.body);
+                    var body = fs.readFileSync(self.file, "utf8");
+                    callback(200, {"Content-Type": "text/plain"}, body);
                 });
 
                 mock.request({
@@ -27,24 +28,19 @@ vows.describe("gzip").addBatch({
                 }, app, this.callback);
             },
             "should gzip encode it": function (err, status, headers, body) {
-                assert.equal(headers["Content-Type"], "text/plain");
                 assert.equal(headers["Content-Encoding"], "gzip");
-
-                var compressor = new Gzip;
-                compressor.init();
-                var expect = compressor.deflate(this.body) + compressor.end();
-
-                assert.equal(body, expect);
+                assert.equal(body, this.body);
             }
         },
         "with a Stream body": {
             topic: function () {
-                this.body = "Hello world!";
+                this.file = path.resolve(__dirname, "_files/test.txt");
+                this.body = fs.readFileSync(this.file + ".gz", "utf8");
 
                 var self = this;
                 var app = gzip(function (env, callback) {
-                    var stream = new BufferedStream(self.body);
-                    callback(200, {"Content-Type": "text/plain"}, stream);
+                    var body = new BufferedStream(fs.readFileSync(self.file, "utf8"));
+                    callback(200, {"Content-Type": "text/plain"}, body);
                 });
 
                 mock.request({
@@ -54,19 +50,14 @@ vows.describe("gzip").addBatch({
                 }, app, this.callback);
             },
             "should gzip encode it": function (err, status, headers, body) {
-                assert.equal(headers["Content-Type"], "text/plain");
                 assert.equal(headers["Content-Encoding"], "gzip");
-
-                var compressor = new Gzip;
-                compressor.init();
-                var expect = compressor.deflate(this.body) + compressor.end();
-
-                assert.equal(body, expect);
+                assert.equal(body, this.body);
             }
         },
         "with a file Stream body": {
             topic: function () {
                 this.file = path.resolve(__dirname, "_files/test.txt");
+                this.body = fs.readFileSync(this.file + ".gz", "utf8");
 
                 var app = utils.notFound;
                 app = stat(app, path.resolve(__dirname, "_files"));
@@ -80,13 +71,14 @@ vows.describe("gzip").addBatch({
                 }, app, this.callback);
             },
             "should gzip encode it": function (err, status, headers, body) {
-                var expect = fs.readFileSync(this.file + ".gz", "utf8");
-                assert.equal(body, expect);
+                assert.equal(headers["Content-Encoding"], "gzip");
+                assert.equal(body, this.body);
             }
         },
         "when the client does not accept gzip encoding": {
             topic: function () {
-                this.body = "Hello world!";
+                this.file = path.resolve(__dirname, "_files/test.txt");
+                this.body = fs.readFileSync(this.file, "utf8");
 
                 var self = this;
                 var app = gzip(function (env, callback) {

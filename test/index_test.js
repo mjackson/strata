@@ -23,9 +23,6 @@ vows.describe("index").addBatch({
             this.content = "hello world!";
             this.contentLength = Buffer.byteLength(this.content).toString(10);
 
-            var input = new BufferedStream(this.content);
-            input.pause();
-
             return strata.env({
                 protocol: this.protocol,
                 protocolVersion: this.protocolVersion,
@@ -42,7 +39,7 @@ vows.describe("index").addBatch({
                     "User-Agent": this.userAgent,
                     "Content-Length": this.contentLength
                 },
-                input: input
+                input: new BufferedStream(this.content)
             });
         },
         "should have the correct protocol": function (env) {
