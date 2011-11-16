@@ -1,3 +1,7 @@
+= HEAD
+
+  * Update markdown dependency version to ~0.3.1.
+
 = 0.8.0 / 2011-11-16
 
   * Support for node 0.6.
