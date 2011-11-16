@@ -6,6 +6,8 @@
 
   * Removed utils.strftime in favor of strftime package.
 
+  * Removed utils.isRe in favor of util.isRegExp.
+
   * Refactored BufferedStream into its own module.
 
   * Added remoteUser environment variable when using basic auth.
