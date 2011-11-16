@@ -16,7 +16,7 @@ The core Strata distribution consists of four things:
   - A user manual (see doc) that contains detailed documentation and code
     examples
 
-# Installation
+## Installation
 
 Install Strata using [npm](http://npmjs.org/):
 
@@ -24,7 +24,7 @@ Install Strata using [npm](http://npmjs.org/):
 
 You are also free to [browse or download the source](https://github.com/mjijackson/strata).
 
-# Usage
+## Usage
 
 The simplest possible Strata app looks like this:
 
@@ -36,7 +36,7 @@ function app(env, callback) {
 require("strata").run(app);
 ```
 
-# Documentation
+## Documentation
 
 The Strata user manual (see doc) is designed to teach you how to get up and
 running with the framework as quickly as possible. Each chapter of the manual
@@ -50,7 +50,7 @@ higher ones.
 
 You can also [read the manual online](http://stratajs.org/manual).
 
-# Tests
+## Tests
 
 The test directory contains a comprehensive suite of unit tests for all of
 Strata's core modules. Use [vows](http://vowsjs.org) to run all tests:
@@ -61,7 +61,7 @@ Run the tests for a specific module with:
 
     $ vows test/utils_test.js
 
-# License
+## License
 
 Copyright 2011 Michael Jackson
 
@@ -83,7 +83,7 @@ liability, whether in an action of contract, tort or otherwise, arising from,
 out of or in connection with the software or the use or other dealings in
 the software.
 
-# Acknowledgements
+## Acknowledgements
 
 Strata was inspired by similar efforts in the Python and Ruby communities,
 namely [WSGI](http://www.wsgi.org/) and [Rack](http://rack.rubyforge.org/). It
