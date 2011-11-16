@@ -16,6 +16,7 @@
         "usererror": "~1.0.1",
         "bufferedstream": "~1.0.1",
         "mime": "1.2.3",
+        "strftime": "0.4.6",
         "markdown": "0.2.1"
     },
     "devDependencies": {

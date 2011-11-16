@@ -4,6 +4,8 @@
 
   * Removed dependency on gzbz2 in favor of native zlib support in node.
 
+  * Removed utils.strftime in favor of strftime package.
+
   * Refactored BufferedStream into its own module.
 
   * Added remoteUser environment variable when using basic auth.
