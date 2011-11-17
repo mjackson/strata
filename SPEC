@@ -51,6 +51,10 @@ the following:
 
 In addition to these, the environment MAY include the following properties:
 
+  - flash             A string containing the flash message, if any. This is a
+                      message that was set using the flash module and is
+                      available to all applications downstream from a
+                      strata.flash middleware
   - session           An object containing session data. Available to all
                       applications downstream from a strata.sessionCookie
                       middleware

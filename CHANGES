@@ -1,5 +1,9 @@
 = HEAD
 
+  * Added flash module.
+
+  * Extracted mock.call from mock.request.
+
   * Fixed retrieval of the remote client address under node 0.6.
 
   * Fixed commonLogger middleware to report the remote client address properly.
