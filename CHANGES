@@ -1,3 +1,11 @@
+= HEAD
+
+  * Fixed retrieval of the remote client address under node 0.6.
+
+  * Fixed commonLogger middleware to report the remote client address properly.
+
+  * Removed utils.reverseHttpPropertyName
+
 = 0.8.1 / 2011-11-16
 
   * Update markdown dependency version to ~0.3.1.

@@ -28,11 +28,6 @@ function headerConversionContext(header, normalized, canonical, capitalized, pro
     context["should be converted to the proper http* property name"] = function (header) {
         assert.equal(utils.httpPropertyName(header), property);
     }
-    context["should be converted to the proper reverse http* property name"] = function (header) {
-        var pName = utils.httpPropertyName(header);
-        assert.equal(pName, property);
-        assert.equal(utils.reverseHttpPropertyName(pName), normalized);
-    }
 
     return context;
 }
