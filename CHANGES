@@ -1,5 +1,9 @@
 = HEAD
 
+  * Added strata.call to catch errors that are thrown synchronously by strata
+    apps. In these cases, an error response can be gracefully returned to the
+    client without bringing the whole server down.
+
   * Added flash module.
 
   * Extracted mock.call from mock.request.
