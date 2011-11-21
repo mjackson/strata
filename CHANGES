@@ -1,4 +1,4 @@
-= HEAD
+= 0.8.2 / 2011-11-21
 
   * Added strata.call to catch errors that are thrown synchronously by strata
     apps. In these cases, an error response can be gracefully returned to the
