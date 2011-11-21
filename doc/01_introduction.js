@@ -3,7 +3,7 @@
 
 Welcome to Strata!
 
-[Strata](http://stratajs.org) is a fast, streaming web framework for [node.js](http://nodejs.org)
+[Strata](http://stratajs.org) is a streaming HTTP framework for [node.js](http://nodejs.org)
 that is patterned after time-honored and battle tested web application design
 principles pioneered in the [Python](http://python.org/) and [Ruby](http://ruby-lang.org)
 communities (see [WSGI](http://wsgi.org/wsgi/) and [Rack](http://rack.rubyforge.org/)).

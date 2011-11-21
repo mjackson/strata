@@ -2,7 +2,7 @@
     "name": "strata",
     "version": "0.8.1",
     "author": "Michael Jackson <mjijackson@gmail.com>",
-    "description": "A fast, streaming web framework patterned after WSGI/Rack",
+    "description": "A streaming HTTP framework patterned after WSGI/Rack",
     "keywords": ["web", "server", "framework", "middleware", "rack", "jsgi", "wsgi", "connect", "express"],
     "homepage": "http://stratajs.org",
     "engines": {

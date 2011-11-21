@@ -1,4 +1,4 @@
-Strata is a fast, streaming web framework for node.js that is patterned after
+Strata is a streaming HTTP framework for node.js that is patterned after
 time-honored and battle tested web application design principles pioneered in
 the Python and Ruby communities (see WSGI and Rack). Using Strata, developers
 can build highly performant web servers in a powerful, modular style that is
