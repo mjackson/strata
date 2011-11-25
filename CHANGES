@@ -2,6 +2,9 @@
 
   * Added urlmap middleware. Removed Mapper.
 
+  * Removed Router and routing from Builder. This functionality belongs in
+    another package that builds on the base that strata provides.
+
 = 0.8.2 / 2011-11-21
 
   * Added strata.call to catch errors that are thrown synchronously by strata

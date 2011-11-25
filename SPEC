@@ -58,9 +58,6 @@ In addition to these, the environment MAY include the following properties:
   - session           An object containing session data. Available to all
                       applications downstream from a strata.sessionCookie
                       middleware
-  - route             An object containing information about the route that was
-                      triggered. Available to all applications downstream from a
-                      strata.Router application
   - remoteUser        A string containing the name of the authorized user when
                       using HTTP basic auth. Available to all applications
                       downstream from a strata.authBasic middleware
