@@ -104,20 +104,20 @@ vows.describe("request").addBatch({
             assert.equal(req.referrer, this.referrer);
         },
         "should know what content types are acceptable": function (req) {
-            assert.ok(req.accept("text/html"));
-            assert.ok(req.accept("application/json"));
+            assert.ok(req.accepts("text/html"));
+            assert.ok(req.accepts("application/json"));
         },
         "should know what character sets are acceptable": function (req) {
-            assert.ok(req.acceptCharset("iso-8859-1"));
-            assert.ok(req.acceptCharset("utf-8"));
+            assert.ok(req.acceptsCharset("iso-8859-1"));
+            assert.ok(req.acceptsCharset("utf-8"));
         },
         "should know what content encodings are acceptable": function (req) {
-            assert.ok(req.acceptEncoding("gzip"));
-            assert.ok(req.acceptEncoding("compress"));
+            assert.ok(req.acceptsEncoding("gzip"));
+            assert.ok(req.acceptsEncoding("compress"));
         },
         "should know what languages are acceptable": function (req) {
-            assert.ok(req.acceptLanguage("en"));
-            assert.ok(!req.acceptLanguage("jp"));
+            assert.ok(req.acceptsLanguage("en"));
+            assert.ok(!req.acceptsLanguage("jp"));
         },
         "should know if it is secure": function (req) {
             assert.ok(req.ssl);

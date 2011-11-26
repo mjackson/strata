@@ -1,3 +1,11 @@
+= HEAD
+
+  * Added Response.headers and Request.headers, and all corresponding properties
+    to their respective prototypes.
+
+  * Renamed Request#accept* family of methods to accepts* to prevent collision
+    with accessors of raw header values.
+
 = 0.8.2 / 2011-11-21
 
   * Added strata.call to catch errors that are thrown synchronously by strata
