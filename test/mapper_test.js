@@ -1,12 +1,13 @@
 var assert = require("assert"),
     vows = require("vows"),
     mock = require("./../lib/mock"),
-    urlmap = require("./../lib/urlmap");
+    Mapper = require("./../lib/mapper");
 
-vows.describe("urlmap").addBatch({
-    "A urlmap middleware": {
+vows.describe("mapper").addBatch({
+    "A Mapper": {
         topic: function () {
-            mock.request("", urlmap({}), this.callback);
+            var app = new Mapper;
+            mock.request("", app, this.callback);
         },
         "should return 404 by default": function (err, status, headers, body) {
             assert.equal(status, 404);
@@ -19,9 +20,9 @@ vows.describe("urlmap").addBatch({
                         "X-PathInfo": env.pathInfo,
                         "Content-Type": "text/plain"
                     }, "");
-                };
+                }
 
-                var map = urlmap({
+                var map = Mapper.fromMap({
                     "http://example.org/static": app,
                     "/path": app,
                     "/some/path": app
@@ -173,7 +174,7 @@ vows.describe("urlmap").addBatch({
         },
         "with host-based definitions": {
             topic: function () {
-                var map = urlmap({
+                var map = Mapper.fromMap({
                     "/": function (env, callback) {
                         callback(200, {
                             "Content-Type": "text/plain",
@@ -313,11 +314,11 @@ vows.describe("urlmap").addBatch({
                 }
             }
         },
-        "with nested urlmaps": {
+        "with nested Mappers": {
             topic: function () {
-                var map = urlmap({
-                    "/some": urlmap({
-                        "/path": urlmap({
+                var map = Mapper.fromMap({
+                    "/some": Mapper.fromMap({
+                        "/path": Mapper.fromMap({
                             "/name": function (env, callback) {
                                 callback(200, {
                                     "Content-Type": "text/plain",
@@ -326,8 +327,8 @@ vows.describe("urlmap").addBatch({
                                     "X-PathInfo": env.pathInfo
                                 }, "");
                             }
-                        })
-                    })
+                        }).toApp()
+                    }).toApp()
                 });
 
                 return map;
@@ -360,7 +361,7 @@ vows.describe("urlmap").addBatch({
         },
         "with multiple root apps": {
             topic: function () {
-                var map = urlmap({
+                var map = Mapper.fromMap({
                     "/": function (env, callback) {
                         callback(200, {
                             "Content-Type": "text/plain",

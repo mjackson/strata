@@ -1,7 +1,5 @@
 = HEAD
 
-  * Added urlmap middleware. Removed Mapper.
-
   * Removed Router and routing from Builder. This functionality belongs in
     another package that builds on the base that strata provides.
 
