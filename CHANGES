@@ -1,8 +1,5 @@
 = HEAD
 
-  * Removed Router and routing from Builder. This functionality belongs in
-    another package that builds on the base that strata provides.
-
   * Added Response.headers and Request.headers, and all corresponding properties
     to their respective prototypes.
 
