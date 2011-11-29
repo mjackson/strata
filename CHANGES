@@ -6,6 +6,8 @@
   * Renamed Request#accept* family of methods to accepts* to prevent collision
     with accessors of raw header values.
 
+  * Only use static middleware on GET requests.
+
 = 0.8.2 / 2011-11-21
 
   * Added strata.call to catch errors that are thrown synchronously by strata
