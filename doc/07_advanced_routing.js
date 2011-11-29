@@ -12,7 +12,7 @@ in the [Rails](http://rubyonrails.org/) and [Sinatra](http://www.sinatrarb.com/)
 web frameworks. Strata recognizes any sequence of a colon followed by an
 alpha character and any number of alpha-numeric characters or underscores as
 one of these symbols. They match any non-empty sequence of characters in the
-URL up to a `/`, `?`, or `#`.
+URL up to a `.`, `/`, `?`, or `#`.
 
 The second method is to use a pure regular expression. This method provides
 you with the most fine-grained control over the matching behavior of the

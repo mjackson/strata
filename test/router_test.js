@@ -22,6 +22,13 @@ vows.describe("router").addBatch({
             assert.ok(pattern);
             assert.deepEqual(keys, ["$id", "_photo_id"]);
             assert.match("/users/1/photos/1", pattern);
+
+            keys = [];
+            pattern = Router.compileRoute("/users/:id.:format", keys);
+
+            assert.ok(pattern);
+            assert.deepEqual(keys, ["id", "format"]);
+            assert.match("/users/2.json", pattern);
         },
         "should properly recognize the splat character": function () {
             var keys = [];
