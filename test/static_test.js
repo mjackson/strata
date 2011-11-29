@@ -51,6 +51,14 @@ vows.describe("static").addBatch({
             "should forward the request to the downstream app": function (err, status, headers, body) {
                 assert.equal(status, 404);
             }
+        },
+        "when the path contains ..": {
+            topic: function (app) {
+                mock.request("/../etc/passwd", app, this.callback);
+            },
+            "should respond with a 403": function (err, status, headers, body) {
+                assert.equal(status, 403);
+            }
         }
     },
     "A static middleware with multiple index files": {
