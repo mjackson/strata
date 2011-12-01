@@ -38,7 +38,7 @@ var strata = require("strata"),
 // This is our simple data store.
 var users = [];
 
-// Define a template.
+// Define a template. This would normally be stored in a template file.
 var userListTemplate = [
     '{{^users}}',
     '<p>There are no users!</p>',
@@ -61,6 +61,7 @@ var userListTemplate = [
 ].join("\n");
 
 var app = new strata.Builder;
+var router = new strata.Router;
 
 app.use(strata.commonLogger);
 app.use(strata.contentType, "text/html");
@@ -69,8 +70,8 @@ app.use(strata.contentLength);
 // GET /users
 // Shows a list of the users currently in the data store and a form for adding
 // another name to the store.
-// Note: app.get(pattern, app) is sugar for app.route(pattern, app, "GET")
-app.get("/users", function (env, callback) {
+// Note: router.get(pattern, app) is sugar for router.route(pattern, app, "GET")
+router.get("/users", function (env, callback) {
     var content = mustache.to_html(userListTemplate, {
         hasUsers: users.length != 0,
         users: users
@@ -81,8 +82,8 @@ app.get("/users", function (env, callback) {
 
 // POST /users
 // Adds a username to the data store.
-// Note: app.post(pattern, app) is sugar for app.route(pattern, app, "POST")
-app.post("/users", function (env, callback) {
+// Note: router.post(pattern, app) is sugar for router.route(pattern, app, "POST")
+router.post("/users", function (env, callback) {
     var req = new strata.Request(env);
 
     req.params(function (err, params) {
@@ -99,10 +100,11 @@ app.post("/users", function (env, callback) {
     });
 });
 
-app.run(function (env, callback) {
+router.run(function (env, callback) {
     callback(200, {}, 'Try <a href="/users">/users</a>.');
 });
 
+app.run(router);
 strata.run(app);
 
 /*

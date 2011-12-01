@@ -81,13 +81,15 @@ the environment for the sake of *downstream* apps.
 
 The example app below demonstrates how to build a simple middleware that stores
 the value of a request parameter named "user" in a custom environment variable
-so that it may be used by the downstream app.
+so that it may be used by the downstream app. The app is constructed using a
+`strata.Builder`, which provides an easy interface for constructing applications
+fronted by middleware.
 */
 
 var strata = require("strata");
 
 // This function is the middleware. It keeps a reference to the downstream app.
-var setUser = function (app) {
+function setUser(app) {
     return function (env, callback) {
         var req = new strata.Request(env);
 
@@ -107,16 +109,18 @@ var setUser = function (app) {
     }
 }
 
-var app = function (env, callback) {
+var app = new strata.Builder;
+
+// Wrap the app in several useful middlewares.
+app.use(strata.contentType); // Sets the Content-Type header
+app.use(strata.contentLength); // Sets the Content-Length header
+app.use(setUser); // Sets the myappUser environment variable
+
+app.run(function (env, callback) {
     // In the downstream app we have access to any custom variables that were
     // set by middleware upstream.
     callback(200, {}, "Welcome, " + env.myappUser + "!");
-}
-
-// Wrap the app in several useful middlewares.
-app = setUser(app); // Sets the myappUser environment variable
-app = strata.contentLength(app); // Sets the Content-Length header
-app = strata.contentType(app, "text/plain"); // Sets the Content-Type header
+});
 
 strata.run(app);
 
@@ -130,36 +134,6 @@ Then view the app at [http://localhost:1982/](http://localhost:1982/).
 
 Tip: When running this app, try [http://localhost:1982/?user=Michael](http://localhost:1982/?user=Michael)
 or something similar.
-
-## Using the Builder
-
-The `strata.Builder` constructor is one of the most useful tools included in the
-core framework. The `Builder#use` method in particular lets us build apps in a
-much more elegant fashion than was shown above. Compare the previous example
-with the following code, which will produce an identical result.
-
-Note: We'll assume that the `setUser` function has already been defined in this
-example for the sake of brevity.
-
-    var strata = require("strata");
-    var app = new strata.Builder;
-
-    app.use(strata.contentType, "text/plain");
-    app.use(strata.contentLength);
-    app.use(setUser);
-
-    app.run(function (env, callback) {
-        callback(200, {}, "Welcome, " + env.myappUser + "!");
-    });
-
-    strata.run(app);
-
-Notice how we are able to read the middleware stack from top to bottom now. This
-makes it much easier to think about when visualizing the path a request will
-take through your app.
-
-A `strata.Builder` is also capable of routing and mapping, but we'll explore
-these concepts further in later chapters.
 
 ## More Examples
 

@@ -22,13 +22,8 @@ When a pattern matches the URL, the results of the match are stored in the
 `route` environment variable. This variable contains the original string that
 matched as well as any captures that were present in the pattern. It also has
 getter/setter properties for any segments of the URL that were defined as
-symbols.
-
-The example below expands upon the example in the previous chapter and adds
-support for viewing and deleting a user with a particular id. By now, some of
-the common tasks of setting the `Content-Length` and `Content-Type` of every
-response by hand is getting a bit tedious, so we'll use some middleware to
-do these tasks for us.
+symbols. The example below expands upon the example in the previous chapter and
+adds support for viewing and deleting a user with a particular id.
 
 Note: This example uses [Mustache](https://github.com/janl/mustache.js) for
 template rendering. To install it, use `npm install mustache`.
@@ -42,7 +37,7 @@ var strata = require("strata"),
 var users = {},
     userId = 0;
 
-// Define some templates.
+// Define some templates. These would normally be stored in template files.
 var userListTemplate = [
     '{{^users}}',
     '<p>There are no users!</p>',
@@ -92,6 +87,7 @@ var userDetailTemplate = [
 ].join("\n");
 
 var app = new strata.Builder;
+var router = new strata.Router;
 
 app.use(strata.commonLogger);
 app.use(strata.contentType, "text/html");
@@ -101,8 +97,8 @@ app.use(strata.methodOverride);
 // GET /users
 // Shows a list of the users currently in the data store and a form for adding
 // another to the store.
-// Note: app.get(pattern, app) is sugar for app.route(pattern, app, "GET")
-app.get("/users", function (env, callback) {
+// Note: router.get(pattern, app) is sugar for router.route(pattern, app, "GET")
+router.get("/users", function (env, callback) {
     var userList = [];
 
     for (var id in users) {
@@ -119,8 +115,8 @@ app.get("/users", function (env, callback) {
 
 // POST /users
 // Adds a user to the data store.
-// Note: app.post(pattern, app) is sugar for app.route(pattern, app, "POST")
-app.post("/users", function (env, callback) {
+// Note: router.post(pattern, app) is sugar for router.route(pattern, app, "POST")
+router.post("/users", function (env, callback) {
     var req = new strata.Request(env);
 
     req.params(function (err, params) {
@@ -147,8 +143,8 @@ app.post("/users", function (env, callback) {
 
 // GET /users/:id
 // Shows details about the user with the given id.
-// Note: app.get(pattern, app) is sugar for app.route(pattern, app, "GET")
-app.get("/users/:id", function (env, callback) {
+// Note: router.get(pattern, app) is sugar for router.route(pattern, app, "GET")
+router.get("/users/:id", function (env, callback) {
     var id = env.route.id;
     var content = mustache.to_html(userDetailTemplate, {
         id: id,
@@ -160,8 +156,8 @@ app.get("/users/:id", function (env, callback) {
 
 // DELETE /users/:id
 // Deletes the user with the given id.
-// Note: app.del(pattern, app) is sugar for app.route(pattern, app, "DELETE")
-app.del("/users/:id", function (env, callback) {
+// Note: router.del(pattern, app) is sugar for router.route(pattern, app, "DELETE")
+router.del("/users/:id", function (env, callback) {
     var id = env.route.id;
 
     if (id in users) {
@@ -172,10 +168,11 @@ app.del("/users/:id", function (env, callback) {
     redirect(env, callback, "/users");
 });
 
-app.run(function (env, callback) {
+router.run(function (env, callback) {
     callback(200, {}, 'Try <a href="/users">/users</a>.');
 });
 
+app.run(router);
 strata.run(app);
 
 /*
