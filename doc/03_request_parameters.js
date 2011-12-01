@@ -87,7 +87,7 @@ app will be `{"a":"z","c":"d"}`.
 However, if we modify the app to use `Request#query` instead of `Request#params`
 (i.e. we change `req.params` to `req.query`) and issued the same request we
 would get a response of `{"a":"b"}` because only parameters from the query
-string would be parsed into the `params` object.
+string would be parsed into the `query` object.
 
 You are encouraged to experiment for yourself with the example app above to get
 a good feel for how Strata's request parameter parsing works before proceeding
