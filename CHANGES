@@ -1,5 +1,7 @@
 = HEAD
 
+  * Remove routing capabilities from Builder.
+
   * Added Response.headers and Request.headers, and all corresponding properties
     to their respective prototypes.
 

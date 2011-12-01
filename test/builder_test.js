@@ -32,22 +32,7 @@ vows.describe("builder").addBatch({
             app.use(root);
             app.use(count);
 
-            app.route("/one", function (env, callback) {
-                callback(200, {
-                    "Content-Type": "text/plain",
-                    "X-Route": "/one"
-                }, "");
-            });
-
-            app.route("/two", function (env, callback) {
-                callback(200, {
-                    "Content-Type": "text/plain",
-                    "X-Route": "/two"
-                }, "");
-            });
-
             app.map("/one", function (app) {
-                app.use(count);
                 app.run(function (env, callback) {
                     callback(200, {
                         "Content-Type": "text/plain",
@@ -56,24 +41,29 @@ vows.describe("builder").addBatch({
                 });
             });
 
+            app.use(count);
+
+            app.map("/two", function (app) {
+                app.run(function (env, callback) {
+                    callback(200, {
+                        "Content-Type": "text/plain",
+                        "X-Position": "two"
+                    }, "");
+                });
+            });
+
+            app.use(count);
+
             return app;
         },
-        "when a match cannot be made": {
+        "when a non-existent route is requested": {
             topic: function (app) {
                 mock.request("/doesnt-exist", app, this.callback);
             },
-            "should return 404": function (err, status, headers, body) {
-                assert.equal(status, 404);
-            }
-        },
-        "when / is requested": {
-            topic: function (app) {
-                mock.request("/", app, this.callback);
+            "should call all middleware": function (err, status, headers, body) {
+                assert.equal(headers["X-Count"], "3");
             },
-            "should call middleware": function (err, status, headers, body) {
-                assert.equal(headers["X-Count"], "1");
-            },
-            "should properly map to an app at the root of the server": function (err, status, headers, body) {
+            "should map to the root of the server": function (err, status, headers, body) {
                 assert.equal(headers["X-Position"], "root");
             }
         },
@@ -81,8 +71,8 @@ vows.describe("builder").addBatch({
             topic: function (app) {
                 mock.request("/one", app, this.callback);
             },
-            "should call all middleware": function (err, status, headers, body) {
-                assert.equal(headers["X-Count"], "2");
+            "should call all middleware in front of the call to map": function (err, status, headers, body) {
+                assert.equal(headers["X-Count"], "1");
             },
             "should properly map": function (err, status, headers, body) {
                 assert.equal(headers["X-Position"], "one");
@@ -92,12 +82,11 @@ vows.describe("builder").addBatch({
             topic: function (app) {
                 mock.request("/two", app, this.callback);
             },
-            "should call all middleware": function (err, status, headers, body) {
-                assert.equal(headers["X-Count"], "1");
+            "should call all middleware in front of the call to map": function (err, status, headers, body) {
+                assert.equal(headers["X-Count"], "2");
             },
-            "should properly route": function (err, status, headers, body) {
-                assert.equal(headers["X-Position"], "root");
-                assert.equal(headers["X-Route"], "/two");
+            "should properly map": function (err, status, headers, body) {
+                assert.equal(headers["X-Position"], "two");
             }
         }
     }
