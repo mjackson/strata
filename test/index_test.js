@@ -7,6 +7,34 @@ var assert = require("assert"),
     utils = require("./../lib/utils");
 
 vows.describe("index").addBatch({
+    "app": {
+        "when given a valid app": {
+            topic: function () {
+                this.callback(null, strata.app(function (env, callback) {}));
+            },
+            "should return that app" : function (err, app) {
+                assert.ok(app);
+            }
+        },
+        "when given an object that has a toApp function": {
+            topic: function () {
+                this.callback(null, strata.app(new strata.Builder));
+            },
+            "should return that app": function (err, app) {
+                assert.ok(app);
+            }
+        },
+        "when given an invalid app": function () {
+            assert.throws(function () {
+                strata.app({});
+            }, /a function/);
+        },
+        "when given a function whose length is not 2 should throw": function () {
+            assert.throws(function () {
+                strata.app(function () {});
+            }, /two arguments/);
+        }
+    },
     "env": {
         topic: function () {
             this.protocol = "https:";

@@ -2,6 +2,9 @@
 
   * Remove routing capabilities from Builder.
 
+  * Added ability for Builder, Mapper, and Router to receive an app that
+    responds to `toApp`. See strata.app.
+
   * Added Response.headers and Request.headers, and all corresponding properties
     to their respective prototypes.
 
