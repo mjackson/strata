@@ -2,7 +2,7 @@
 # Applications
 
 Before you get started with Strata, it's important to have a basic understanding
-of how Strata works. The Strata [SPEC](https://github.com/mjijackson/strata/blob/master/SPEC)
+of how Strata works. The Strata [SPEC](https://raw.github.com/mjijackson/strata/master/SPEC)
 defines two interfaces: 1) an interface for node's built-in HTTP server to
 communicate the request to the application and 2) an interface for the
 application to communicate the response back to the server.

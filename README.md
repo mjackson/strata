@@ -38,17 +38,20 @@ require("strata").run(app);
 
 ## Documentation
 
-The Strata user manual (see doc) is designed to teach you how to get up and
-running with the framework as quickly as possible. Each chapter of the manual
-contains documentation about a certain feature of the framework and a code
-example.
+The [Strata user manual](http://stratajs.org/manual) is designed to teach you
+how to get up and running with the framework as quickly as possible. Each
+chapter of the manual contains documentation about a certain feature of the
+framework and a code example.
 
 The manual is written in such a way that the topics and examples discussed in
 higher numbered chapters build upon previous ones. Thus, it is recommended to
 start with lower numbered chapters when getting started and work your way up to
 higher ones.
 
-You can also [read the manual online](http://stratajs.org/manual).
+The user manual refers to the [SPEC](https://raw.github.com/mjijackson/strata/master/SPEC)
+in various places. This document is the canonical reference for the key building
+blocks of the framework including applications, callbacks, and the Strata
+environment.
 
 ## Tests
 
