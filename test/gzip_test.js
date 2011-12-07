@@ -4,7 +4,7 @@ var assert = require("assert"),
     fs = require("fs"),
     mock = require("./../lib/mock"),
     gzip = require("./../lib/gzip"),
-    stat = require("./../lib/static"),
+    file = require("./../lib/file"),
     utils = require("./../lib/utils"),
     BufferedStream = require("bufferedstream");
 
@@ -60,7 +60,7 @@ vows.describe("gzip").addBatch({
                 this.body = fs.readFileSync(this.file + ".gz", "utf8");
 
                 var app = utils.notFound;
-                app = stat(app, path.resolve(__dirname, "_files"));
+                app = file(app, path.resolve(__dirname, "_files"));
                 app = gzip(app);
 
                 mock.request({

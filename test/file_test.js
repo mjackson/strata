@@ -4,15 +4,15 @@ var assert = require("assert"),
     fs = require("fs"),
     EventEmitter = require("events").EventEmitter,
     mock = require("./../lib/mock"),
-    stat = require("./../lib/static"),
+    file = require("./../lib/file"),
     utils = require("./../lib/utils");
 
 var root = path.join(__dirname, "_files");
 
-vows.describe("static").addBatch({
-    "A static middleware": {
+vows.describe("file").addBatch({
+    "A file middleware": {
         topic: function () {
-            return stat(utils.notFound, root, "index.html");
+            return file(utils.notFound, root, "index.html");
         },
         "when a static file is requested": {
             topic: function (app) {
@@ -61,9 +61,9 @@ vows.describe("static").addBatch({
             }
         }
     },
-    "A static middleware with multiple index files": {
+    "A file middleware with multiple index files": {
         topic: function () {
-            return stat(utils.notFound, root, ["index.htm", "index.html"]);
+            return file(utils.notFound, root, ["index.htm", "index.html"]);
         },
         "when a directory is requested": {
             topic: function (app) {

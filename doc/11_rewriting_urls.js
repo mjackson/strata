@@ -68,7 +68,7 @@ var app = new strata.Builder;
 
 app.use(strata.commonLogger);
 app.use(checkHtml, root); // Check for .html in front of a static file server.
-app.use(strata.static, root);
+app.use(strata.file, root);
 
 strata.run(app);
 

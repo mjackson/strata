@@ -45,7 +45,7 @@ var root = path.resolve(".");
 
 app.use(strata.commonLogger);
 app.use(strata.gzip);
-app.use(strata.static, root);
+app.use(strata.file, root);
 
 strata.run(app);
 
