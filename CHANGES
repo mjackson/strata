@@ -1,7 +1,7 @@
-= HEAD
+= 0.10.0 / 2011-12-22
 
   * Bumped dependency on node down to 0.4.7. Some features of 0.6 may be used
-    if they are available (i.e. when running node 0.6), but strata only
+    if they are available (i.e. when running on node 0.6), but strata only
     requires 0.4.7. This should help users who are deploying to platforms that
     are not on the bleeding edge of node development.
 
