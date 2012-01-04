@@ -1,3 +1,7 @@
+= 0.10.1 / 2012-01-03
+
+  * Fixed bug that prevented caching request body when the body is empty.
+
 = 0.10.0 / 2011-12-22
 
   * Bumped dependency on node down to 0.4.7. Some features of 0.6 may be used
