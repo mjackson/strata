@@ -1,3 +1,7 @@
+= 0.11.0 / 2012-01-19
+
+  * Removed dependency on gzbz2. strata.gzip requires node >= 0.6.
+
 = 0.10.1 / 2012-01-03
 
   * Fixed bug that prevented caching request body when the body is empty.
