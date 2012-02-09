@@ -12,7 +12,7 @@ vows.describe("redirect").addBatch({
             var self = this;
             var app = function (env, callback) {
                 redirect(env, callback, self.location);
-            }
+            };
 
             mock.request("", app, this.callback);
         },
@@ -35,7 +35,7 @@ vows.describe("redirect").addBatch({
                         callback(status, headers, body);
                     });
                 }
-            }
+            };
 
             var self = this;
             var app = recordLocation(function (env, callback) {
@@ -70,7 +70,7 @@ vows.describe("redirect").addBatch({
                         callback(status, headers, body);
                     });
                 }
-            }
+            };
 
             var app = forwardLocation(function (env, callback) {
                 redirect.back(env, callback);

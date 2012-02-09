@@ -18,16 +18,16 @@ function headerConversionContext(header, normalized, canonical, capitalized, pro
 
     context["should be converted to the proper normalized name"] = function (header) {
         assert.equal(utils.normalizedHeaderName(header), normalized);
-    }
+    };
     context["should be converted to the proper canonical name"] = function (header) {
         assert.equal(utils.canonicalHeaderName(header), canonical);
-    }
+    };
     context["should be converted to the proper capitalized name"] = function (header) {
         assert.equal(utils.capitalizedHeaderName(header), capitalized);
-    }
+    };
     context["should be converted to the proper http* property name"] = function (header) {
         assert.equal(utils.httpPropertyName(header), property);
-    }
+    };
 
     return context;
 }

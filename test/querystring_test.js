@@ -30,18 +30,18 @@ function parserContext(query) {
 
         parser.onParam = function (name, value) {
             params[name] = value;
-        }
+        };
         parser.onEnd = function () {
             self.callback(null, params);
-        }
+        };
 
         parser.write(query);
         parser.end();
-    }
+    };
 
     context["should parse correctly"] = function (params) {
         assert.deepEqual(params, qs.parse(query));
-    }
+    };
 
     return context;
 }

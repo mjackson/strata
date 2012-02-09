@@ -24,7 +24,7 @@ looks like this:
                 }
             }
         });
-    }
+    };
 
 In this example you can see that Strata normalizes access to file uploads using
 the familiar `req.params` API. In other words, file uploads are treated just

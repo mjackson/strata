@@ -42,7 +42,7 @@ var app = function (env, callback) {
         "Content-Type": "text/plain",
         "Content-Length": "12"
     }, "Hello world!");
-}
+};
 
 strata.run(app);
 

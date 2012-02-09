@@ -12,7 +12,7 @@ vows.describe("rewrite").addBatch({
                     "Content-Type": "text/plain",
                     "X-PathInfo": env.pathInfo
                 }, "");
-            }
+            };
 
             app = rewrite(app, "/abc", "/xyz");
             app = rewrite(app, /\/def/g, "/xyz");

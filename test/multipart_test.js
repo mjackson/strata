@@ -239,7 +239,7 @@ function makeParser(boundary, callback) {
 
     parser.onParam = function (name, value) {
         params[name] = value;
-    }
+    };
 
     var ended = false;
 
@@ -247,7 +247,7 @@ function makeParser(boundary, callback) {
         assert.ok(!ended); // onEnd should only be called once
         ended = true;
         callback(null, params);
-    }
+    };
 
     return parser;
 }

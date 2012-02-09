@@ -27,7 +27,7 @@ vows.describe("mock").addBatch({
                     "Content-Type": "text/plain",
                     "Content-Length": Buffer.byteLength(content).toString()
                 }, content);
-            }
+            };
 
             mock.request({
                 requestMethod: "HEAD"

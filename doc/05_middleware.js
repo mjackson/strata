@@ -37,7 +37,7 @@ Strata is `strata.contentType`. The source is copied below.
                 callback(status, headers, body);
             });
         }
-    }
+    };
 
 As you can see, this middleware is simply a function that takes an app and an
 optional default content type as arguments, and returns *another* app. The thing

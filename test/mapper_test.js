@@ -20,7 +20,7 @@ vows.describe("mapper").addBatch({
                         "X-PathInfo": env.pathInfo,
                         "Content-Type": "text/plain"
                     }, "");
-                }
+                };
 
                 var map = Mapper.fromMap({
                     "http://example.org/static": app,

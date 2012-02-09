@@ -61,7 +61,7 @@ vows.describe("router").addBatch({
                     "X-Route": JSON.stringify(route),
                     "X-Id": String(route.id)
                 }, "");
-            }
+            };
 
             router.route(/\/users\/(\d+)/i, app);
             router.route("/posts/:id", app, "GET");

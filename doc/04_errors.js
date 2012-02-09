@@ -133,7 +133,7 @@ strata.handleError = function (err, env, callback) {
     }
 
     return _handleError(err, env, callback);
-}
+};
 
 /*
 As in previous chapters, you can save the code in the examples above to a file

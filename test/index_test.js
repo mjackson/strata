@@ -157,7 +157,7 @@ vows.describe("index").addBatch({
     "createServer": {
         "when given a valid app": {
             topic: function () {
-                var app = function (env, callback) {}
+                var app = function (env, callback) {};
                 return app;
             },
             "should not throw": function (app) {
@@ -176,7 +176,7 @@ vows.describe("index").addBatch({
             topic: function () {
                 var app = function (env, callback) {
                     throw new Error;
-                }
+                };
 
                 mock.request({
                     pathInfo: "/",
@@ -203,7 +203,7 @@ vows.describe("index").addBatch({
             var innerApp = function (env, callback) {
                 var err = new strata.Error("Bang!");
                 returnValue = strata.handleError(err, env, callback);
-            }
+            };
 
             var app = function (env, callback) {
                 innerApp(env, function (status, headers, body) {
@@ -212,7 +212,7 @@ vows.describe("index").addBatch({
                         callback(status, headers, body);
                     });
                 });
-            }
+            };
 
             mock.request(env, app, this.callback);
         },
