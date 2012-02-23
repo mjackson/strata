@@ -2,7 +2,7 @@ var assert = require("assert"),
     vows = require("vows"),
     path = require("path"),
     mock = require("./../lib/mock"),
-    Builder = require("./../lib/builder");
+    build = require("./../lib/build");
 
 // Increments the X-Count header when called.
 function count(app) {
@@ -24,10 +24,10 @@ function root(app) {
     }
 }
 
-vows.describe("builder").addBatch({
-    "A Builder": {
+vows.describe("build").addBatch({
+    "A build middleware": {
         topic: function () {
-            var app = new Builder;
+            var app = build();
 
             app.use(root);
             app.use(count);

@@ -1,12 +1,12 @@
 var assert = require("assert"),
     vows = require("vows"),
     mock = require("./../lib/mock"),
-    Mapper = require("./../lib/mapper");
+    map = require("./../lib/map");
 
-vows.describe("mapper").addBatch({
-    "A Mapper": {
+vows.describe("map").addBatch({
+    "A map middleware": {
         topic: function () {
-            var app = new Mapper;
+            var app = map();
             mock.request("", app, this.callback);
         },
         "should return 404 by default": function (err, status, headers, body) {
@@ -22,13 +22,11 @@ vows.describe("mapper").addBatch({
                     }, "");
                 };
 
-                var map = Mapper.fromMap({
+                return map.make({
                     "http://example.org/static": app,
                     "/path": app,
                     "/some/path": app
                 });
-
-                return map;
             },
             "when / is requested": {
                 topic: function (app) {
@@ -174,7 +172,7 @@ vows.describe("mapper").addBatch({
         },
         "with host-based definitions": {
             topic: function () {
-                var map = Mapper.fromMap({
+                return map.make({
                     "/": function (env, callback) {
                         callback(200, {
                             "Content-Type": "text/plain",
@@ -204,8 +202,6 @@ vows.describe("mapper").addBatch({
                         }, "");
                     }
                 });
-
-                return map;
             },
             "when / is requested": {
                 topic: function (app) {
@@ -316,9 +312,9 @@ vows.describe("mapper").addBatch({
         },
         "with nested Mappers": {
             topic: function () {
-                var map = Mapper.fromMap({
-                    "/some": Mapper.fromMap({
-                        "/path": Mapper.fromMap({
+                return map.make({
+                    "/some": map.make({
+                        "/path": map.make({
                             "/name": function (env, callback) {
                                 callback(200, {
                                     "Content-Type": "text/plain",
@@ -327,11 +323,9 @@ vows.describe("mapper").addBatch({
                                     "X-PathInfo": env.pathInfo
                                 }, "");
                             }
-                        }).toApp()
-                    }).toApp()
+                        })
+                    })
                 });
-
-                return map;
             },
             "when /some/path is requested": {
                 topic: function (app) {
@@ -361,7 +355,7 @@ vows.describe("mapper").addBatch({
         },
         "with multiple root apps": {
             topic: function () {
-                var map = Mapper.fromMap({
+                return map.make({
                     "/": function (env, callback) {
                         callback(200, {
                             "Content-Type": "text/plain",
@@ -379,8 +373,6 @@ vows.describe("mapper").addBatch({
                         }, "");
                     }
                 });
-
-                return map;
             },
             "when /path is requested": {
                 topic: function (app) {
