@@ -36,18 +36,18 @@ The app below demonstrates how gzip compression should be configured in front
 of an app that serves static files.
 */
 
-var strata = require("strata");
-var app = new strata.Builder;
+var path = require("path"),
+    strata = require("strata");
 
 // For the sake of this example, the root directory where we store static files
 // is the current working directory (i.e. $PWD).
 var root = path.resolve(".");
 
-app.use(strata.commonLogger);
-app.use(strata.gzip);
-app.use(strata.file, root);
+strata.use(strata.commonLogger);
+strata.use(strata.gzip);
+strata.use(strata.file, root);
 
-strata.run(app);
+strata.run();
 
 /*
 As in previous chapters, you can save the above code to a file named `app.js`

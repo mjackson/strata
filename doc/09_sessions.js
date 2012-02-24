@@ -47,32 +47,28 @@ currently logged in user.
 var strata = require("strata"),
     redirect = strata.redirect;
 
-var app = new strata.Builder;
-
-app.use(strata.commonLogger);
-app.use(strata.contentType, "text/html");
-app.use(strata.contentLength);
-app.use(strata.sessionCookie, {
+strata.use(strata.commonLogger);
+strata.use(strata.contentType, "text/html");
+strata.use(strata.contentLength);
+strata.use(strata.sessionCookie, {
     secret: "my s3kret",
     name: "myapp.session"
 });
 
-// GET /login
 // Sets a userId variable in the session that lets us know the user
 // is logged in.
-app.get("/login", function (env, callback) {
+strata.get("/login", function (env, callback) {
     env.session.userId = "1";
     redirect(env, callback, "/");
 });
 
-// GET /logout
 // Clears the session and redirects to /.
-app.get("/logout", function (env, callback) {
+strata.get("/logout", function (env, callback) {
     env.session = {};
     redirect(env, callback, "/");
 });
 
-app.run(function (env, callback) {
+strata.run(function (env, callback) {
     var session = env.session;
 
     var content;
@@ -84,8 +80,6 @@ app.run(function (env, callback) {
 
     callback(200, {}, content);
 });
-
-strata.run(app);
 
 /*
 As in previous chapters, you can save the above code to a file named `app.js`

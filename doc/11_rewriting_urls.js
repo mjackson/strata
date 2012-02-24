@@ -50,27 +50,27 @@ function checkHtml(app, root) {
     return function (env, callback) {
         var pathInfo = env.pathInfo;
 
-        // Check to see if a .html version of the requested file exists.
-        if (path.existsSync(path.join(root, pathInfo) + ".html")) {
-            // Rewrite the pathInfo for downstream apps.
-            env.pathInfo = pathInfo + ".html";
-        }
+        // Check to see if an .html version of the requested file exists.
+        path.exists(path.join(root, pathInfo) + ".html", function (exists) {
+            if (exists) {
+                // Rewrite env.pathInfo for downstream apps.
+                env.pathInfo = pathInfo + ".html";
+            }
 
-        app(env, function (status, headers, body) {
-            // Reset the value of pathInfo for upstream apps.
-            env.pathInfo = pathInfo;
-            callback(status, headers, body);
+            app(env, function (status, headers, body) {
+                // Reset the value of pathInfo for upstream apps.
+                env.pathInfo = pathInfo;
+                callback(status, headers, body);
+            });
         });
     }
 }
 
-var app = new strata.Builder;
+strata.use(strata.commonLogger);
+strata.use(checkHtml, root); // Check for .html in front of a static file server.
+strata.use(strata.file, root);
 
-app.use(strata.commonLogger);
-app.use(checkHtml, root); // Check for .html in front of a static file server.
-app.use(strata.file, root);
-
-strata.run(app);
+strata.run();
 
 /*
 As in previous chapters, you can save the above code to a file named `app.js`

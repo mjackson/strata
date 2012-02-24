@@ -60,18 +60,13 @@ var userListTemplate = [
     '</p>'
 ].join("\n");
 
-var app = new strata.Builder;
-var router = new strata.Router;
+strata.use(strata.commonLogger);
+strata.use(strata.contentType, "text/html");
+strata.use(strata.contentLength);
 
-app.use(strata.commonLogger);
-app.use(strata.contentType, "text/html");
-app.use(strata.contentLength);
-
-// GET /users
 // Shows a list of the users currently in the data store and a form for adding
 // another name to the store.
-// Note: router.get(pattern, app) is sugar for router.route(pattern, app, "GET")
-router.get("/users", function (env, callback) {
+strata.get("/users", function (env, callback) {
     var content = mustache.to_html(userListTemplate, {
         hasUsers: users.length != 0,
         users: users
@@ -80,10 +75,8 @@ router.get("/users", function (env, callback) {
     callback(200, {}, content);
 });
 
-// POST /users
 // Adds a username to the data store.
-// Note: router.post(pattern, app) is sugar for router.route(pattern, app, "POST")
-router.post("/users", function (env, callback) {
+strata.post("/users", function (env, callback) {
     var req = new strata.Request(env);
 
     req.params(function (err, params) {
@@ -100,12 +93,9 @@ router.post("/users", function (env, callback) {
     });
 });
 
-router.run(function (env, callback) {
+strata.run(function (env, callback) {
     callback(200, {}, 'Try <a href="/users">/users</a>.');
 });
-
-app.run(router);
-strata.run(app);
 
 /*
 As in previous chapters, you can save the above code to a file named `app.js`

@@ -31,12 +31,11 @@ encoded as JSON and returned to the client in an `application/json` response.
 
 var strata = require("strata");
 
-function app(env, callback) {
-    var req = new strata.Request(env);
+strata.run(function (env, callback) {
+    var req = strata.Request(env);
 
     req.params(function (err, params) {
         // Ignoring the err argument for now. See the next chapter!
-
         var content = JSON.stringify(params);
 
         callback(200, {
@@ -44,9 +43,7 @@ function app(env, callback) {
             "Content-Length": Buffer.byteLength(content).toString()
         }, content);
     });
-}
-
-strata.run(app);
+});
 
 /*
 As in the previous chapter, you can save the above code to a file named `app.js`

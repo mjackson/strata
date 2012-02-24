@@ -32,12 +32,10 @@ directory (or any of its subdirectories).
     // Use the current working directory as document root for this example.
     var root = path.resolve(".");
 
-    var app = new strata.Builder;
+    strata.use(strata.commonLogger);
+    strata.use(strata.file, root);
 
-    app.use(strata.commonLogger);
-    app.use(strata.file, root);
-
-    strata.run(app);
+    strata.run();
 
 ## Indexes
 
@@ -74,13 +72,11 @@ var path = require("path"),
 // Use the current working directory as document root for this example.
 var root = path.resolve(".");
 
-var app = new strata.Builder;
+strata.use(strata.commonLogger);
+strata.use(strata.file, root);
+strata.use(strata.directory, root);
 
-app.use(strata.commonLogger);
-app.use(strata.file, root);
-app.use(strata.directory, root);
-
-strata.run(app);
+strata.run();
 
 /*
 As in previous chapters, you can save the above code to a file named `app.js`

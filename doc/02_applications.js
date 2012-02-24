@@ -15,36 +15,39 @@ Strata-specific properties, and may also include application-specific extension
 properties. The callback is a function the application uses to send the
 response.
 
-The application communicates with the server by calling the callback with three
-arguments: the response **status** code, an object containing HTTP **headers**,
-and the response **body**. The body may be a string or a Stream. The server then
-returns the appropriate response to the client. If the response body is a
-Stream, it is streamed to the client as data becomes available.
+The application communicates the response back to the server by calling the
+callback with three arguments: the response **status** code, an object
+containing HTTP **headers**, and the response **body**. The server then returns
+the response to the client.
 
-It is important to remember that the environment object is always unique to the
-current request and is shared among all callbacks that are used in constructing
-the response. This provides a convenient concurrency primitive in an otherwise
-completely asynchronous environment.
+The response body may be a String or a Stream. If it's a string, it is sent to
+the client immediately. If a Stream it is streamed to the client as data becomes
+available.
+
+The environment object is always unique to the current request and is shared
+among all callbacks that are used in constructing the response. This provides a
+convenient concurrency primitive in an otherwise completely asynchronous
+environment.
 
 Both the environment and the callback are described in much greater detail in
 the Strata [SPEC](https://github.com/mjijackson/strata/blob/master/SPEC).
 
 ## Hello World
 
-The following example demonstrates the simplest app possible. It simply sends a
-string of text in a response with an HTTP 200 status code.
+The following example demonstrates a very simple app that sends a string of text
+in a response with an HTTP 200 status code.
 */
 
 var strata = require("strata");
 
-var app = function (env, callback) {
-    callback(200, {
+strata.run(function (env, callback) {
+    var headers = {
         "Content-Type": "text/plain",
         "Content-Length": "12"
-    }, "Hello world!");
-};
+    };
 
-strata.run(app);
+    callback(200, headers, "Hello world!");
+});
 
 /*
 Save the above code to a file named `app.js` and run it with the `node`
@@ -66,12 +69,12 @@ app as a second argument. Valid options include the following:
   - `key`       Private key to use for SSL (HTTPS only)
   - `cert`      Public X509 certificate to use (HTTPS only)
 
-A callback function may be given as the final argument. This will be called when
-the application is booted and the server is listening for incoming connections.
-
 For example, to run an app on port 3000 you could do the following:
 
     strata.run(app, { port: 3000 });
+
+A callback function may be given as a third argument. This will be called when
+the application is booted and the server is listening for incoming connections.
 
 ## Using the strata Executable
 

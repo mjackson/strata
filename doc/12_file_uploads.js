@@ -12,8 +12,8 @@ looks like this:
     var strata = require("strata"),
         multipart = strata.multipart;
 
-    var app = function (env, callback) {
-        var req = new strata.Request(env);
+    strata.run(function (env, callback) {
+        var req = strata.Request(env);
 
         req.params(function (err, params) {
             for (var name in params) {
@@ -24,7 +24,7 @@ looks like this:
                 }
             }
         });
-    };
+    });
 
 In this example you can see that Strata normalizes access to file uploads using
 the familiar `req.params` API. In other words, file uploads are treated just
@@ -45,15 +45,12 @@ The app below demonstrates how you might build a simple form to upload an image.
 var strata = require("strata"),
     multipart = strata.multipart;
 
-var app = new strata.Builder;
+strata.use(strata.commonLogger);
+strata.use(strata.contentType);
+strata.use(strata.contentLength);
 
-app.use(strata.commonLogger);
-app.use(strata.contentType);
-app.use(strata.contentLength);
-
-// GET /
 // Shows a form for making a file upload.
-app.get("/", function (env, callback) {
+strata.get("/", function (env, callback) {
     var content = "";
 
     content += '<form action="/" method="post" enctype="multipart/form-data">';
@@ -64,10 +61,9 @@ app.get("/", function (env, callback) {
     callback(200, {}, content);
 });
 
-// POST /
 // Uploads a file to the server.
-app.post("/", function (env, callback) {
-    var req = new strata.Request(env);
+strata.post("/", function (env, callback) {
+    var req = strata.Request(env);
 
     req.params(function (err, params) {
         if (err && strata.handleError(err, env, callback)) {
@@ -100,7 +96,7 @@ app.post("/", function (env, callback) {
     });
 });
 
-strata.run(app);
+strata.run();
 
 /*
 As in previous chapters, you can save the above code to a file named `app.js`

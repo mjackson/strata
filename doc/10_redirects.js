@@ -35,24 +35,29 @@ correct path is tracked for us automatically in the session.
 var strata = require("strata"),
     redirect = strata.redirect;
 
-var app = new strata.Builder;
+// Define some templates. These would normally be stored in template files.
+var loggedInTemplate = [
+    '<p>You are now logged in!</p>',
+    '<p><a href="/logout">Logout</a></p>'
+].join("\n");
 
-app.use(strata.commonLogger);
-app.use(strata.contentType);
-app.use(strata.contentLength);
-app.use(strata.sessionCookie);
+var loggedOutTemplate = [
+    '<p>Please login.</p>',
+    '<form action="/login" method="post">',
+    '<button>Login</button>',
+    '</form>'
+].join("\n");
 
-// GET /
+strata.use(strata.commonLogger);
+strata.use(strata.contentType, "text/html");
+strata.use(strata.contentLength);
+strata.use(strata.sessionCookie);
+
 // The "restricted" section of the app. Requires a user to login before they
 // can view it.
-app.get("/", function (env, callback) {
+strata.get("/", function (env, callback) {
     if (env.session.loggedIn) {
-        var content = [
-            '<p>You can now access the restricted section!</p>',
-            '<p><a href="/logout">Logout</a></p>'
-        ].join("\n");
-
-        callback(200, {}, content);
+        callback(200, {}, loggedInTemplate);
     } else {
         // This call stores the current request URL in the session and redirects
         // the user to /login for auth.
@@ -60,23 +65,14 @@ app.get("/", function (env, callback) {
     }
 });
 
-// GET /login
 // Shows the login form.
-app.get("/login", function (env, callback) {
-    var content = [
-        '<p>You are trying to view a restricted page. Please login.</p>',
-        '<form action="/login" method="post">',
-        '<button>Login</button>',
-        '</form>'
-    ].join("\n");
-
-    callback(200, {}, content);
+strata.get("/login", function (env, callback) {
+    callback(200, {}, loggedOutTemplate);
 });
 
-// POST /login
 // Sets the loggedIn session variable and redirects the user to the URL they
 // were trying to access before they were sent to /login.
-app.post("/login", function (env, callback) {
+strata.post("/login", function (env, callback) {
     env.session.loggedIn = 1;
 
     // This call sends the user back to wherever they were before they were
@@ -84,14 +80,13 @@ app.post("/login", function (env, callback) {
     redirect.back(env, callback);
 });
 
-// GET /logout
 // Clears the session.
-app.get("/logout", function (env, callback) {
+strata.get("/logout", function (env, callback) {
     env.session = {};
     redirect(env, callback, "/");
 });
 
-strata.run(app);
+strata.run();
 
 /*
 As in previous chapters, you can save the above code to a file named `app.js`
