@@ -1,3 +1,17 @@
+= HEAD
+
+  * Removed the Builder, Mapper, and Router constructors in favor of similar
+    (but not identical) build, map, and route middlewares.
+
+  * Added the ability for users to call any of the build/map/route methods
+    directly on the strata module itself. Doing so generates a "default" app
+    that may be run by calling `strata.run` with no other arguments.
+
+  * Added all routing methods to the build middleware to enable easier app
+    creation. The caveat is that calls to the routing methods are not
+    interleaved with calls to use & map. Instead, they are simply forwarded to
+    a downstream route middleware which is set as the default app of the build.
+
 = 0.11.0 / 2012-01-19
 
   * Removed dependency on gzbz2. strata.gzip requires node >= 0.6.
