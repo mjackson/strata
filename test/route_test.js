@@ -1,65 +1,22 @@
 var assert = require("assert"),
     vows = require("vows"),
     mock = require("./../lib/mock"),
-    Router = require("./../lib/router");
+    route = require("./../lib/route");
 
-vows.describe("router").addBatch({
-    "Router.compileRoute": {
-        "should properly recognize valid identifiers": function () {
-            var keys, pattern;
-
-            keys = [];
-            pattern = Router.compileRoute("/users/:id", keys);
-
-            assert.ok(pattern);
-            assert.deepEqual(keys, ["id"]);
-            assert.match("/users/1", pattern);
-            assert.match("/users/asdf1324_", pattern);
-
-            keys = [];
-            pattern = Router.compileRoute("/users/:$id/photos/:_photo_id", keys);
-
-            assert.ok(pattern);
-            assert.deepEqual(keys, ["$id", "_photo_id"]);
-            assert.match("/users/1/photos/1", pattern);
-
-            keys = [];
-            pattern = Router.compileRoute("/users/:id.:format", keys);
-
-            assert.ok(pattern);
-            assert.deepEqual(keys, ["id", "format"]);
-            assert.match("/users/2.json", pattern);
-        },
-        "should properly recognize the splat character": function () {
-            var keys = [];
-            var pattern = Router.compileRoute("/users/*", keys);
-
-            assert.ok(pattern);
-            assert.deepEqual(keys, ["splat"]);
-            assert.match("/users/1", pattern);
-            assert.match("/users/1/photos/1", pattern);
-        },
-        "should ignore invalid identifiers": function () {
-            var keys = [];
-            var pattern = Router.compileRoute("/users/:1id");
-
-            assert.ok(pattern);
-            assert.isEmpty(keys);
-        }
-    },
-    "A Router": {
+vows.describe("route").addBatch({
+    "A route middleware": {
         topic: function () {
-            var router = new Router;
+            var router = route();
 
             var app = function (env, callback) {
-                var route = env.route;
+                var routeParams = env.route;
 
-                assert.ok(route);
+                assert.ok(routeParams);
 
                 callback(200, {
                     "Content-Type": "text/plain",
-                    "X-Route": JSON.stringify(route),
-                    "X-Id": String(route.id)
+                    "X-Route": JSON.stringify(routeParams),
+                    "X-Id": String(routeParams.id)
                 }, "");
             };
 
@@ -148,12 +105,12 @@ vows.describe("router").addBatch({
         },
         'with a route that returns an "X-Cascade: pass" header': {
             topic: function () {
-                var app = new Router;
+                var router = route();
 
-                app.route("/path", pass(idApp("1")));
-                app.route("/path", idApp("2"));
+                router.route("/path", pass(idApp("1")));
+                router.route("/path", idApp("2"));
 
-                return app;
+                return router;
             },
             "when that route matches": {
                 topic: function (app) {

@@ -76,8 +76,8 @@ to look like this:
 
 var strata = require("strata");
 
-function app(env, callback) {
-    var req = new strata.Request(env);
+strata.run(function (env, callback) {
+    var req = strata.Request(env);
 
     req.params(function (err, params) {
         // If there was an error and strata.handleError issued a response
@@ -93,9 +93,7 @@ function app(env, callback) {
             "Content-Length": Buffer.byteLength(content).toString()
         }, content);
     });
-}
-
-strata.run(app);
+});
 
 /*
 The `strata.handleError` function handles the error by issuing a 500 Internal
@@ -121,14 +119,12 @@ If you wish to handle all instances of this error with a 400 response, you may
 override `strata.handleError`.
 */
 
-var strata = require("strata");
-
 // Get a reference to the original error handler.
 var _handleError = strata.handleError;
 
 strata.handleError = function (err, env, callback) {
     if (err instanceof strata.InvalidRequestBodyError) {
-        callback(400, {"Content-Type": "text/plain"}, "Invalid Request Body");
+        callback(400, {}, "Invalid Request Body");
         return true;
     }
 

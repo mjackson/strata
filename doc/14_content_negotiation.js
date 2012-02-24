@@ -20,22 +20,21 @@ client accepts `text/html` responses, and sets the `Content-Type` accordingly.
 */
 
 var strata = require("strata");
-var app = new strata.Builder;
 
-app.use(strata.commonLogger);
-app.use(strata.contentLength);
+strata.use(strata.commonLogger);
+strata.use(strata.contentType, "text/html")
+strata.use(strata.contentLength);
 
-app.get("/", function (env, callback) {
-    var req = new strata.Request(env);
+strata.run(function (env, callback) {
+    var req = strata.Request(env);
 
-    if (req.accept("text/html")) {
-        callback(200, {"Content-Type": "text/html"}, "<p>You accept HTML!</p>");
+    if (req.accepts("text/html")) {
+        callback(200, {}, "<p>You accept HTML!</p>");
     } else {
-        callback(200, {"Content-Type": "text/plain"}, "You don't accept HTML. :(");
+        var headers = {"Content-Type": "text/plain"};
+        callback(200, headers, "You don't accept HTML. :(");
     }
 });
-
-strata.run(app);
 
 /*
 As in previous chapters, you can save the above code to a file named `app.js`

@@ -91,7 +91,7 @@ var strata = require("strata");
 // This function is the middleware. It keeps a reference to the downstream app.
 function setUser(app) {
     return function (env, callback) {
-        var req = new strata.Request(env);
+        var req = strata.Request(env);
 
         // Get the value of the "user" request parameter and put it in the
         // myappUser environment variable. Names of environment variables should
@@ -109,20 +109,15 @@ function setUser(app) {
     }
 }
 
-var app = new strata.Builder;
+strata.use(strata.contentType); // Sets the Content-Type header
+strata.use(strata.contentLength); // Sets the Content-Length header
+strata.use(setUser); // Sets the myappUser environment variable
 
-// Wrap the app in several useful middlewares.
-app.use(strata.contentType); // Sets the Content-Type header
-app.use(strata.contentLength); // Sets the Content-Length header
-app.use(setUser); // Sets the myappUser environment variable
-
-app.run(function (env, callback) {
+strata.run(function (env, callback) {
     // In the downstream app we have access to any custom variables that were
     // set by middleware upstream.
     callback(200, {}, "Welcome, " + env.myappUser + "!");
 });
-
-strata.run(app);
 
 /*
 As in previous chapters, you can save the above code to a file named `app.js`

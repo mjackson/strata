@@ -51,17 +51,16 @@ named `app.js`.
 */
 
 var strata = require("strata");
-var app = new strata.Builder;
 
-app.use(strata.commonLogger);
-app.use(strata.contentType, "text/plain");
-app.use(strata.contentLength);
+strata.use(strata.commonLogger);
+strata.use(strata.contentType, "text/plain");
+strata.use(strata.contentLength);
 
-app.get("/", function (env, callback) {
+strata.get("/", function (env, callback) {
     callback(200, {}, "Hello world!");
 });
 
-strata.run(app);
+strata.run();
 
 /*
 You can run the file using the `node` executable:
