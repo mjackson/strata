@@ -8,7 +8,7 @@ request body. Strata provides access to both of these and much more via the
 
 You instantiate a `Request` object with one argument: the environment.
 
-    var req = new Request(env);
+    var req = strata.Request(env);
 
 A `Request` uses the environment to read information about the incoming
 request and even cache the results of certain operations (e.g. parsing the
