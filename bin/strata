@@ -2,9 +2,11 @@
 
 var fs = require("fs"),
     path = require("path"),
-    strata = require("strata");
+    strata = require("strata"),
+    utils = strata.utils;
 
-var appfile = path.resolve("./app.js"),
+var app,
+    appfile = path.resolve("./app.js"),
     options = {},
     exit = false,
     arg;
@@ -16,8 +18,8 @@ for (var i = 2; i < process.argv.length; ++i) {
 
     arg = process.argv[i];
 
-    function nextArg() {
-        var next = process.argv[++i];
+    function nextArg(defaultValue) {
+        var next = process.argv[++i] || defaultValue;
 
         if (!next) {
             printUsage();
@@ -40,6 +42,12 @@ for (var i = 2; i < process.argv.length; ++i) {
         } else {
             throw new Error('Certificate file "' + certfile + '" does not exist');
         }
+        break;
+    case "-d":
+        var dir = nextArg(".");
+        app = strata.file(utils.notFound, dir);
+        app = strata.directory(app, dir);
+        app = strata.commonLogger(app);
         break;
     case "-h":
     case "--help":
@@ -74,12 +82,15 @@ for (var i = 2; i < process.argv.length; ++i) {
 }
 
 if (!exit) {
-    if (path.existsSync(appfile)) {
-        var app = require(appfile);
-        strata.run(app, options);
-    } else {
-        throw new Error('Application file "' + appfile + '" does not exist');
+    if (!app) {
+        try {
+            app = require(appfile);
+        } catch (e) {
+            throw new Error('Application file "' + appfile + '" does not exist');
+        }
     }
+
+    strata.run(app, options);
 }
 
 function printUsage() {
@@ -88,12 +99,14 @@ function printUsage() {
         "Usage: strata [options] [appfile]",
         "",
         "  Starts the Strata application contained in the given appfile.",
-        "  If none is given, will use the file $PWD/app.js.",
+        "  If none is given, uses ./app.js.",
         "",
         "Options:",
         "  -a, --address   The address to bind to (defaults to 0.0.0.0)",
         "  -c, --cert      The name of the public key certificate file",
         "                  (HTTPS only)",
+        "  -d              The path to a directory to serve (defaults to .). If",
+        "                  this is given the appfile is ignored"
         "  -h, --help      Show this help message and exit",
         "  -k, --key       The name of the private key file (HTTPS only)",
         "  -p, --port      The port number to listen on (defaults to 1982)",

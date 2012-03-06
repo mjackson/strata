@@ -1,3 +1,8 @@
+= HEAD
+
+  * Added -d option to the strata executable. This allows you to easily serve
+    the contents of a given directory over HTTP(S).
+
 = 0.12.0 / 2012-03-03
 
   * Removed the Builder, Mapper, and Router constructors in favor of similar
