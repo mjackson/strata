@@ -1,3 +1,7 @@
+= 0.12.2 / 2012-03-06
+
+  * Added a missing comma.
+
 = 0.12.1 / 2012-03-06
 
   * Added -d option to the strata executable. This allows you to easily serve
