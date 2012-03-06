@@ -106,7 +106,7 @@ function printUsage() {
         "  -c, --cert      The name of the public key certificate file",
         "                  (HTTPS only)",
         "  -d              The path to a directory to serve (defaults to .). If",
-        "                  this is given the appfile is ignored"
+        "                  this is given the appfile is ignored",
         "  -h, --help      Show this help message and exit",
         "  -k, --key       The name of the private key file (HTTPS only)",
         "  -p, --port      The port number to listen on (defaults to 1982)",
