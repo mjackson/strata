@@ -80,15 +80,14 @@ vows.describe("lint").addBatch({
             }, /method must be/);
 
             assert.throws(function () {
-                var env = mock.env();
-                env.scriptName = "some/path";
+                var env = mock.env({scriptName: "some/path"});
                 app(env, function (status, headers, body) {});
             }, /scriptName must start with "\/"/);
 
             assert.throws(function () {
                 var env = mock.env({scriptName: "/"});
                 app(env, function (status, headers, body) {});
-            }, /scriptName cannot be "\/"/);
+            }, /scriptName must not be "\/"/);
 
             assert.throws(function () {
                 var env = mock.env({pathInfo: "some/path"});
