@@ -2,7 +2,7 @@
 
 var fs = require("fs"),
     path = require("path"),
-    strata = require("strata"),
+    strata = require("../lib/index"),
     utils = strata.utils;
 
 var app,
