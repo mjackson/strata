@@ -44,13 +44,17 @@ the following:
                       appropriate HTTP header in the request. The remainder of
                       the property name will be the camel-cased version of the
                       original header name (e.g. "httpAccept" and
-                      "httpUserAgent").
+                      "httpUserAgent"). The environment MUST NOT contain the
+                      properties httpContentType or httpContentLength (use
+                      contentType and contentLength instead).
   - input             A readable Stream of data contained in the request body
   - error             A writable Stream for error output
   - strataVersion     The current version of Strata as [major, minor, patch]
 
 In addition to these, the environment MAY include the following properties:
 
+  - contentType       The HTTP Content-Type of the data in the request body
+  - contentLength     The HTTP Content-Length of the request body
   - flash             A string containing the flash message, if any. This is a
                       message that was set using the flash module and is
                       available to all applications downstream from a
@@ -68,9 +72,6 @@ In addition to these, the environment MAY include the following properties:
 When combined with scriptName and pathInfo, the serverName and serverPort
 variables may be used to reconstruct the original request URL. Note, however,
 that if httpHost is present it should be used in preference to serverName.
-
-The environment MUST NOT contain the properties httpContentType or
-httpContentLength (use contentType and contentLength instead).
 
 There are the following additional restrictions:
 
