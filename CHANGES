@@ -1,3 +1,8 @@
+= HEAD
+
+  * Fixed a bug where the request would not return properly when using the
+    directory middleware and the directory is not found.
+
 = 0.12.3 / 2012-03-23
 
   * Ignore broken symlinks when displaying a directory listing using
