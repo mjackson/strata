@@ -3,16 +3,16 @@
 
 Strata supports [content negotiation](http://httpd.apache.org/docs/2.0/content-negotiation.html)
 for resources with various representations through the `strata.Request` module.
-There are currently four methods on a `strata.Request` object that can help with
-content negotiation:
+There are four methods on a `strata.Request` object that can help with content
+negotiation:
 
-  - `accept`            Determines if the request headers indicate that the
+  - `accepts`           Determines if the request headers indicate that the
                         client accepts a given media type
-  - `acceptCharset`     Determines if the request headers indicate that the
+  - `acceptsCharset`    Determines if the request headers indicate that the
                         client accepts a given character set
-  - `acceptEncoding`    Determines if the request headers indicate that the
+  - `acceptsEncoding`   Determines if the request headers indicate that the
                         client accepts a given encoding
-  - `acceptLanguage`    Determines if the request headers indicate that the
+  - `acceptsLanguage`   Determines if the request headers indicate that the
                         client accepts a given language
 
 The app below does some simple content negotiation to determine whether the
