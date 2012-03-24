@@ -1,7 +1,9 @@
-= HEAD
+= 0.12.3 / 2012-03-23
 
   * Ignore broken symlinks when displaying a directory listing using
     strata.directory.
+
+  * Fix memory leak when using the default app in strata.run.
 
 = 0.12.2 / 2012-03-06
 
