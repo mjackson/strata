@@ -1,4 +1,4 @@
-= HEAD
+= 0.12.4 / 2012-03-30
 
   * Fixed a bug where the request would not return properly when using the
     directory middleware and the directory is not found.
