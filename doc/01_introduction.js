@@ -3,19 +3,20 @@
 
 Welcome to Strata!
 
-[Strata](http://stratajs.org) is a streaming HTTP framework for [node.js](http://nodejs.org)
-that is patterned after time-honored and battle tested web application design
-principles pioneered in the [Python](http://python.org/) and [Ruby](http://ruby-lang.org)
-communities (see [WSGI](http://wsgi.org/wsgi/) and [Rack](http://rack.rubyforge.org/)).
-Using Strata, developers can build highly performant web servers in a
-powerful, modular style that is easy to maintain and takes full advantage of
-the streaming capabilities and excellent I/O handling of node.js.
+[Strata](http://stratajs.org) is a streaming HTTP server for
+[node.js](http://nodejs.org) that is patterned after time-honored web server
+design principles pioneered in the [Python](http://python.org/) and
+[Ruby](http://ruby-lang.org) communities, namely [WSGI](http://wsgi.org/wsgi/)
+and [Rack](http://rack.rubyforge.org/). Using Strata, developers can build
+highly performant web servers in a powerful, modular style that is easy to
+maintain and takes full advantage of the streaming capabilities and excellent
+I/O handling of node.js.
 
-The goal of this manual is to introduce you to the Strata web framework in a
-way that will help you get started quickly by providing clear, concise
-explanations and example code. At the same time, the manual provides detailed
-descriptions of various components of the framework so that you're not left
-wondering how things actually work behind the scenes.
+The goal of this manual is to introduce you to the Strata web server in a way
+that will help you get started quickly by providing clear, concise explanations
+and example code. At the same time, the manual provides detailed descriptions of
+various components of the framework so that you're not left wondering how things
+actually work behind the scenes.
 
 The manual is designed to be read linearly. Earlier chapters cover the basic
 principles you should understand before proceeding to later chapters, so you

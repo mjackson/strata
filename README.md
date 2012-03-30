@@ -1,8 +1,9 @@
-Strata is a streaming HTTP framework for node.js that is patterned after
-time-honored and battle tested web application design principles pioneered in
-the Python and Ruby communities (see WSGI and Rack). Using Strata, developers
-can build highly performant web servers in a powerful, modular style that is
-easy to maintain and takes full advantage of the streaming capabilities and
+Strata is a streaming HTTP server for node.js that is patterned after
+time-honored web server design principles pioneered in the Python and Ruby
+communities, namely [WSGI](http://www.wsgi.org/) and
+[Rack](http://rack.rubyforge.org/). Using Strata, developers can build highly
+performant web servers in a powerful, modular style that is easy to maintain and
+takes full advantage of the streaming capabilities and
 excellent I/O handling of node.js.
 
 The core Strata distribution consists of four things:
