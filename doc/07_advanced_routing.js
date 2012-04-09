@@ -146,7 +146,7 @@ strata.get("/users/:id", function (env, callback) {
 });
 
 // Deletes the user with the given id (uses DELETE HTTP verb).
-strata.del("/users/:id", function (env, callback) {
+strata.delete("/users/:id", function (env, callback) {
     var id = env.route.id;
 
     if (id in users) {
