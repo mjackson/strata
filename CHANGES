@@ -3,6 +3,9 @@
   * Use "delete" instead of "del" for router methods. Although "delete" is
     indeed a reserved word in JavaScript, that fact applies only to identifiers
     and not identifier names (see https://developer.mozilla.org/en/JavaScript/Reference/Reserved_Words).
+  * Added support for the `callback` HTTP parameter in JSONP middleware. This
+    value takes precedence over any pre-configured callback name that is given
+    when the middleware is instantiated.
 
 = 0.12.4 / 2012-03-30
 
