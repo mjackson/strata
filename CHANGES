@@ -1,3 +1,8 @@
+= HEAD
+
+  * Added timeout middleware to set a limit on the amount of time a server may
+    respond to a request. Also added timeout environment variable.
+
 = 0.12.5 / 2012-04-16
 
   * Use "delete" instead of "del" for router methods. Although "delete" is
