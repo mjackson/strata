@@ -126,44 +126,6 @@ vows.describe("index").addBatch({
             }
         }
     },
-    "createServer": {
-        "when given a valid app": {
-            topic: function () {
-                var app = function (env, callback) {};
-                return app;
-            },
-            "should not throw": function (app) {
-                assert.ok(strata.createServer(app));
-            }
-        },
-        "when given an invalid app": {
-            topic: {},
-            "should throw": function (app) {
-                assert.throws(function () {
-                    strata.createServer(app);
-                }, /must be a function/);
-            }
-        },
-        "when given an app that throws": {
-            topic: function () {
-                var app = function (env, callback) {
-                    throw new Error;
-                };
-
-                mock.request({
-                    pathInfo: "/",
-                    error: mock.stream(this)
-                }, app, this.callback);
-            },
-            "should return a 500 response": function (err, status, headers, body) {
-                assert.ok(status);
-                assert.equal(status, 500);
-            },
-            "should emit an error to the error stream": function (err, status, headers, body) {
-                assert.ok(this.data);
-            }
-        }
-    },
     "handleError": {
         topic: function () {
             var returnValue;

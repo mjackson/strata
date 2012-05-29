@@ -2,6 +2,10 @@
 
   * Added timeout middleware to set a limit on the amount of time a server may
     respond to a request. Also added timeout environment variable.
+  * Added strata.bind and strata.startServer. Also added a requestListener
+    argument to strata.createServer in order to more closely conform with
+    the API in node core and removed the app argument so that more than one app
+    may be bound to a single server.
 
 = 0.12.5 / 2012-04-16
 

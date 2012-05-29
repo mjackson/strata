@@ -6,7 +6,7 @@ var fs = require("fs"),
     utils = strata.utils;
 
 var app,
-    appfile = path.resolve("./app.js"),
+    appFile = path.resolve("./app.js"),
     options = {},
     exit = false,
     arg;
@@ -56,11 +56,11 @@ for (var i = 2; i < process.argv.length; ++i) {
         break;
     case "-k":
     case "--key":
-        var keyfile = nextArg();
-        if (path.existsSync(keyfile)) {
-            options.key = fs.readFileSync(keyfile);
+        var keyFile = nextArg();
+        if (path.existsSync(keyFile)) {
+            options.key = fs.readFileSync(keyFile);
         } else {
-            throw new Error('Key file "' + keyfile + '" does not exist');
+            throw new Error('Key file "' + keyFile + '" does not exist');
         }
         break;
     case "-p":
@@ -77,28 +77,24 @@ for (var i = 2; i < process.argv.length; ++i) {
         exit = true;
         break;
     default:
-        appfile = path.resolve(arg);
+        appFile = path.resolve(arg);
     }
 }
 
 if (!exit) {
-    if (!app) {
-        try {
-            app = require(appfile);
-        } catch (e) {
-            throw new Error('Application file "' + appfile + '" does not exist');
-        }
+    if (app) {
+        strata.run(app, options);
+    } else {
+        strata.runFile(appFile, options);
     }
-
-    strata.run(app, options);
 }
 
 function printUsage() {
     var usage = [
         "strata v. " + strata.version.join("."),
-        "Usage: strata [options] [appfile]",
+        "Usage: strata [options] [appFile]",
         "",
-        "  Starts the Strata application contained in the given appfile.",
+        "  Starts the Strata application contained in the given appFile.",
         "  If none is given, uses ./app.js.",
         "",
         "Options:",
@@ -106,14 +102,14 @@ function printUsage() {
         "  -c, --cert      The name of the public key certificate file",
         "                  (HTTPS only)",
         "  -d              The path to a directory to serve (defaults to .). If",
-        "                  this is given the appfile is ignored",
+        "                  this is given the appFile is ignored",
         "  -h, --help      Show this help message and exit",
         "  -k, --key       The name of the private key file (HTTPS only)",
         "  -p, --port      The port number to listen on (defaults to 1982)",
         "  -s, --socket    The unix socket to listen to. If this is given",
         "                  the -a and -p options are ignored",
         "  -v, --version   Show the current version of Strata and exit"
-    ];
+    ].join("\n");
 
-    console.log(usage.join("\n"));
+    console.log(usage);
 }
