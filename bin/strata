@@ -71,6 +71,17 @@ for (var i = 2; i < process.argv.length; ++i) {
     case "--socket":
         options.socket = nextArg();
         break;
+    case "-R":
+        var interval = parseFloat(process.argv[i + 1]);
+
+        if (interval) {
+            i++; // Numeric argument was given.
+        } else {
+            interval = 1;
+        }
+
+        options.interval = Math.round(interval * 1000);
+        break;
     case "-v":
     case "--version":
         console.log(strata.version.join("."));
@@ -106,6 +117,8 @@ function printUsage() {
         "  -h, --help      Show this help message and exit",
         "  -k, --key       The name of the private key file (HTTPS only)",
         "  -p, --port      The port number to listen on (defaults to 1982)",
+        "  -R [interval]   Reloads the appFile in a new V8 instance every",
+        "                  interval in seconds. The default interval is 1",
         "  -s, --socket    The unix socket to listen to. If this is given",
         "                  the -a and -p options are ignored",
         "  -v, --version   Show the current version of Strata and exit"
