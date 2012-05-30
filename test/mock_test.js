@@ -25,7 +25,7 @@ vows.describe("mock").addBatch({
                 var content = "Hello world";
                 callback(200, {
                     "Content-Type": "text/plain",
-                    "Content-Length": Buffer.byteLength(content).toString()
+                    "Content-Length": String(Buffer.byteLength(content))
                 }, content);
             };
 

@@ -21,7 +21,7 @@ vows.describe("index").addBatch({
             this.queryString = "a=1&b=2";
             this.userAgent = "test suite";
             this.content = "hello world!";
-            this.contentLength = Buffer.byteLength(this.content).toString(10);
+            this.contentLength = String(Buffer.byteLength(this.content));
 
             return strata.env({
                 protocol: this.protocol,

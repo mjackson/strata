@@ -90,7 +90,7 @@ strata.run(function (env, callback) {
 
         callback(200, {
             "Content-Type": "application/json",
-            "Content-Length": Buffer.byteLength(content).toString()
+            "Content-Length": String(Buffer.byteLength(content))
         }, content);
     });
 });
