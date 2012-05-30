@@ -69,8 +69,8 @@ In addition to these, the environment MAY include the following properties:
                       applications downstream from a strata.sessionCookie
                       middleware
   - timeout           The numerical id of the timeout set by the timeout
-                      middleware. May be used to cancel the timeout using
-                      the clearTimeout function by downstream apps
+                      middleware. May be used by downstream apps to cancel the
+                      timeout using clearTimeout
 
 When combined with scriptName and pathInfo, the serverName and serverPort
 variables may be used to reconstruct the original request URL. Note, however,
