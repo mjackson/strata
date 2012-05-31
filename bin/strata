@@ -67,6 +67,10 @@ for (var i = 2; i < process.argv.length; ++i) {
     case "--port":
         options.port = nextArg();
         break;
+    case "-q":
+    case "--quiet":
+        options.quiet = true;
+        break;
     case "-s":
     case "--socket":
         options.socket = nextArg();
@@ -106,6 +110,7 @@ function printUsage() {
         "  -h, --help      Show this help message and exit",
         "  -k, --key       The name of the private key file (HTTPS only)",
         "  -p, --port      The port number to listen on (defaults to 1982)",
+        "  -q, --quiet     Don't print a startup message to the console",
         "  -s, --socket    The unix socket to listen to. If this is given",
         "                  the -a and -p options are ignored",
         "  -v, --version   Show the current version of Strata and exit"

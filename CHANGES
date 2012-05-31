@@ -1,3 +1,7 @@
+= HEAD
+
+  * Added --quiet option to strata executable.
+
 = 0.14.0 / 2012-05-30
 
   * Renamed strata.map middleware to strata.urlMap to avoid naming conflict
