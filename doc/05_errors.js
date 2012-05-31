@@ -88,10 +88,11 @@ strata.run(function (env, callback) {
 
         var content = JSON.stringify(params);
 
-        callback(200, {
-            "Content-Type": "application/json",
-            "Content-Length": String(Buffer.byteLength(content))
-        }, content);
+        var res = strata.Response(content);
+        res.contentType = "application/json";
+        res.contentLength = Buffer.byteLength(content);
+
+        res.send(callback);
     });
 });
 

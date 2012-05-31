@@ -100,4 +100,13 @@ For example, if you wanted to run an app in a file `web.js` on port 3000, you
 would invoke `strata` like this:
 
     $ strata -p 3000 web.js
+
+## Reloading in Development
+
+When in development it can be cumbersome to restart the server every time your
+application code changes. Strata's executable provides a `-r N` flag that will
+automatically run your server in a child process that is reloaded every N
+seconds. Use it like this:
+
+    $ strata -p 3000 -r 1 web.js
 */

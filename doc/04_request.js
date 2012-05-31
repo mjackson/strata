@@ -1,19 +1,32 @@
 /*
-# Request Parameters
+# Requests
 
-One of the most common tasks in building a web app is retrieving request
-parameters that were sent by the client in either the URL query string or the
-request body. Strata provides access to both of these and much more via the
-`Request` object.
-
-You instantiate a `Request` object with one argument: the environment.
+The `strata.Request` module provides a convenient interface to retrieving
+information about the incoming request. You instantiate a `Request` object with
+one argument: the **environment**.
 
     var req = strata.Request(env);
 
-A `Request` uses the environment to read information about the incoming
-request and even cache the results of certain operations (e.g. parsing the
-request body) to speed up execution later. It has several methods for retrieving
-request parameters:
+A `Request` uses the environment to read information about the incoming request
+and even cache the results of certain operations (e.g. parsing the request body)
+to speed up execution later. It is able to reconstruct the original request URL,
+which is useful when creating links to other locations in the same app, and it
+is reverse-proxy aware.
+
+## Parameters
+
+One of the most common tasks in building a web app is retrieving request
+parameters that were sent by the client in either the URL query string or the
+request body. It includes support for parsing all of the following content
+types:
+
+  - `application/x-www-form-urlencoded`
+  - `application/json`
+  - `multipart/form-data`
+  - `multipart/related`
+  - `multipart/mixed`
+
+Several methods are available for retrieving request parameters:
 
   - `Request#query` provides parameters that were sent in the URL query string
     (i.e. GET parameters)
@@ -36,12 +49,14 @@ strata.run(function (env, callback) {
 
     req.params(function (err, params) {
         // Ignoring the err argument for now. See the next chapter!
+
         var content = JSON.stringify(params);
 
-        callback(200, {
-            "Content-Type": "application/json",
-            "Content-Length": String(Buffer.byteLength(content))
-        }, content);
+        var res = strata.Response(content);
+        res.contentType = "application/json";
+        res.contentLength = Buffer.byteLength(content);
+
+        res.send(callback);
     });
 });
 
