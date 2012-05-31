@@ -1,12 +1,12 @@
 var assert = require("assert"),
     vows = require("vows"),
     mock = require("./../lib/mock"),
-    route = require("./../lib/route");
+    router = require("./../lib/router");
 
-vows.describe("route").addBatch({
-    "A route middleware": {
+vows.describe("router").addBatch({
+    "A router middleware": {
         topic: function () {
-            var router = route();
+            var localRouter = router();
 
             var app = function (env, callback) {
                 var routeParams = env.route;
@@ -20,11 +20,11 @@ vows.describe("route").addBatch({
                 }, "");
             };
 
-            router.route(/\/users\/(\d+)/i, app);
-            router.route("/posts/:id", app, "GET");
-            router.route("/posts/:id", app, ["POST", "DELETE"]);
+            localRouter.route(/\/users\/(\d+)/i, app);
+            localRouter.route("/posts/:id", app, "GET");
+            localRouter.route("/posts/:id", app, ["POST", "DELETE"]);
 
-            return router;
+            return localRouter;
         },
         "when a match cannot be made": {
             topic: function (app) {
@@ -103,14 +103,14 @@ vows.describe("route").addBatch({
                 assert.equal(status, 404);
             }
         },
-        'with a route that returns an "X-Cascade: pass" header': {
+        'with a router that returns an "X-Cascade: pass" header': {
             topic: function () {
-                var router = route();
+                var localRouter = router();
 
-                router.route("/path", pass(idApp("1")));
-                router.route("/path", idApp("2"));
+                localRouter.route("/path", pass(idApp("1")));
+                localRouter.route("/path", idApp("2"));
 
-                return router;
+                return localRouter;
             },
             "when that route matches": {
                 topic: function (app) {

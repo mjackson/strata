@@ -2,6 +2,8 @@
 
   * Renamed strata.map middleware to strata.urlMap to avoid naming conflict
     with high-level sugar API.
+  * Renamed strata.route middleware to strata.router to avoid naming conflict
+    with high-level sugar API.
 
 = 0.13.0 / 2012-05-29
 
