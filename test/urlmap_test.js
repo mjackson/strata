@@ -1,12 +1,12 @@
 var assert = require("assert"),
     vows = require("vows"),
     mock = require("./../lib/mock"),
-    map = require("./../lib/map");
+    urlMap = require("./../lib/urlmap");
 
-vows.describe("map").addBatch({
-    "A map middleware": {
+vows.describe("urlMap").addBatch({
+    "A urlMap middleware": {
         topic: function () {
-            var app = map();
+            var app = urlMap();
             mock.request("", app, this.callback);
         },
         "should return 404 by default": function (err, status, headers, body) {
@@ -22,7 +22,7 @@ vows.describe("map").addBatch({
                     }, "");
                 };
 
-                return map.make({
+                return urlMap.make({
                     "http://example.org/static": app,
                     "/path": app,
                     "/some/path": app
@@ -172,7 +172,7 @@ vows.describe("map").addBatch({
         },
         "with host-based definitions": {
             topic: function () {
-                return map.make({
+                return urlMap.make({
                     "/": function (env, callback) {
                         callback(200, {
                             "Content-Type": "text/plain",
@@ -312,9 +312,9 @@ vows.describe("map").addBatch({
         },
         "with nested Mappers": {
             topic: function () {
-                return map.make({
-                    "/some": map.make({
-                        "/path": map.make({
+                return urlMap.make({
+                    "/some": urlMap.make({
+                        "/path": urlMap.make({
                             "/name": function (env, callback) {
                                 callback(200, {
                                     "Content-Type": "text/plain",
@@ -355,7 +355,7 @@ vows.describe("map").addBatch({
         },
         "with multiple root apps": {
             topic: function () {
-                return map.make({
+                return urlMap.make({
                     "/": function (env, callback) {
                         callback(200, {
                             "Content-Type": "text/plain",

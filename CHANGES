@@ -1,3 +1,8 @@
+= HEAD
+
+  * Renamed strata.map middleware to strata.urlMap to avoid naming conflict
+    with high-level sugar API.
+
 = 0.13.0 / 2012-05-29
 
   * Added timeout middleware to set a limit on the amount of time a server may
