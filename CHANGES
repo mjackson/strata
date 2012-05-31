@@ -4,6 +4,7 @@
     code on a given interval in a child process.
   * Added -q flag to strata executable to prevent the server startup message
     from being printed to the console.
+  * Added strata.defaultPort variable.
 
 = 0.14.0 / 2012-05-30
 

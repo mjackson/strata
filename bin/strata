@@ -150,7 +150,7 @@ function printUsage() {
         "                  If this is given the appFile is ignored",
         "  -h, --help      Show this help message and exit",
         "  -k PATH         The name of the private key file (HTTPS only)",
-        "  -p PORT         The port number to listen on (defaults to 1982)",
+        "  -p PORT         The port number to listen on (defaults to " + strata.defaultPort + ")",
         "  -q              Don't print a startup message to the console",
         "  -r N            Reload all application code every N seconds",
         "                  (defaults to 1). Good for development",
