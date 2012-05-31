@@ -2,20 +2,14 @@
 
 var fs = require("fs"),
     path = require("path"),
+    spawn = require("child_process").spawn,
     strata = require("../lib/index"),
     utils = strata.utils;
 
-var app,
-    appFile = path.resolve("./app.js"),
-    options = {},
-    exit = false,
+var options = {appFile: path.resolve("./app.js")},
     arg;
 
 for (var i = 2; i < process.argv.length; ++i) {
-    if (exit) {
-        break;
-    }
-
     arg = process.argv[i];
 
     function nextArg(defaultValue) {
@@ -23,7 +17,7 @@ for (var i = 2; i < process.argv.length; ++i) {
 
         if (!next) {
             printUsage();
-            exit = true;
+            process.exit();
         }
 
         return next;
@@ -31,68 +25,115 @@ for (var i = 2; i < process.argv.length; ++i) {
 
     switch (arg) {
     case "-a":
-    case "--address":
         options.host = nextArg();
         break;
     case "-c":
-    case "--cert":
-        var certfile = nextArg();
-        if (path.existsSync(certfile)) {
-            options.cert = fs.readFileSync(certfile);
-        } else {
-            throw new Error('Certificate file "' + certfile + '" does not exist');
-        }
+        options.certFile = nextArg();
         break;
     case "-d":
-        var dir = nextArg(".");
-        app = strata.file(utils.notFound, dir);
-        app = strata.directory(app, dir);
-        app = strata.commonLogger(app);
+        options.dir = nextArg(".");
         break;
     case "-h":
     case "--help":
         printUsage();
-        exit = true;
+        process.exit();
         break;
     case "-k":
-    case "--key":
-        var keyFile = nextArg();
-        if (path.existsSync(keyFile)) {
-            options.key = fs.readFileSync(keyFile);
-        } else {
-            throw new Error('Key file "' + keyFile + '" does not exist');
-        }
+        options.keyFile = nextArg();
         break;
     case "-p":
-    case "--port":
         options.port = nextArg();
         break;
     case "-q":
-    case "--quiet":
         options.quiet = true;
         break;
+    case "-r":
+        options.reload = Math.round(parseFloat(nextArg(1)) * 1000);
+        break;
     case "-s":
-    case "--socket":
         options.socket = nextArg();
         break;
     case "-v":
     case "--version":
-        console.log(strata.version.join("."));
-        exit = true;
+        printVersion();
+        process.exit();
         break;
     default:
-        appFile = path.resolve(arg);
+        options.appFile = path.resolve(arg);
     }
 }
 
-if (!exit) {
-    if (app) {
-        strata.run(app, options);
+if (options.certFile) {
+    options.cert = fs.readFileSync(options.certFile);
+}
+
+if (options.keyFile) {
+    options.key = fs.readFileSync(options.keyFile);
+}
+
+if (options.reload) {
+    var child;
+
+    function spawnChild(options, timeout) {
+        var argv = childArgv(options);
+
+        if (child) {
+            // All children after the first should boot quietly.
+            argv.push("-q");
+        }
+
+        child = spawn("strata", argv, {
+            cwd: process.cwd(),
+            env: process.env
+        });
+
+        child.stdout.on("data", function (chunk) {
+            process.stdout.write(chunk);
+        });
+
+        child.stderr.on("data", function (chunk) {
+            process.stderr.write(chunk);
+        });
+
+        child.on("exit", function () {
+            spawnChild(options);
+        });
+
+        setTimeout(function () {
+            child.kill();
+        }, options.reload);
+    }
+
+    // Spawn the child process.
+    spawnChild(options);
+
+    // Clean up the child process when the parent exits.
+    process.on("exit", function () {
+        child.exit();
+    });
+} else {
+    var app;
+    if (options.dir) {
+        app = strata.file(utils.notFound, options.dir);
+        app = strata.directory(app, options.dir);
+        app = strata.commonLogger(app);
     } else {
-        strata.runFile(appFile, options);
+        app = require(options.appFile);
     }
+
+    strata.run(app, options);
 }
 
+/**
+ * Prints the current version of Strata to the console.
+ */
+function printVersion() {
+    console.log(strata.version.join("."));
+}
+
+/**
+ * Prints a usage message to the console.
+ */
 function printUsage() {
     var usage = [
         "strata v. " + strata.version.join("."),
@@ -102,19 +143,39 @@ function printUsage() {
         "  If none is given, uses ./app.js.",
         "",
         "Options:",
-        "  -a, --address   The address to bind to (defaults to 0.0.0.0)",
-        "  -c, --cert      The name of the public key certificate file",
+        "  -a ADDR         The address to bind to (defaults to 0.0.0.0)",
+        "  -c PATH         The name of the public key certificate file",
         "                  (HTTPS only)",
-        "  -d              The path to a directory to serve (defaults to .). If",
-        "                  this is given the appFile is ignored",
+        "  -d PATH         The path to a directory to serve (defaults to .).",
+        "                  If this is given the appFile is ignored",
         "  -h, --help      Show this help message and exit",
-        "  -k, --key       The name of the private key file (HTTPS only)",
-        "  -p, --port      The port number to listen on (defaults to 1982)",
-        "  -q, --quiet     Don't print a startup message to the console",
-        "  -s, --socket    The unix socket to listen to. If this is given",
+        "  -k PATH         The name of the private key file (HTTPS only)",
+        "  -p PORT         The port number to listen on (defaults to 1982)",
+        "  -q              Don't print a startup message to the console",
+        "  -r N            Reload all application code every N seconds",
+        "                  (defaults to 1). Good for development",
+        "  -s PATH         The unix socket to listen to. If this is given",
         "                  the -a and -p options are ignored",
         "  -v, --version   Show the current version of Strata and exit"
     ].join("\n");
 
     console.log(usage);
+}
+
+/**
+ * Reconstructs an argv array from the given `options` object suitable for
+ * running a server in a child process.
+ */
+function childArgv(options) {
+    var argv = [];
+
+    if (options.host)       argv.push("-a", options.host);
+    if (options.certFile)   argv.push("-c", options.certFile);
+    if (options.dir)        argv.push("-d", options.dir);
+    if (options.keyFile)    argv.push("-k", options.keyFile);
+    if (options.port)       argv.push("-p", options.port);
+    if (options.socket)     argv.push("-s", options.socket);
+    if (options.appFile)    argv.push(options.appFile);
+
+    return argv;
 }

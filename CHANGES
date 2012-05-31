@@ -1,6 +1,9 @@
 = HEAD
 
-  * Added --quiet option to strata executable.
+  * Added -r flag to strata executable to automatically reload all application
+    code on a given interval in a child process.
+  * Added -q flag to strata executable to prevent the server startup message
+    from being printed to the console.
 
 = 0.14.0 / 2012-05-30
 
