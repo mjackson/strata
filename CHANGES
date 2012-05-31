@@ -1,3 +1,7 @@
+= 0.15.1 / 2012-05-31
+
+  * Updates to some documentation.
+
 = 0.15.0 / 2012-05-31
 
   * Added -r flag to strata executable to automatically reload all application
