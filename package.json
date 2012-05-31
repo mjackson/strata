@@ -1,9 +1,9 @@
 {
     "name": "strata",
-    "version": "0.13.0",
+    "version": "0.14.0",
     "author": "Michael Jackson <mjijackson@gmail.com>",
-    "description": "A streaming HTTP framework patterned after WSGI/Rack",
-    "keywords": ["web", "server", "framework", "middleware", "rack", "jsgi", "wsgi", "connect", "express"],
+    "description": "A modular, streaming HTTP server",
+    "keywords": ["web", "server", "framework", "middleware", "rack", "jsgi", "wsgi"],
     "homepage": "http://stratajs.org",
     "engines": {
         "node": ">= 0.4.7"
