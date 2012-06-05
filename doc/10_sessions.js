@@ -38,7 +38,8 @@ let you customize its behavior. Valid options are:
   - `expireAfter`   A number of seconds after which this cookie will expire,
                     defaults to `null`
   - `secure`        True to only send this cookie over HTTPS, defaults to `false`
-  - `httpOnly`      True to only send this cookie over HTTP, defaults to `true`
+  - `httpOnly`      True to restrict access to this cookie to HTTP(S) APIs,
+                    defaults to `true`
 
 The app below demonstrates how a session might be used to track the id of the
 currently logged in user.
