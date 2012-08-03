@@ -1,9 +1,9 @@
-var assert = require("assert"),
-    vows = require("vows"),
-    qs = require("querystring"),
-    Request = require("./../lib/request"),
-    mock = require("./../lib/mock"),
-    BufferedStream = require("bufferedstream");
+var assert = require("assert");
+var vows = require("vows");
+var qs = require("querystring");
+var Request = require("./../lib/request");
+var mock = require("./../lib/mock");
+var BufferedStream = require("bufferedstream");
 
 vows.describe("request").addBatch({
     "A Request": {

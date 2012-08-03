@@ -1,11 +1,11 @@
-var assert = require("assert"),
-    vows = require("vows"),
-    path = require("path"),
-    fs = require("fs"),
-    EventEmitter = require("events").EventEmitter,
-    mock = require("./../lib/mock"),
-    file = require("./../lib/file"),
-    utils = require("./../lib/utils");
+var assert = require("assert");
+var vows = require("vows");
+var path = require("path");
+var fs = require("fs");
+var EventEmitter = require("events").EventEmitter;
+var mock = require("./../lib/mock");
+var file = require("./../lib/file");
+var utils = require("./../lib/utils");
 
 var root = path.join(__dirname, "_files");
 

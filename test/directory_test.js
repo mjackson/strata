@@ -1,9 +1,9 @@
-var path = require("path"),
-    assert = require("assert"),
-    vows = require("vows"),
-    mock = require("./../lib/mock"),
-    utils = require("./../lib/utils"),
-    directory = require("./../lib/directory");
+var path = require("path");
+var assert = require("assert");
+var vows = require("vows");
+var mock = require("./../lib/mock");
+var utils = require("./../lib/utils");
+var directory = require("./../lib/directory");
 
 vows.describe("directory").addBatch({
     "A directory middleware": {

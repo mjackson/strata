@@ -1,6 +1,6 @@
-var assert = require("assert"),
-    vows = require("vows"),
-    Accept = require("./../lib/header/accept");
+var assert = require("assert");
+var vows = require("vows");
+var Accept = require("./../lib/header/accept");
 
 vows.describe("header/accept").addBatch({
     "An Accept header": {

@@ -1,8 +1,8 @@
-var assert = require("assert"),
-    vows = require("vows"),
-    path = require("path"),
-    mock = require("./../lib/mock"),
-    build = require("./../lib/build");
+var assert = require("assert");
+var vows = require("vows");
+var path = require("path");
+var mock = require("./../lib/mock");
+var build = require("./../lib/build");
 
 // Increments the X-Count header when called.
 function count(app) {

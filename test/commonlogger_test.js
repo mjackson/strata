@@ -1,8 +1,8 @@
-var assert = require("assert"),
-    vows = require("vows"),
-    mock = require("./../lib/mock"),
-    commonLogger = require("./../lib/commonlogger"),
-    utils = require("./../lib/utils");
+var assert = require("assert");
+var vows = require("vows");
+var mock = require("./../lib/mock");
+var commonLogger = require("./../lib/commonlogger");
+var utils = require("./../lib/utils");
 
 vows.describe("commonlogger").addBatch({
     "A commonLogger middleware": {

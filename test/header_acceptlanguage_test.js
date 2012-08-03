@@ -1,6 +1,6 @@
-var assert = require("assert"),
-    vows = require("vows"),
-    AcceptLanguage = require("./../lib/header/acceptlanguage");
+var assert = require("assert");
+var vows = require("vows");
+var AcceptLanguage = require("./../lib/header/acceptlanguage");
 
 vows.describe("header/acceptlanguage").addBatch({
     "An AcceptLanguage header": {

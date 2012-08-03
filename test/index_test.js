@@ -1,10 +1,10 @@
-var assert = require("assert"),
-    vows = require("vows"),
-    EventEmitter = require("events").EventEmitter,
-    strata = require("./../lib/index"),
-    mock = require("./../lib/mock"),
-    BufferedStream = require("bufferedstream"),
-    utils = require("./../lib/utils");
+var assert = require("assert");
+var vows = require("vows");
+var EventEmitter = require("events").EventEmitter;
+var strata = require("./../lib/index");
+var mock = require("./../lib/mock");
+var BufferedStream = require("bufferedstream");
+var utils = require("./../lib/utils");
 
 vows.describe("index").addBatch({
     "env": {

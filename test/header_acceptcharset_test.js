@@ -1,6 +1,6 @@
-var assert = require("assert"),
-    vows = require("vows"),
-    AcceptCharset = require("./../lib/header/acceptcharset");
+var assert = require("assert");
+var vows = require("vows");
+var AcceptCharset = require("./../lib/header/acceptcharset");
 
 vows.describe("header/acceptcharset").addBatch({
     "An AcceptCharset header": {

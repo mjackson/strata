@@ -1,12 +1,12 @@
-var assert = require("assert"),
-    vows = require("vows"),
-    path = require("path"),
-    fs = require("fs"),
-    mock = require("./../lib/mock"),
-    gzip = require("./../lib/gzip"),
-    file = require("./../lib/file"),
-    utils = require("./../lib/utils"),
-    BufferedStream = require("bufferedstream");
+var assert = require("assert");
+var vows = require("vows");
+var path = require("path");
+var fs = require("fs");
+var mock = require("./../lib/mock");
+var gzip = require("./../lib/gzip");
+var file = require("./../lib/file");
+var utils = require("./../lib/utils");
+var BufferedStream = require("bufferedstream");
 
 vows.describe("gzip").addBatch({
     "A gzip middleware": {

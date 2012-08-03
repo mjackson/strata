@@ -1,7 +1,7 @@
-var assert = require("assert"),
-    vows = require("vows"),
-    mock = require("./../lib/mock"),
-    sessionCookie = require("./../lib/session/cookie");
+var assert = require("assert");
+var vows = require("vows");
+var mock = require("./../lib/mock");
+var sessionCookie = require("./../lib/session/cookie");
 
 vows.describe("session/cookie").addBatch({
     "A sessionCookie middleware": {

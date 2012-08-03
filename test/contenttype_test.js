@@ -1,7 +1,7 @@
-var assert = require("assert"),
-    vows = require("vows"),
-    mock = require("./../lib/mock"),
-    contentType = require("./../lib/contenttype");
+var assert = require("assert");
+var vows = require("vows");
+var mock = require("./../lib/mock");
+var contentType = require("./../lib/contenttype");
 
 vows.describe("contenttype").addBatch({
     "A contentType middleware": {

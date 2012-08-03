@@ -1,8 +1,8 @@
-var assert = require("assert"),
-    vows = require("vows"),
-    mock = require("./../lib/mock"),
-    jsonp = require("./../lib/jsonp"),
-    BufferedStream = require("bufferedstream");
+var assert = require("assert");
+var vows = require("vows");
+var mock = require("./../lib/mock");
+var jsonp = require("./../lib/jsonp");
+var BufferedStream = require("bufferedstream");
 
 vows.describe("jsonp").addBatch({
     "A jsonp middleware": {

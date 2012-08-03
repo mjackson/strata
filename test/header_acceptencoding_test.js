@@ -1,6 +1,6 @@
-var assert = require("assert"),
-    vows = require("vows"),
-    AcceptEncoding = require("./../lib/header/acceptencoding");
+var assert = require("assert");
+var vows = require("vows");
+var AcceptEncoding = require("./../lib/header/acceptencoding");
 
 vows.describe("header/acceptencoding").addBatch({
     "An AcceptEncoding header": {

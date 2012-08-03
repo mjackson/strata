@@ -1,7 +1,7 @@
-var assert = require("assert"),
-    vows = require("vows"),
-    mock = require("./../lib/mock"),
-    utils = require("./../lib/utils");
+var assert = require("assert");
+var vows = require("vows");
+var mock = require("./../lib/mock");
+var utils = require("./../lib/utils");
 
 vows.describe("mock").addBatch({
     "A mock request to utils.empty": {

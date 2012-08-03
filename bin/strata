@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-var fs = require("fs"),
-    path = require("path"),
-    spawn = require("child_process").spawn,
-    strata = require("../lib/index"),
-    utils = strata.utils;
+var fs = require("fs");
+var path = require("path");
+var spawn = require("child_process").spawn;
+var strata = require("../lib/index");
+var utils = strata.utils;
 
 var options = {appFile: path.resolve("./app.js")},
     arg;

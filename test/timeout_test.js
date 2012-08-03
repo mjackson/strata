@@ -1,8 +1,8 @@
-var assert = require("assert"),
-    vows = require("vows"),
-    mock = require("./../lib/mock"),
-    utils = require("./../lib/utils"),
-    timeout = require("./../lib/timeout");
+var assert = require("assert");
+var vows = require("vows");
+var mock = require("./../lib/mock");
+var utils = require("./../lib/utils");
+var timeout = require("./../lib/timeout");
 
 vows.describe("timeout").addBatch({
     "A timeout middleware": {

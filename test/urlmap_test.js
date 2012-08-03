@@ -1,7 +1,7 @@
-var assert = require("assert"),
-    vows = require("vows"),
-    mock = require("./../lib/mock"),
-    urlMap = require("./../lib/urlmap");
+var assert = require("assert");
+var vows = require("vows");
+var mock = require("./../lib/mock");
+var urlMap = require("./../lib/urlmap");
 
 vows.describe("urlMap").addBatch({
     "A urlMap middleware": {

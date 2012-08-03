@@ -1,8 +1,8 @@
-var assert = require("assert"),
-    vows = require("vows"),
-    strata = require("./../lib"),
-    mock = strata.mock,
-    rewrite = strata.rewrite;
+var assert = require("assert");
+var vows = require("vows");
+var strata = require("./../lib");
+var mock = strata.mock;
+var rewrite = strata.rewrite;
 
 vows.describe("rewrite").addBatch({
     "A rewrite middleware": {
