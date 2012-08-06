@@ -31,33 +31,33 @@ Note: This example uses [Mustache](https://github.com/janl/mustache.js) for
 template rendering. To install it, use `npm install mustache`.
 */
 
-var strata = require("strata"),
-    redirect = strata.redirect,
-    mustache = require("mustache");
+var strata = require("strata");
+var redirect = strata.redirect;
+var mustache = require("mustache");
 
 // This is our simple data store.
 var users = [];
 
 // Define a template. This would normally be stored in a template file.
 var userListTemplate = [
-    '{{^users}}',
-    '<p>There are no users!</p>',
-    '{{/users}}',
-    '{{#hasUsers}}',
-    '<p>The users are:</p>',
-    '<ul>',
-    '{{#users}}',
-    '  <li>{{.}}</li>',
-    '{{/users}}',
-    '</ul>',
-    '{{/hasUsers}}',
-    '<p>Create a new user:</p>',
-    '<p>',
-    '<form method="post" action="/users">',
-    '<input type="text" name="username" placeholder="username" width="200">',
-    '<input type="submit" value="Submit">',
-    '</form>',
-    '</p>'
+  '{{^users}}',
+  '<p>There are no users!</p>',
+  '{{/users}}',
+  '{{#hasUsers}}',
+  '<p>The users are:</p>',
+  '<ul>',
+  '{{#users}}',
+  '  <li>{{.}}</li>',
+  '{{/users}}',
+  '</ul>',
+  '{{/hasUsers}}',
+  '<p>Create a new user:</p>',
+  '<p>',
+  '<form method="post" action="/users">',
+  '<input type="text" name="username" placeholder="username" width="200">',
+  '<input type="submit" value="Submit">',
+  '</form>',
+  '</p>'
 ].join("\n");
 
 strata.use(strata.commonLogger);
@@ -67,34 +67,34 @@ strata.use(strata.contentLength);
 // Shows a list of the users currently in the data store and a form for adding
 // another name to the store.
 strata.get("/users", function (env, callback) {
-    var content = mustache.to_html(userListTemplate, {
-        hasUsers: users.length != 0,
-        users: users
-    });
+  var content = mustache.to_html(userListTemplate, {
+    hasUsers: users.length != 0,
+    users: users
+  });
 
-    callback(200, {}, content);
+  callback(200, {}, content);
 });
 
 // Adds a username to the data store.
 strata.post("/users", function (env, callback) {
-    var req = new strata.Request(env);
+  var req = new strata.Request(env);
 
-    req.params(function (err, params) {
-        if (err && strata.handleError(err, env, callback)) {
-            return;
-        }
+  req.params(function (err, params) {
+    if (err && strata.handleError(err, env, callback)) {
+      return;
+    }
 
-        if (params.username) {
-            users.push(params.username);
-        }
+    if (params.username) {
+      users.push(params.username);
+    }
 
-        // Redirect to /users.
-        redirect(env, callback, "/users");
-    });
+    // Redirect to /users.
+    redirect(env, callback, "/users");
+  });
 });
 
 strata.run(function (env, callback) {
-    callback(200, {}, 'Try <a href="/users">/users</a>.');
+  callback(200, {}, 'Try <a href="/users">/users</a>.');
 });
 
 /*

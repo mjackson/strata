@@ -45,19 +45,19 @@ encoded as JSON and returned to the client in an `application/json` response.
 var strata = require("strata");
 
 strata.run(function (env, callback) {
-    var req = strata.Request(env);
+  var req = strata.Request(env);
 
-    req.params(function (err, params) {
-        // Ignoring the err argument for now. See the next chapter!
+  req.params(function (err, params) {
+    // Ignoring the err argument for now. See the next chapter!
 
-        var content = JSON.stringify(params);
+    var content = JSON.stringify(params);
 
-        var res = strata.Response(content);
-        res.contentType = "application/json";
-        res.contentLength = Buffer.byteLength(content);
+    var res = strata.Response(content);
+    res.contentType = "application/json";
+    res.contentLength = Buffer.byteLength(content);
 
-        res.send(callback);
-    });
+    res.send(callback);
+  });
 });
 
 /*

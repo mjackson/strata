@@ -36,8 +36,8 @@ The app below demonstrates how gzip compression should be configured in front
 of an app that serves static files.
 */
 
-var path = require("path"),
-    strata = require("strata");
+var path = require("path");
+var strata = require("strata");
 
 // For the sake of this example, the root directory where we store static files
 // is the current working directory (i.e. $PWD).

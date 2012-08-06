@@ -9,21 +9,21 @@ context of the rest of the framework.
 The basic pattern for an app that handles file uploads by streaming them to disk
 looks like this:
 
-    var strata = require("strata"),
-        multipart = strata.multipart;
+    var strata = require("strata");
+    var multipart = strata.multipart;
 
     strata.run(function (env, callback) {
-        var req = strata.Request(env);
+      var req = strata.Request(env);
 
-        req.params(function (err, params) {
-            for (var name in params) {
-                if (params[name] instanceof multipart.File) {
-                    // It's a multipart.File object.
-                } else {
-                    // It's a string.
-                }
-            }
-        });
+      req.params(function (err, params) {
+        for (var name in params) {
+          if (params[name] instanceof multipart.File) {
+            // It's a multipart.File object.
+          } else {
+            // It's a string.
+          }
+        }
+      });
     });
 
 In this example you can see that Strata normalizes access to file uploads using
@@ -42,8 +42,8 @@ These objects have the following properties:
 The app below demonstrates how you might build a simple form to upload an image.
 */
 
-var strata = require("strata"),
-    multipart = strata.multipart;
+var strata = require("strata");
+var multipart = strata.multipart;
 
 strata.use(strata.commonLogger);
 strata.use(strata.contentType);
@@ -51,49 +51,49 @@ strata.use(strata.contentLength);
 
 // Shows a form for making a file upload.
 strata.get("/", function (env, callback) {
-    var content = "";
+  var content = "";
 
-    content += '<form action="/" method="post" enctype="multipart/form-data">';
-    content += '<input name="photo" type="file">';
-    content += '<input type="submit" value="Upload">';
-    content += '</form>';
+  content += '<form action="/" method="post" enctype="multipart/form-data">';
+  content += '<input name="photo" type="file">';
+  content += '<input type="submit" value="Upload">';
+  content += '</form>';
 
-    callback(200, {}, content);
+  callback(200, {}, content);
 });
 
 // Uploads a file to the server.
 strata.post("/", function (env, callback) {
-    var req = strata.Request(env);
+  var req = strata.Request(env);
 
-    req.params(function (err, params) {
-        if (err && strata.handleError(err, env, callback)) {
-            return;
-        }
+  req.params(function (err, params) {
+    if (err && strata.handleError(err, env, callback)) {
+      return;
+    }
 
-        var photo = params.photo;
+    var photo = params.photo;
 
-        // Do some simple validation.
-        if (!photo) {
-            callback(403, {}, 'Param "photo" is required');
-        } else if (!(photo instanceof multipart.File)) {
-            callback(403, {}, 'Param "photo" must be a file upload');
-        } else if (!(/image\//).test(photo.type)) {
-            callback(403, {}, 'Param "photo" must be an image');
-        } else {
-            var content = "";
+    // Do some simple validation.
+    if (!photo) {
+      callback(403, {}, 'Param "photo" is required');
+    } else if (!(photo instanceof multipart.File)) {
+      callback(403, {}, 'Param "photo" must be a file upload');
+    } else if (!(/image\//).test(photo.type)) {
+      callback(403, {}, 'Param "photo" must be an image');
+    } else {
+      var content = "";
 
-            content += "The photo was uploaded successfully. Here are its properties:";
-            content += "<ul>";
+      content += "The photo was uploaded successfully. Here are its properties:";
+      content += "<ul>";
 
-            ["path", "name", "type", "size"].forEach(function (prop) {
-                content += "<li>" + prop + ": " + photo[prop] + "</li>";
-            });
+      ["path", "name", "type", "size"].forEach(function (prop) {
+        content += "<li>" + prop + ": " + photo[prop] + "</li>";
+      });
 
-            content += "</ul>";
+      content += "</ul>";
 
-            callback(200, {}, content);
-        }
-    });
+      callback(200, {}, content);
+    }
+  });
 });
 
 strata.run();

@@ -32,20 +32,20 @@ to `redirect.back` we don't specify a path to redirect the user back to. The
 correct path is tracked for us automatically in the session.
 */
 
-var strata = require("strata"),
-    redirect = strata.redirect;
+var strata = require("strata");
+var redirect = strata.redirect;
 
 // Define some templates. These would normally be stored in template files.
 var loggedInTemplate = [
-    '<p>You are now logged in!</p>',
-    '<p><a href="/logout">Logout</a></p>'
+  '<p>You are now logged in!</p>',
+  '<p><a href="/logout">Logout</a></p>'
 ].join("\n");
 
 var loggedOutTemplate = [
-    '<p>Please login.</p>',
-    '<form action="/login" method="post">',
-    '<button>Login</button>',
-    '</form>'
+  '<p>Please login.</p>',
+  '<form action="/login" method="post">',
+  '<button>Login</button>',
+  '</form>'
 ].join("\n");
 
 strata.use(strata.commonLogger);
@@ -56,34 +56,34 @@ strata.use(strata.sessionCookie);
 // The "restricted" section of the app. Requires a user to login before they
 // can view it.
 strata.get("/", function (env, callback) {
-    if (env.session.loggedIn) {
-        callback(200, {}, loggedInTemplate);
-    } else {
-        // This call stores the current request URL in the session and redirects
-        // the user to /login for auth.
-        redirect.forward(env, callback, "/login");
-    }
+  if (env.session.loggedIn) {
+    callback(200, {}, loggedInTemplate);
+  } else {
+    // This call stores the current request URL in the session and redirects
+    // the user to /login for auth.
+    redirect.forward(env, callback, "/login");
+  }
 });
 
 // Shows the login form.
 strata.get("/login", function (env, callback) {
-    callback(200, {}, loggedOutTemplate);
+  callback(200, {}, loggedOutTemplate);
 });
 
 // Sets the loggedIn session variable and redirects the user to the URL they
 // were trying to access before they were sent to /login.
 strata.post("/login", function (env, callback) {
-    env.session.loggedIn = 1;
+  env.session.loggedIn = 1;
 
-    // This call sends the user back to wherever they were before they were
-    // sent to /login for auth using redirect.forward.
-    redirect.back(env, callback);
+  // This call sends the user back to wherever they were before they were
+  // sent to /login for auth using redirect.forward.
+  redirect.back(env, callback);
 });
 
 // Clears the session.
 strata.get("/logout", function (env, callback) {
-    env.session = {};
-    redirect(env, callback, "/");
+  env.session = {};
+  redirect(env, callback, "/");
 });
 
 strata.run();

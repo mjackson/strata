@@ -21,12 +21,12 @@ meaningful hierarchies of errors, complete with stack traces. You can inherit
 from Strata's base error prototype, `strata.Error` to get this extra
 functionality.
 
-    var util = require("util"),
-        strata = require("strata");
+    var util = require("util");
+    var strata = require("strata");
 
     function LoginFailedError(message, cause) {
-        message = message || "Login Failed";
-        strata.Error.call(this, message, cause);
+      message = message || "Login Failed";
+      strata.Error.call(this, message, cause);
     }
 
     util.inherits(LoginFailedError, strata.Error);
@@ -77,23 +77,23 @@ to look like this:
 var strata = require("strata");
 
 strata.run(function (env, callback) {
-    var req = strata.Request(env);
+  var req = strata.Request(env);
 
-    req.params(function (err, params) {
-        // If there was an error and strata.handleError issued a response
-        // based on it, return and stop processing the request.
-        if (err && strata.handleError(err, env, callback)) {
-            return;
-        }
+  req.params(function (err, params) {
+    // If there was an error and strata.handleError issued a response
+    // based on it, return and stop processing the request.
+    if (err && strata.handleError(err, env, callback)) {
+      return;
+    }
 
-        var content = JSON.stringify(params);
+    var content = JSON.stringify(params);
 
-        var res = strata.Response(content);
-        res.contentType = "application/json";
-        res.contentLength = Buffer.byteLength(content);
+    var res = strata.Response(content);
+    res.contentType = "application/json";
+    res.contentLength = Buffer.byteLength(content);
 
-        res.send(callback);
-    });
+    res.send(callback);
+  });
 });
 
 /*
@@ -124,12 +124,12 @@ override `strata.handleError`.
 var _handleError = strata.handleError;
 
 strata.handleError = function (err, env, callback) {
-    if (err instanceof strata.InvalidRequestBodyError) {
-        callback(400, {}, "Invalid Request Body");
-        return true;
-    }
+  if (err instanceof strata.InvalidRequestBodyError) {
+    callback(400, {}, "Invalid Request Body");
+    return true;
+  }
 
-    return _handleError(err, env, callback);
+  return _handleError(err, env, callback);
 };
 
 /*

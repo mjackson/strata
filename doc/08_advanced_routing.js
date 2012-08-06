@@ -29,61 +29,61 @@ Note: This example uses [Mustache](https://github.com/janl/mustache.js) for
 template rendering. To install it, use `npm install mustache`.
 */
 
-var strata = require("strata"),
-    redirect = strata.redirect,
-    mustache = require("mustache");
+var strata = require("strata");
+var redirect = strata.redirect;
+var mustache = require("mustache");
 
 // This is our simple data store.
-var users = {},
-    userId = 0;
+var users = {};
+var userId = 0;
 
 // Define some templates. These would normally be stored in template files.
 var userListTemplate = [
-    '{{^users}}',
-    '<p>There are no users!</p>',
-    '{{/users}}',
-    '{{#hasUsers}}',
-    '<p>The users are:</p>',
-    '<ul>',
-    '{{#users}}',
-    '  <li>',
-    '  Name: {{firstName}} {{lastName}}',
-    '  (<a href="/users/{{id}}">{{username}}</a>)',
-    '  <form action="/users/{{id}}" method="POST" style="display:inline">',
-    '    <input type="hidden" name="_method" value="DELETE">',
-    '    <button>Delete</button>',
-    '  </form>',
-    '  </li>',
-    '{{/users}}',
-    '</ul>',
-    '{{/hasUsers}}',
-    '<p>Create a new user:</p>',
-    '<p>',
-    '<form method="post" action="/users">',
-    '<input type="text" name="first_name" placeholder="first name" width="200">',
-    '<input type="text" name="last_name" placeholder="last name" width="200">',
-    '<input type="text" name="username" placeholder="username" width="200">',
-    '<input type="submit" value="Submit">',
-    '</form>',
-    '</p>'
+  '{{^users}}',
+  '<p>There are no users!</p>',
+  '{{/users}}',
+  '{{#hasUsers}}',
+  '<p>The users are:</p>',
+  '<ul>',
+  '{{#users}}',
+  '  <li>',
+  '  Name: {{firstName}} {{lastName}}',
+  '  (<a href="/users/{{id}}">{{username}}</a>)',
+  '  <form action="/users/{{id}}" method="POST" style="display:inline">',
+  '    <input type="hidden" name="_method" value="DELETE">',
+  '    <button>Delete</button>',
+  '  </form>',
+  '  </li>',
+  '{{/users}}',
+  '</ul>',
+  '{{/hasUsers}}',
+  '<p>Create a new user:</p>',
+  '<p>',
+  '<form method="post" action="/users">',
+  '<input type="text" name="first_name" placeholder="first name" width="200">',
+  '<input type="text" name="last_name" placeholder="last name" width="200">',
+  '<input type="text" name="username" placeholder="username" width="200">',
+  '<input type="submit" value="Submit">',
+  '</form>',
+  '</p>'
 ].join("\n");
 
 var userDetailTemplate = [
-    '{{^user}}',
-    '<p>There is no user with id "{{id}}".</p>',
-    '{{/user}}',
-    '{{#user}}',
-    '<p>Details for user with id "{{id}}":</p>',
-    '<dl>',
-    '  <dt>First name</dt><dd>{{firstName}}</dd>',
-    '  <dt>Last name</dt><dd>{{lastName}}</dd>',
-    '  <dt>Username</dt><dd>{{username}}</dd>',
-    '</dl>',
-    '<form action="/users/{{id}}" method="POST" style="display:inline">',
-    '  <input type="hidden" name="_method" value="DELETE">',
-    '  <button>Delete</button>',
-    '</form>',
-    '{{/user}}'
+  '{{^user}}',
+  '<p>There is no user with id "{{id}}".</p>',
+  '{{/user}}',
+  '{{#user}}',
+  '<p>Details for user with id "{{id}}":</p>',
+  '<dl>',
+  '  <dt>First name</dt><dd>{{firstName}}</dd>',
+  '  <dt>Last name</dt><dd>{{lastName}}</dd>',
+  '  <dt>Username</dt><dd>{{username}}</dd>',
+  '</dl>',
+  '<form action="/users/{{id}}" method="POST" style="display:inline">',
+  '  <input type="hidden" name="_method" value="DELETE">',
+  '  <button>Delete</button>',
+  '</form>',
+  '{{/user}}'
 ].join("\n");
 
 strata.use(strata.commonLogger);
@@ -94,71 +94,71 @@ strata.use(strata.methodOverride);
 // Shows a list of the users currently in the data store and a form for adding
 // another to the store.
 strata.get("/users", function (env, callback) {
-    var userList = [];
+  var userList = [];
 
-    for (var id in users) {
-        userList.push(users[id]);
-    }
+  for (var id in users) {
+    userList.push(users[id]);
+  }
 
-    var content = mustache.to_html(userListTemplate, {
-        hasUsers: userList.length != 0,
-        users: userList
-    });
+  var content = mustache.to_html(userListTemplate, {
+    hasUsers: userList.length != 0,
+    users: userList
+  });
 
-    callback(200, {}, content);
+  callback(200, {}, content);
 });
 
 // Adds a user to the data store.
 strata.post("/users", function (env, callback) {
-    var req = new strata.Request(env);
+  var req = new strata.Request(env);
 
-    req.params(function (err, params) {
-        if (err && strata.handleError(err, env, callback)) {
-            return;
-        }
+  req.params(function (err, params) {
+    if (err && strata.handleError(err, env, callback)) {
+      return;
+    }
 
-        // Weak validation, but sufficient for the example.
-        if (params.first_name && params.last_name && params.username) {
-            var id = userId++;
+    // Weak validation, but sufficient for the example.
+    if (params.first_name && params.last_name && params.username) {
+      var id = userId++;
 
-            users[id] = {
-                id: id,
-                firstName: params.first_name,
-                lastName: params.last_name,
-                username: params.username
-            };
-        }
-
-        // Redirect to /users.
-        redirect(env, callback, "/users");
-    });
-});
-
-// Shows details about the user with the given id.
-strata.get("/users/:id", function (env, callback) {
-    var id = env.route.id;
-    var content = mustache.to_html(userDetailTemplate, {
+      users[id] = {
         id: id,
-        user: users[id]
-    });
-
-    callback(200, {}, content);
-});
-
-// Deletes the user with the given id (uses DELETE HTTP verb).
-strata.delete("/users/:id", function (env, callback) {
-    var id = env.route.id;
-
-    if (id in users) {
-        delete users[id];
+        firstName: params.first_name,
+        lastName: params.last_name,
+        username: params.username
+      };
     }
 
     // Redirect to /users.
     redirect(env, callback, "/users");
+  });
+});
+
+// Shows details about the user with the given id.
+strata.get("/users/:id", function (env, callback) {
+  var id = env.route.id;
+  var content = mustache.to_html(userDetailTemplate, {
+    id: id,
+    user: users[id]
+  });
+
+  callback(200, {}, content);
+});
+
+// Deletes the user with the given id (uses DELETE HTTP verb).
+strata.delete("/users/:id", function (env, callback) {
+  var id = env.route.id;
+
+  if (id in users) {
+    delete users[id];
+  }
+
+  // Redirect to /users.
+  redirect(env, callback, "/users");
 });
 
 strata.run(function (env, callback) {
-    callback(200, {}, 'Try <a href="/users">/users</a>.');
+  callback(200, {}, 'Try <a href="/users">/users</a>.');
 });
 
 /*

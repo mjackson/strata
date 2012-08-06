@@ -41,12 +41,12 @@ in a response with an HTTP 200 status code.
 var strata = require("strata");
 
 strata.run(function (env, callback) {
-    var headers = {
-        "Content-Type": "text/plain",
-        "Content-Length": "12"
-    };
+  var headers = {
+    "Content-Type": "text/plain",
+    "Content-Length": "12"
+  };
 
-    callback(200, headers, "Hello world!");
+  callback(200, headers, "Hello world!");
 });
 
 /*
@@ -88,7 +88,7 @@ that exports a Strata app. The contents of this file may look something like
 this:
 
     function app(env, callback) {
-        // ...
+      // ...
     }
 
     module.exports = app;

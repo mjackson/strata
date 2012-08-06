@@ -25,18 +25,20 @@ Let's take a detailed look at some very simple middleware to get an idea of
 what this might look like in code. The simplest middleware that ships with
 Strata is `strata.contentType`. The source is copied below.
 
-    module.exports = function (app, defaultType) {
-        defaultType = defaultType || "text/html";
+    strata.contentType = function (app, defaultType) {
+      defaultType = defaultType || "text/html";
 
-        return function contentType(env, callback) {
-            app(env, function (status, headers, body) {
-                if (!headers["Content-Type"]) {
-                    headers["Content-Type"] = defaultType;
-                }
+      function contentType(env, callback) {
+        app(env, function (status, headers, body) {
+          if (!headers["Content-Type"]) {
+            headers["Content-Type"] = defaultType;
+          }
 
-                callback(status, headers, body);
-            });
-        }
+          callback(status, headers, body);
+        });
+      }
+
+      return contentType;
     };
 
 As you can see, this middleware is simply a function that takes an app and an
@@ -90,23 +92,23 @@ var strata = require("strata");
 
 // This function is the middleware. It keeps a reference to the downstream app.
 function setUser(app) {
-    return function (env, callback) {
-        var req = strata.Request(env);
+  return function (env, callback) {
+    var req = strata.Request(env);
 
-        // Get the value of the "user" request parameter and put it in the
-        // myappUser environment variable. Names of environment variables should
-        // be prefixed uniquely (see the SPEC).
-        req.params(function (err, params) {
-            if (err && strata.handleError(err, env, callback)) {
-                return;
-            }
+    // Get the value of the "user" request parameter and put it in the
+    // myappUser environment variable. Names of environment variables should
+    // be prefixed uniquely (see the SPEC).
+    req.params(function (err, params) {
+      if (err && strata.handleError(err, env, callback)) {
+        return;
+      }
 
-            env.myappUser = params.user || "Anonymous User";
+      env.myappUser = params.user || "Anonymous User";
 
-            // Call the downstream app.
-            app(env, callback);
-        });
-    }
+      // Call the downstream app.
+      app(env, callback);
+    });
+  }
 }
 
 strata.use(strata.contentType); // Sets the Content-Type header
@@ -114,9 +116,9 @@ strata.use(strata.contentLength); // Sets the Content-Length header
 strata.use(setUser); // Sets the myappUser environment variable
 
 strata.run(function (env, callback) {
-    // In the downstream app we have access to any custom variables that were
-    // set by middleware upstream.
-    callback(200, {}, "Welcome, " + env.myappUser + "!");
+  // In the downstream app we have access to any custom variables that were
+  // set by middleware upstream.
+  callback(200, {}, "Welcome, " + env.myappUser + "!");
 });
 
 /*

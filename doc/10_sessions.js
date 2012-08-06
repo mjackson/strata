@@ -45,41 +45,41 @@ The app below demonstrates how a session might be used to track the id of the
 currently logged in user.
 */
 
-var strata = require("strata"),
-    redirect = strata.redirect;
+var strata = require("strata");
+var redirect = strata.redirect;
 
 strata.use(strata.commonLogger);
 strata.use(strata.contentType, "text/html");
 strata.use(strata.contentLength);
 strata.use(strata.sessionCookie, {
-    secret: "my s3kret",
-    name: "myapp.session"
+  secret: "my s3kret",
+  name: "myapp.session"
 });
 
 // Sets a userId variable in the session that lets us know the user
 // is logged in.
 strata.get("/login", function (env, callback) {
-    env.session.userId = "1";
-    redirect(env, callback, "/");
+  env.session.userId = "1";
+  redirect(env, callback, "/");
 });
 
 // Clears the session and redirects to /.
 strata.get("/logout", function (env, callback) {
-    env.session = {};
-    redirect(env, callback, "/");
+  env.session = {};
+  redirect(env, callback, "/");
 });
 
 strata.run(function (env, callback) {
-    var session = env.session;
+  var session = env.session;
 
-    var content;
-    if (session.userId) {
-        content = 'You are logged in. <a href="/logout">Click here</a> to log out.';
-    } else {
-        content = 'You are logged out. <a href="/login">Click here</a> to log in.';
-    }
+  var content;
+  if (session.userId) {
+    content = 'You are logged in. <a href="/logout">Click here</a> to log out.';
+  } else {
+    content = 'You are logged out. <a href="/login">Click here</a> to log in.';
+  }
 
-    callback(200, {}, content);
+  callback(200, {}, content);
 });
 
 /*

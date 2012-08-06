@@ -26,8 +26,8 @@ anyway.
 The app below demonstrates how to serve any file in the current working
 directory (or any of its subdirectories).
 
-    var path = require("path"),
-        strata = require("strata");
+    var path = require("path");
+    var strata = require("strata");
 
     // Use the current working directory as document root for this example.
     var root = path.resolve(".");
@@ -66,8 +66,8 @@ above and add a `strata.directory` middleware immediately after `strata.file`
 in the middleware pipeline.
 */
 
-var path = require("path"),
-    strata = require("strata");
+var path = require("path");
+var strata = require("strata");
 
 // Use the current working directory as document root for this example.
 var root = path.resolve(".");

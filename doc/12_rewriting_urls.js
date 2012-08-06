@@ -37,8 +37,8 @@ chapter.
 The example app below performs the same function in Strata.
 */
 
-var path = require("path"),
-    strata = require("strata");
+var path = require("path");
+var strata = require("strata");
 
 // For the sake of this example, the root directory where we store static files
 // is the current working directory (i.e. $PWD).
@@ -47,23 +47,23 @@ var root = path.resolve(".");
 // This middleware checks for a file in the given `root` directory that has an
 // ".html" suffix but otherwise corresponds to the path given in the URL.
 function checkHtml(app, root) {
-    return function (env, callback) {
-        var pathInfo = env.pathInfo;
+  return function (env, callback) {
+    var pathInfo = env.pathInfo;
 
-        // Check to see if an .html version of the requested file exists.
-        path.exists(path.join(root, pathInfo) + ".html", function (exists) {
-            if (exists) {
-                // Rewrite env.pathInfo for downstream apps.
-                env.pathInfo = pathInfo + ".html";
-            }
+    // Check to see if an .html version of the requested file exists.
+    path.exists(path.join(root, pathInfo) + ".html", function (exists) {
+      if (exists) {
+        // Rewrite env.pathInfo for downstream apps.
+        env.pathInfo = pathInfo + ".html";
+      }
 
-            app(env, function (status, headers, body) {
-                // Reset the value of pathInfo for upstream apps.
-                env.pathInfo = pathInfo;
-                callback(status, headers, body);
-            });
-        });
-    }
+      app(env, function (status, headers, body) {
+        // Reset the value of pathInfo for upstream apps.
+        env.pathInfo = pathInfo;
+        callback(status, headers, body);
+      });
+    });
+  }
 }
 
 strata.use(strata.commonLogger);

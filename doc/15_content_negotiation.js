@@ -26,14 +26,14 @@ strata.use(strata.contentType, "text/html")
 strata.use(strata.contentLength);
 
 strata.run(function (env, callback) {
-    var req = strata.Request(env);
+  var req = strata.Request(env);
 
-    if (req.accepts("text/html")) {
-        callback(200, {}, "<p>You accept HTML!</p>");
-    } else {
-        var headers = {"Content-Type": "text/plain"};
-        callback(200, headers, "You don't accept HTML. :(");
-    }
+  if (req.accepts("text/html")) {
+    callback(200, {}, "<p>You accept HTML!</p>");
+  } else {
+    var headers = {"Content-Type": "text/plain"};
+    callback(200, headers, "You don't accept HTML. :(");
+  }
 });
 
 /*
