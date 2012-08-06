@@ -31,11 +31,46 @@ The simplest possible Strata app looks like this:
 
 ``` javascript
 function app(env, callback) {
-    callback(200, {}, "Hello world!");
+  callback(200, {}, "Hello world!");
 }
 
 require("strata").run(app);
 ```
+
+As you can see from the example above, a Strata "app" is simply a JavaScript
+function that accepts two arguments: the server environment and a callback. The
+environment contains all sorts of information about the current request
+including headers, POST and session data, and much more. The callback is used
+to send the response. You can read much more about both the environment and the
+callback in the [SPEC](https://raw.github.com/mjijackson/strata/master/SPEC).
+
+A slightly more complex application might look something like the following:
+
+``` javascript
+var strata = require('strata');
+
+strata.use(strata.commonLogger); // Log requests to the console
+strata.use(strata.file, '/path/to/public'); // Serve static files in /path/to/public
+strata.use(strata.contentType, 'text/html'); // Default Content-Type to text/html
+strata.use(strata.contentLength); // Set the Content-Length automatically
+strata.use(strata.sessionCookie, { // Enable cookie-based sessions
+  secret: 'session secret string' // Set a session secret for security
+});
+
+strata.get('/', function (env, callback) {
+  callback(200, {}, 'Hello anonymous!');
+});
+
+strata.get('/:username', function (env, callback) {
+  var route = env.route;
+  callback(200, {}, 'Hello ' + route.username + '!');
+});
+
+// Start the server on port 3000
+strata.run({ port: 3000 });
+```
+
+There are many more usage examples in the [Strata user manual](http://stratajs.org/manual).
 
 ## Documentation
 
