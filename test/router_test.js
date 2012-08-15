@@ -1,7 +1,8 @@
 var assert = require("assert");
 var vows = require("vows");
-var mock = require("./../lib/mock");
-var router = require("./../lib/router");
+var strata = require("../lib");
+var mock = strata.mock;
+var router = strata.router;
 
 vows.describe("router").addBatch({
   "A router middleware": {

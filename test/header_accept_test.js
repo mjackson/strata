@@ -1,9 +1,13 @@
 var assert = require("assert");
 var vows = require("vows");
-var Accept = require("./../lib/header/accept");
+var strata = require("../lib");
+var Accept = strata.Accept;
 
 vows.describe("header/accept").addBatch({
   "An Accept header": {
+    "may be instantiated without using new": function () {
+      assert.instanceOf(Accept(), Accept);
+    },
     "should know its qvalues": function () {
       var header = new Accept("text/html, text/*;q=0.3, */*;q=0.5");
       assert.equal(header.qvalue("image/png"), 0.5);

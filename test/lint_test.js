@@ -1,8 +1,9 @@
 var assert = require("assert");
 var vows = require("vows");
-var mock = require("./../lib/mock");
-var lint = require("./../lib/lint");
-var utils = require("./../lib/utils");
+var strata = require("../lib");
+var utils = strata.utils;
+var mock = strata.mock;
+var lint = strata.lint;
 
 vows.describe("lint").addBatch({
   "A lint middleware": {

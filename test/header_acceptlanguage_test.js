@@ -1,9 +1,13 @@
 var assert = require("assert");
 var vows = require("vows");
-var AcceptLanguage = require("./../lib/header/acceptlanguage");
+var strata = require("../lib");
+var AcceptLanguage = strata.AcceptLanguage;
 
 vows.describe("header/acceptlanguage").addBatch({
   "An AcceptLanguage header": {
+    "may be instantiated without using new": function () {
+      assert.instanceOf(AcceptLanguage(), AcceptLanguage);
+    },
     "should know its qvalues": function () {
       var header = new AcceptLanguage("");
       assert.equal(header.qvalue("en"), 1);

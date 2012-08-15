@@ -1,8 +1,9 @@
+var path = require("path");
+var fs = require("fs");
 var assert = require("assert");
 var vows = require("vows");
-var fs = require("fs");
-var path = require("path");
-var multipart = require("./../lib/multipart");
+var strata = require("../lib");
+var multipart = strata.multipart;
 
 vows.describe("multipart").addBatch({
   "A Parser": {

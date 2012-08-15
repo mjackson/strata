@@ -1,7 +1,8 @@
 var assert = require("assert");
 var vows = require("vows");
-var mock = require("./../lib/mock");
-var cascade = require("./../lib/cascade");
+var strata = require("../lib");
+var mock = strata.mock;
+var cascade = strata.cascade;
 
 vows.describe("cascade").addBatch({
   "A cascade middleware": {

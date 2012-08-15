@@ -1,6 +1,6 @@
 var assert = require("assert");
 var vows = require("vows");
-var strata = require("./../lib");
+var strata = require("../lib");
 var mock = strata.mock;
 var rewrite = strata.rewrite;
 

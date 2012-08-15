@@ -1,9 +1,13 @@
 var assert = require("assert");
 var vows = require("vows");
-var AcceptCharset = require("./../lib/header/acceptcharset");
+var strata = require("../lib");
+var AcceptCharset = strata.AcceptCharset;
 
 vows.describe("header/acceptcharset").addBatch({
   "An AcceptCharset header": {
+    "may be instantiated without using new": function () {
+      assert.instanceOf(AcceptCharset(), AcceptCharset);
+    },
     "should know its qvalues": function () {
       var header = new AcceptCharset("");
       assert.equal(header.qvalue("unicode-1-1"), 0);

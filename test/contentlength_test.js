@@ -1,8 +1,9 @@
 var assert = require("assert");
 var vows = require("vows");
-var mock = require("./../lib/mock");
-var contentLength = require("./../lib/contentlength");
 var BufferedStream = require("bufferedstream");
+var strata = require("../lib");
+var mock = strata.mock;
+var contentLength = strata.contentLength;
 
 vows.describe("contentlength").addBatch({
   "A contentLength middleware": {

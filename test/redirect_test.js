@@ -1,8 +1,8 @@
 var assert = require("assert");
 var vows = require("vows");
-var strata = require("./../lib");
-var redirect = strata.redirect;
+var strata = require("../lib");
 var mock = strata.mock;
+var redirect = strata.redirect;
 
 vows.describe("redirect").addBatch({
   "redirect": {

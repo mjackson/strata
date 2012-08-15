@@ -1,8 +1,9 @@
 var assert = require("assert");
 var vows = require("vows");
-var mock = require("./../lib/mock");
-var urlMap = require("./../lib/urlmap");
-var utils = require("./../lib/utils");
+var strata = require("../lib");
+var utils = strata.utils;
+var mock = strata.mock;
+var urlMap = strata.urlMap;
 
 vows.describe("urlMap").addBatch({
   "A urlMap middleware": {

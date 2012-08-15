@@ -1,7 +1,8 @@
 var assert = require("assert");
 var vows = require("vows");
-var mock = require("./../lib/mock");
-var methodOverride = require("./../lib/methodoverride");
+var strata = require("../lib");
+var mock = strata.mock;
+var methodOverride = strata.methodOverride;
 
 vows.describe("methodoverride").addBatch({
   "A methodOverride middleware": {

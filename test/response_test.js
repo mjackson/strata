@@ -1,6 +1,7 @@
 var assert = require("assert");
 var vows = require("vows");
-var Response = require("./../lib/response");
+var strata = require("../lib");
+var Response = strata.Response;
 
 vows.describe("response").addBatch({
   "A Response": {
@@ -17,6 +18,9 @@ vows.describe("response").addBatch({
       var res = new Response(this.body, this.headers, this.status);
 
       return res;
+    },
+    "may be instantiated without using new": function (res) {
+      assert.instanceOf(Response(), Response);
     },
     "should know its status": function (res) {
       assert.equal(res.status, this.status);

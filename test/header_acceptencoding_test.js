@@ -1,9 +1,13 @@
 var assert = require("assert");
 var vows = require("vows");
-var AcceptEncoding = require("./../lib/header/acceptencoding");
+var strata = require("../lib");
+var AcceptEncoding = strata.AcceptEncoding;
 
 vows.describe("header/acceptencoding").addBatch({
   "An AcceptEncoding header": {
+    "may be instantiated without using new": function () {
+      assert.instanceOf(AcceptEncoding(), AcceptEncoding);
+    },
     "should know its qvalues": function () {
       var header = new AcceptEncoding("");
       assert.equal(header.qvalue("gzip"), 0);

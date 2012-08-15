@@ -1,8 +1,9 @@
 var assert = require("assert");
 var vows = require("vows");
-var mock = require("./../lib/mock");
-var jsonp = require("./../lib/jsonp");
 var BufferedStream = require("bufferedstream");
+var strata = require("../lib");
+var mock = strata.mock;
+var jsonp = strata.jsonp;
 
 vows.describe("jsonp").addBatch({
   "A jsonp middleware": {

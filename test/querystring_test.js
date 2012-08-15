@@ -1,7 +1,8 @@
+var qs = require("querystring");
 var assert = require("assert");
 var vows = require("vows");
-var qs = require("querystring");
-var querystring = require("./../lib/querystring");
+var strata = require("../lib");
+var querystring = strata.querystring;
 
 vows.describe("querystring").addBatch({
   "A Parser": {

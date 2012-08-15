@@ -1,9 +1,10 @@
+var qs = require("querystring");
 var assert = require("assert");
 var vows = require("vows");
-var qs = require("querystring");
-var Request = require("./../lib/request");
-var mock = require("./../lib/mock");
 var BufferedStream = require("bufferedstream");
+var strata = require("../lib");
+var mock = strata.mock;
+var Request = strata.Request;
 
 vows.describe("request").addBatch({
   "A Request": {
@@ -45,6 +46,9 @@ vows.describe("request").addBatch({
       var req = new Request(env);
 
       return req;
+    },
+    "may be instantiated without using new": function (req) {
+      assert.instanceOf(Request(), Request);
     },
     "should know its protocol": function (req) {
       assert.equal(req.protocol, this.protocol);

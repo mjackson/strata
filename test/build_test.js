@@ -1,8 +1,9 @@
 var assert = require("assert");
 var vows = require("vows");
 var path = require("path");
-var mock = require("./../lib/mock");
-var build = require("./../lib/build");
+var strata = require("../lib");
+var mock = strata.mock;
+var build = strata.build;
 
 vows.describe("build").addBatch({
   "A build middleware": {

@@ -1,8 +1,9 @@
 var assert = require("assert");
 var vows = require("vows");
-var mock = require("./../lib/mock");
-var commonLogger = require("./../lib/commonlogger");
-var utils = require("./../lib/utils");
+var strata = require("../lib");
+var utils = strata.utils;
+var mock = strata.mock;
+var commonLogger = strata.commonLogger;
 
 vows.describe("commonlogger").addBatch({
   "A commonLogger middleware": {

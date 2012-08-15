@@ -1,8 +1,9 @@
 var assert = require("assert");
 var vows = require("vows");
-var mock = require("./../lib/mock");
-var utils = require("./../lib/utils");
-var timeout = require("./../lib/timeout");
+var strata = require("../lib");
+var mock = strata.mock;
+var utils = strata.utils;
+var timeout = strata.timeout;
 
 vows.describe("timeout").addBatch({
   "A timeout middleware": {

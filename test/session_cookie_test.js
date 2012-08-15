@@ -1,7 +1,8 @@
 var assert = require("assert");
 var vows = require("vows");
-var mock = require("./../lib/mock");
-var sessionCookie = require("./../lib/session/cookie");
+var strata = require("../lib");
+var mock = strata.mock;
+var sessionCookie = strata.sessionCookie;
 
 vows.describe("session/cookie").addBatch({
   "A sessionCookie middleware": {

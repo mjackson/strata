@@ -1,8 +1,9 @@
 var assert = require("assert");
 var vows = require("vows");
-var mock = require("./../lib/mock");
-var authBasic = require("./../lib/auth/basic");
-var utils = require("./../lib/utils");
+var strata = require("../lib");
+var utils = strata.utils;
+var mock = strata.mock;
+var authBasic = strata.authBasic;
 
 vows.describe("auth/basic").addBatch({
   "An authBasic middleware": {

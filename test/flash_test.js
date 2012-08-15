@@ -1,7 +1,8 @@
 var assert = require("assert");
 var vows = require("vows");
-var mock = require("./../lib/mock");
-var flash = require("./../lib/flash");
+var strata = require("../lib");
+var mock = strata.mock;
+var flash = strata.flash;
 
 vows.describe("flash").addBatch({
   "A flash middleware": {
