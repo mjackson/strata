@@ -6,7 +6,7 @@
     "keywords": ["web", "server", "framework", "middleware", "rack", "jsgi", "wsgi"],
     "homepage": "http://stratajs.org",
     "engines": {
-        "node": ">= 0.4.7"
+        "node": ">= 0.6.0"
     },
     "repository": {
         "type": "git",

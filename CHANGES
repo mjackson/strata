@@ -2,6 +2,7 @@
 
   * Added the ability to pass a callback as the second argument to a build
     middleware. This callback receives the build as its only argument.
+  * Require node >= 0.6.0.
 
 = 0.15.1 / 2012-05-31
 
