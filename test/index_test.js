@@ -164,12 +164,18 @@ vows.describe("index").addBatch({
   },
   "A strata.Error": {
     topic: new strata.Error("Bang!"),
+    "may be instantiated without using new": function () {
+      assert.instanceOf(strata.Error(), strata.Error);
+    },
     "should be an instance of Error": function (err) {
       assert.instanceOf(err, Error);
     }
   },
   "A strata.InvalidRequestBodyError": {
     topic: new strata.InvalidRequestBodyError("Bang!"),
+    "may be instantiated without using new": function () {
+      assert.instanceOf(strata.InvalidRequestBodyError(), strata.InvalidRequestBodyError);
+    },
     "should be an instance of Error": function (err) {
       assert.instanceOf(err, Error);
     },
