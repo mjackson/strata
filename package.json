@@ -1,33 +1,33 @@
 {
-    "name": "strata",
-    "version": "0.15.1",
-    "author": "Michael Jackson <mjijackson@gmail.com>",
-    "description": "A modular, streaming HTTP server",
-    "keywords": ["web", "server", "framework", "middleware", "rack", "jsgi", "wsgi"],
-    "homepage": "http://stratajs.org",
-    "engines": {
-        "node": ">= 0.6.0"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/mjijackson/strata.git"
-    },
-    "dependencies": {
-        "usererror": "~1.0.1",
-        "bufferedstream": "~1.0.1",
-        "mime": "1.2.3",
-        "strftime": "0.4.6",
-        "markdown": "~0.3.1"
-    },
-    "devDependencies": {
-        "vows": "0.6.0",
-        "mustache": "0.3.1-dev"
-    },
-    "main": "./lib",
-    "bin": {
-        "strata": "./bin/strata"
-    },
-    "scripts": {
-        "test": "vows test/*_test.js"
-    }
+  "name": "strata",
+  "version": "0.15.1",
+  "author": "Michael Jackson <mjijackson@gmail.com>",
+  "description": "A modular, streaming HTTP server",
+  "keywords": ["web", "server", "framework", "middleware", "rack", "jsgi", "wsgi"],
+  "homepage": "http://stratajs.org",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mjijackson/strata.git"
+  },
+  "dependencies": {
+    "usererror": "~1.0.1",
+    "bufferedstream": "~1.0.1",
+    "mime": "1.2.3",
+    "strftime": "0.4.6",
+    "markdown": "~0.3.1"
+  },
+  "devDependencies": {
+    "vows": "0.6.0",
+    "mustache": "0.3.1-dev"
+  },
+  "main": "./lib",
+  "bin": {
+    "strata": "./bin/strata"
+  },
+  "scripts": {
+    "test": "vows test/*_test.js"
+  }
 }
