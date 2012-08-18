@@ -1,3 +1,7 @@
+= 0.16.1
+
+  * Fixed a file name in a require call.
+
 = 0.16.0
 
   * Added the ability to pass a callback as the second argument to a build
