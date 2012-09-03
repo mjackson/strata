@@ -15,7 +15,7 @@ vows.describe("cascade").addBatch({
 
       var app = cascade(apps, 404);
 
-      mock.request("", app, this.callback);
+      mock.call(app, '/', this.callback);
     },
     "should return the response of the first app": function (err, status, headers, body) {
       assert.ok(headers["X-Number"]);

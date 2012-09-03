@@ -10,7 +10,7 @@ vows.describe("auth/basic").addBatch({
     "when no validation function is given": {
       "should throw": function () {
         assert.throws(function () {
-          var app = authBasic(utils.empty);
+          var app = authBasic(utils.ok);
         }, /validation function/);
       }
     },
@@ -20,15 +20,15 @@ vows.describe("auth/basic").addBatch({
         var pass = "s3krit";
         var credentials = new Buffer(user + ":" + pass).toString("base64");
 
-        var app = authBasic(utils.empty, function (user, pass, callback) {
+        var app = authBasic(utils.ok, function (user, pass, callback) {
           callback(null, false);
         });
 
-        mock.request({
+        mock.call(app, mock.env({
           headers: {
             "Authorization": "Basic " + credentials
           }
-        }, app, this.callback);
+        }), this.callback);
       },
       "should return 401": function (err, status, headers, body) {
         assert.equal(status, 401);
@@ -50,11 +50,11 @@ vows.describe("auth/basic").addBatch({
           callback(null, user);
         });
 
-        mock.request({
+        mock.call(app, mock.env({
           headers: {
             "Authorization": "Basic " + credentials
           }
-        }, app, this.callback);
+        }), this.callback);
       },
       "should pass the request downstream": function (err, status, headers, body) {
         assert.equal(status, 200);

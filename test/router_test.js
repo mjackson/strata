@@ -29,7 +29,7 @@ vows.describe("router").addBatch({
     },
     "when a match cannot be made": {
       topic: function (app) {
-        mock.request("", app, this.callback);
+        mock.call(app, '/', this.callback);
       },
       "should return 404": function (err, status, headers, body) {
         assert.equal(status, 404);
@@ -37,7 +37,7 @@ vows.describe("router").addBatch({
     },
     "when /users/1 is requested": {
       topic: function (app) {
-        mock.request("/users/1", app, this.callback);
+        mock.call(app, "/users/1", this.callback);
       },
       "should call the correct app": function (err, status, headers, body) {
         assert.ok(headers["X-Route"]);
@@ -50,7 +50,7 @@ vows.describe("router").addBatch({
     },
     "when /posts/1 is requested": {
       topic: function (app) {
-        mock.request("/posts/1", app, this.callback);
+        mock.call(app, "/posts/1", this.callback);
       },
       "should call the correct app": function (err, status, headers, body) {
         assert.ok(headers["X-Route"]);
@@ -63,10 +63,10 @@ vows.describe("router").addBatch({
     },
     "when POST /posts/2 is requested": {
       topic: function (app) {
-        mock.request({
+        mock.call(app, mock.env({
           requestMethod: "POST",
           pathInfo: "/posts/2"
-        }, app, this.callback);
+        }), this.callback);
       },
       "should call the correct app": function (err, status, headers, body) {
         assert.ok(headers["X-Route"]);
@@ -79,10 +79,10 @@ vows.describe("router").addBatch({
     },
     "when DELETE /posts/3 is requested": {
       topic: function (app) {
-        mock.request({
+        mock.call(app, mock.env({
           requestMethod: "DELETE",
           pathInfo: "/posts/3"
-        }, app, this.callback);
+        }), this.callback);
       },
       "should call the correct app": function (err, status, headers, body) {
         assert.ok(headers["X-Route"]);
@@ -95,10 +95,10 @@ vows.describe("router").addBatch({
     },
     "when PUT /posts/1 is requested": {
       topic: function (app) {
-        mock.request({
+        mock.call(app, mock.env({
           requestMethod: "PUT",
           pathInfo: "/posts/1"
-        }, app, this.callback);
+        }), this.callback);
       },
       "should return 404": function (err, status, headers, body) {
         assert.equal(status, 404);
@@ -115,7 +115,7 @@ vows.describe("router").addBatch({
       },
       "when that route matches": {
         topic: function (app) {
-          mock.request("/path", app, this.callback);
+          mock.call(app, "/path", this.callback);
         },
         "should cascade to the next route": function (err, status, headers, body) {
           assert.ok(headers["X-Id"]);
@@ -124,7 +124,7 @@ vows.describe("router").addBatch({
       },
       "when no routes match": {
         topic: function (app) {
-          mock.request("/", app, this.callback);
+          mock.call(app, "/", this.callback);
         },
         "should return a 404 (default app)": function (err, status, headers, body) {
           assert.equal(status, 404);

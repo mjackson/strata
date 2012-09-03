@@ -13,7 +13,7 @@ vows.describe("contenttype").addBatch({
         callback(200, {}, "");
       }, this.type);
 
-      mock.request("", app, this.callback);
+      mock.call(app, '/', this.callback);
     },
     "should add a Content-Type header": function (err, status, headers, body) {
       assert.strictEqual(headers["Content-Type"], this.type);

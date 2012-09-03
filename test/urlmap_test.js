@@ -9,7 +9,7 @@ vows.describe("urlMap").addBatch({
   "A urlMap middleware": {
     topic: function () {
       var app = urlMap();
-      mock.request("", app, this.callback);
+      mock.call(app, '/', this.callback);
     },
     "should return 404 by default": function (err, status, headers, body) {
       assert.equal(status, 404);
@@ -32,7 +32,7 @@ vows.describe("urlMap").addBatch({
       },
       "when / is requested": {
         topic: function (app) {
-          mock.request("/", app, this.callback);
+          mock.call(app, "/", this.callback);
         },
         "should return 404": function (err, status, headers, body) {
           assert.equal(status, 404);
@@ -40,7 +40,7 @@ vows.describe("urlMap").addBatch({
       },
       "when /foo is requested": {
         topic: function (app) {
-          mock.request("/foo", app, this.callback);
+          mock.call(app, "/foo", this.callback);
         },
         "should return 404": function (err, status, headers, body) {
           assert.equal(status, 404);
@@ -48,7 +48,7 @@ vows.describe("urlMap").addBatch({
       },
       "when /path is requested": {
         topic: function (app) {
-          mock.request("/path", app, this.callback);
+          mock.call(app, "/path", this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -62,7 +62,7 @@ vows.describe("urlMap").addBatch({
       },
       "when /path/ is requested": {
         topic: function (app) {
-          mock.request("/path/", app, this.callback);
+          mock.call(app, "/path/", this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -76,7 +76,7 @@ vows.describe("urlMap").addBatch({
       },
       "when /some/path is requested": {
         topic: function (app) {
-          mock.request("/some/path", app, this.callback);
+          mock.call(app, "/some/path", this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -90,7 +90,7 @@ vows.describe("urlMap").addBatch({
       },
       "when /some/path/ is requested": {
         topic: function (app) {
-          mock.request("/some/path/", app, this.callback);
+          mock.call(app, "/some/path/", this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -104,7 +104,7 @@ vows.describe("urlMap").addBatch({
       },
       "when /some///path//name is requested": {
         topic: function (app) {
-          mock.request("/some///path//name", app, this.callback);
+          mock.call(app, "/some///path//name", this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -118,10 +118,10 @@ vows.describe("urlMap").addBatch({
       },
       "when scriptName is /elsewhere and pathInfo is /path/name": {
         topic: function (app) {
-          mock.request({
+          mock.call(app, mock.env({
             scriptName: "/elsewhere",
             pathInfo: "/path/name"
-          }, app, this.callback);
+          }), this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -135,12 +135,12 @@ vows.describe("urlMap").addBatch({
       },
       "when pathInfo is /static and httpHost is example.org": {
         topic: function (app) {
-          mock.request({
+          mock.call(app, mock.env({
             pathInfo: "/static",
             headers: {
               "Host": "example.org"
             }
-          }, app, this.callback);
+          }), this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -154,12 +154,12 @@ vows.describe("urlMap").addBatch({
       },
       "when pathInfo is /static/ and httpHost is example.org": {
         topic: function (app) {
-          mock.request({
+          mock.call(app, mock.env({
             pathInfo: "/static/",
             headers: {
               "Host": "example.org"
             }
-          }, app, this.callback);
+          }), this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -207,7 +207,7 @@ vows.describe("urlMap").addBatch({
       },
       "when / is requested": {
         topic: function (app) {
-          mock.request("/", app, this.callback);
+          mock.call(app, "/", this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -218,12 +218,12 @@ vows.describe("urlMap").addBatch({
       },
       "when pathInfo is / and httpHost is example.org": {
         topic: function (app) {
-          mock.request({
+          mock.call(app, mock.env({
             pathInfo: "/",
             headers: {
               "Host": "example.org"
             }
-          }, app, this.callback);
+          }), this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -234,12 +234,12 @@ vows.describe("urlMap").addBatch({
       },
       "when pathInfo is / and httpHost is example.org": {
         topic: function (app) {
-          mock.request({
+          mock.call(app, mock.env({
             pathInfo: "/",
             headers: {
               "Host": "example.net"
             }
-          }, app, this.callback);
+          }), this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -250,13 +250,13 @@ vows.describe("urlMap").addBatch({
       },
       "when serverName is example.org, pathInfo is /, and httpHost is subdomain.example.org": {
         topic: function (app) {
-          mock.request({
+          mock.call(app, mock.env({
             serverName: "example.org",
             pathInfo: "/",
             headers: {
               "Host": "subdomain.example.org"
             }
-          }, app, this.callback);
+          }), this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -267,7 +267,7 @@ vows.describe("urlMap").addBatch({
       },
       "when http://example.org/ is requested": {
         topic: function (app) {
-          mock.request("http://example.org/", app, this.callback);
+          mock.call(app, "http://example.org/", this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -278,13 +278,13 @@ vows.describe("urlMap").addBatch({
       },
       "when serverName is example.info, pathInfo is /, and httpHost is example.info": {
         topic: function (app) {
-          mock.request({
+          mock.call(app, mock.env({
             serverName: "example.info",
             pathInfo: "/",
             headers: {
               "Host": "example.info"
             }
-          }, app, this.callback);
+          }), this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -295,14 +295,14 @@ vows.describe("urlMap").addBatch({
       },
       "when serverName is example.info, serverPort is 9292, pathInfo is /, and httpHost is example.info:9292": {
         topic: function (app) {
-          mock.request({
+          mock.call(app, mock.env({
             serverName: "example.info",
             serverPort: "9292",
             pathInfo: "/",
             headers: {
               "Host": "example.info:9292"
             }
-          }, app, this.callback);
+          }), this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -331,7 +331,7 @@ vows.describe("urlMap").addBatch({
       },
       "when /some/path is requested": {
         topic: function (app) {
-          mock.request("/some/path", app, this.callback);
+          mock.call(app, "/some/path", this.callback);
         },
         "should return 404": function (err, status, headers, body) {
           assert.equal(status, 404);
@@ -339,7 +339,7 @@ vows.describe("urlMap").addBatch({
       },
       "when /some/path/name is requested": {
         topic: function (app) {
-          mock.request("/some/path/name", app, this.callback);
+          mock.call(app, "/some/path/name", this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -378,7 +378,7 @@ vows.describe("urlMap").addBatch({
       },
       "when /path is requested": {
         topic: function (app) {
-          mock.request("/path", app, this.callback);
+          mock.call(app, "/path", this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -395,7 +395,7 @@ vows.describe("urlMap").addBatch({
       },
       "when /path/name is requested": {
         topic: function (app) {
-          mock.request("/path/name", app, this.callback);
+          mock.call(app, "/path/name", this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -412,7 +412,7 @@ vows.describe("urlMap").addBatch({
       },
       "when / is requested": {
         topic: function (app) {
-          mock.request("/", app, this.callback);
+          mock.call(app, "/", this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -429,7 +429,7 @@ vows.describe("urlMap").addBatch({
       },
       "when /name is requested": {
         topic: function (app) {
-          mock.request("/name", app, this.callback);
+          mock.call(app, "/name", this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);
@@ -446,7 +446,7 @@ vows.describe("urlMap").addBatch({
       },
       "when /http://example.org/another is requested": {
         topic: function (app) {
-          mock.request("/http://example.org/another", app, this.callback);
+          mock.call(app, "/http://example.org/another", this.callback);
         },
         "should return 200": function (err, status, headers, body) {
           assert.equal(status, 200);

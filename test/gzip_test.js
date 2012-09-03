@@ -22,11 +22,11 @@ vows.describe("gzip").addBatch({
           callback(200, { "Content-Type": "text/plain" }, body);
         });
 
-        mock.request({
+        mock.call(app, mock.env({
           headers: {
             "Accept-Encoding": "gzip, *"
           }
-        }, app, this.callback);
+        }), this.callback);
       },
       "should gzip encode it": function (err, status, headers, body) {
         assert.equal(headers["Content-Encoding"], "gzip");
@@ -44,11 +44,11 @@ vows.describe("gzip").addBatch({
           callback(200, { "Content-Type": "text/plain" }, body);
         });
 
-        mock.request({
+        mock.call(app, mock.env({
           headers: {
             "Accept-Encoding": "gzip, *"
           }
-        }, app, this.callback);
+        }), this.callback);
       },
       "should gzip encode it": function (err, status, headers, body) {
         assert.equal(headers["Content-Encoding"], "gzip");
@@ -64,12 +64,12 @@ vows.describe("gzip").addBatch({
         app = file(app, path.resolve(__dirname, "_files"));
         app = gzip(app);
 
-        mock.request({
+        mock.call(app, mock.env({
           pathInfo: "/test.txt",
           headers: {
             "Accept-Encoding": "gzip, *"
           }
-        }, app, this.callback);
+        }), this.callback);
       },
       "should gzip encode it": function (err, status, headers, body) {
         assert.equal(headers["Content-Encoding"], "gzip");
@@ -86,7 +86,7 @@ vows.describe("gzip").addBatch({
           callback(200, { "Content-Type": "text/plain" }, self.body);
         });
 
-        mock.request("", app, this.callback);
+        mock.call(app, '/', this.callback);
       },
       "should not encode the body": function (err, status, headers, body) {
         assert.equal(headers["Content-Type"], "text/plain");

@@ -8,7 +8,7 @@ var lint = strata.lint;
 vows.describe("lint").addBatch({
   "A lint middleware": {
     "should detect an invalid caller": function () {
-      var app = lint(utils.empty);
+      var app = lint(utils.ok);
       assert.throws(function () {
         app(); // Call the downstream app with no arguments.
       }, /two arguments/);
@@ -22,7 +22,7 @@ vows.describe("lint").addBatch({
       }, /three arguments/);
     },
     "should detect an invalid environment": function () {
-      var app = lint(utils.empty);
+      var app = lint(utils.ok);
 
       assert.throws(function () {
         app("", function (status, headers, body) {});
@@ -114,7 +114,7 @@ vows.describe("lint").addBatch({
       }, /error must be a Stream/);
     },
     "should detect an invalid callback": function () {
-      var app = lint(utils.empty);
+      var app = lint(utils.ok);
 
       assert.throws(function () {
         app(mock.env(), "");
@@ -213,7 +213,7 @@ vows.describe("lint").addBatch({
 }).export(module);
 
 function assertRequiredProperty(property) {
-  var app = lint(utils.empty);
+  var app = lint(utils.ok);
   var matcher = new RegExp('missing required property "' + property + '"');
   assert.throws(function () {
     var env = mock.env();
@@ -223,7 +223,7 @@ function assertRequiredProperty(property) {
 }
 
 function assertStringProperty(property) {
-  var app = lint(utils.empty);
+  var app = lint(utils.ok);
   var matcher = new RegExp('"' + property + '" must be a string');
   assert.throws(function () {
     var env = mock.env();

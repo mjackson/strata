@@ -11,7 +11,7 @@ vows.describe("flash").addBatch({
         callback(200, {
           "Content-Type": "text/plain",
           "Content-Length": "0",
-          "X-EnvFlash": String(env.flash)
+          "X-Env-Flash": String(env.flash)
         }, "");
       });
 
@@ -25,8 +25,8 @@ vows.describe("flash").addBatch({
         mock.call(app, env, this.callback);
       },
       "should set the flash environment variable": function (err, status, headers, body) {
-        assert.ok(headers["X-EnvFlash"]);
-        assert.equal(headers["X-EnvFlash"], this.flash);
+        assert.ok(headers["X-Env-Flash"]);
+        assert.equal(headers["X-Env-Flash"], this.flash);
       }
     }
   }

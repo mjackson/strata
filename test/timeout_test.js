@@ -11,11 +11,11 @@ vows.describe("timeout").addBatch({
       var app = timeout(function (env, callback) {
         // Wait 20ms before sending the response.
         setTimeout(function () {
-          utils.empty(env, callback);
+          utils.ok(env, callback);
         }, 20);
       }, 10);
 
-      mock.request("/", app, this.callback);
+      mock.call(app, "/", this.callback);
     },
     "should timeout the request properly": function (err, status, headers, body) {
       assert.equal(status, 500);

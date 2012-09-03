@@ -39,7 +39,7 @@ vows.describe("build").addBatch({
     },
     "when a non-existent route is requested": {
       topic: function (app) {
-        mock.request("/doesnt-exist", app, this.callback);
+        mock.call(app, "/doesnt-exist", this.callback);
       },
       "should call all middleware": function (err, status, headers, body) {
         assert.equal(headers["X-Count"], "3");
@@ -50,7 +50,7 @@ vows.describe("build").addBatch({
     },
     "when /one is requested": {
       topic: function (app) {
-        mock.request("/one", app, this.callback);
+        mock.call(app, "/one", this.callback);
       },
       "should call all middleware in front of the call to map": function (err, status, headers, body) {
         assert.equal(headers["X-Count"], "1");
@@ -61,7 +61,7 @@ vows.describe("build").addBatch({
     },
     "when /two is requested": {
       topic: function (app) {
-        mock.request("/two", app, this.callback);
+        mock.call(app, "/two", this.callback);
       },
       "should call all middleware in front of the call to map": function (err, status, headers, body) {
         assert.equal(headers["X-Count"], "2");

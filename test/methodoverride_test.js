@@ -18,7 +18,7 @@ vows.describe("methodoverride").addBatch({
     },
     "when using GET": {
       topic: function (app) {
-        mock.request("/?_method=put", app, this.callback);
+        mock.call(app, "/?_method=put", this.callback);
       },
       "should return 200": function (err, status, headers, body) {
         assert.equal(status, 200);
@@ -29,10 +29,10 @@ vows.describe("methodoverride").addBatch({
     },
     "when using POST with a method in the queryString": {
       topic: function (app) {
-        mock.request({
+        mock.call(app, mock.env({
           requestMethod: "POST",
           queryString: "_method=put"
-        }, app, this.callback);
+        }), this.callback);
       },
       "should return 200": function (err, status, headers, body) {
         assert.equal(status, 200);
@@ -43,10 +43,10 @@ vows.describe("methodoverride").addBatch({
     },
     "when using POST with a method in the post body": {
       topic: function (app) {
-        mock.request({
+        mock.call(app, mock.env({
           requestMethod: "POST",
           input: "_method=put"
-        }, app, this.callback);
+        }), this.callback);
       },
       "should return 200": function (err, status, headers, body) {
         assert.equal(status, 200);
@@ -57,12 +57,12 @@ vows.describe("methodoverride").addBatch({
     },
     "when using POST with a method in the HTTP headers": {
       topic: function (app) {
-        mock.request({
+        mock.call(app, mock.env({
           requestMethod: "POST",
           headers: {
             "X-Http-Method-Override": "put"
           }
-        }, app, this.callback);
+        }), this.callback);
       },
       "should return 200": function (err, status, headers, body) {
         assert.equal(status, 200);

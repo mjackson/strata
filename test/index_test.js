@@ -142,24 +142,24 @@ vows.describe("index").addBatch({
       var app = function (env, callback) {
         innerApp(env, function (status, headers, body) {
           process.nextTick(function () {
-            headers["X-ReturnType"] = typeof returnValue;
+            headers["X-Return-Type"] = typeof returnValue;
             callback(status, headers, body);
           });
         });
       };
 
-      mock.request(env, app, this.callback);
+      mock.call(app, env, this.callback);
     },
     "should return a boolean": function (err, status, headers, body) {
-      assert.ok(headers["X-ReturnType"]);
-      assert.equal(headers["X-ReturnType"], "boolean");
+      assert.ok(headers["X-Return-Type"]);
+      assert.equal(headers["X-Return-Type"], "boolean");
     },
     "should set a 500 status": function (err, status, headers, body) {
       assert.equal(status, 500);
     },
     "should write to env.error": function () {
       assert.ok(this.data);
-      assert.match(this.data, /Unhandled error/);
+      assert.match(this.data, /unhandled error/i);
     }
   },
   "A strata.Error": {

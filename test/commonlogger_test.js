@@ -11,13 +11,13 @@ vows.describe("commonlogger").addBatch({
       this.output = "";
 
       var self = this;
-      var app = commonLogger(utils.empty, {
+      var app = commonLogger(utils.ok, {
         write: function (message) {
           self.output += message;
         }
       });
 
-      mock.request("", app, this.callback);
+      mock.call(app, '/', this.callback);
     },
     "should log the request": function (err, status, headers, body) {
       assert.match(this.output, /GET \/.+200/);

@@ -21,7 +21,7 @@ vows.describe("rewrite").addBatch({
     },
     "when /abc is requested": {
       topic: function (app) {
-        mock.request("/abc", app, this.callback);
+        mock.call(app, "/abc", this.callback);
       },
       "should rewrite properly": function (err, status, headers, body) {
         assert.ok(headers["X-PathInfo"]);
@@ -30,7 +30,7 @@ vows.describe("rewrite").addBatch({
     },
     "when /def is requested": {
       topic: function (app) {
-        mock.request("/def", app, this.callback);
+        mock.call(app, "/def", this.callback);
       },
       "should rewrite properly": function (err, status, headers, body) {
         assert.ok(headers["X-PathInfo"]);
@@ -39,7 +39,7 @@ vows.describe("rewrite").addBatch({
     },
     "when /def/path/def is requested": {
       topic: function (app) {
-        mock.request("/def/path/def", app, this.callback);
+        mock.call(app, "/def/path/def", this.callback);
       },
       "should rewrite properly": function (err, status, headers, body) {
         assert.ok(headers["X-PathInfo"]);

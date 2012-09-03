@@ -11,7 +11,7 @@ vows.describe("directory").addBatch({
     "when the request targets a directory that is present": {
       topic: function () {
         var app = directory(utils.notFound, __dirname);
-        mock.request("/_files", app, this.callback);
+        mock.call(app, "/_files", this.callback);
       },
       "should return a directory listing of that directory": function (err, status, headers, body) {
         assert.equal(status, 200);
@@ -20,7 +20,7 @@ vows.describe("directory").addBatch({
     "when the request targets a directory that is not present": {
       topic: function () {
         var app = directory(utils.notFound, __dirname);
-        mock.request("/non-existant", app, this.callback);
+        mock.call(app, "/non-existant", this.callback);
       },
       "should pass the request downstream": function (err, status, headers, body) {
         assert.equal(status, 404);
@@ -29,7 +29,7 @@ vows.describe("directory").addBatch({
     "when the request targets a file that is present": {
       topic: function () {
         var app = directory(utils.notFound, __dirname);
-        mock.request("/" + path.basename(__filename), app, this.callback);
+        mock.call(app, "/" + path.basename(__filename), this.callback);
       },
       "should pass the request downstream": function (err, status, headers, body) {
         assert.equal(status, 404);

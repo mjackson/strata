@@ -16,7 +16,7 @@ vows.describe("contentlength").addBatch({
           callback(200, { "Content-Type": "text/plain" }, self.body);
         });
 
-        mock.request("", app, this.callback);
+        mock.call(app, '/', this.callback);
       },
       "should add a Content-Length header": function (err, status, headers, body) {
         var length = this.body.length.toString();
@@ -32,9 +32,9 @@ vows.describe("contentlength").addBatch({
           callback(200, { "Content-Type": "text/plain" }, self.body);
         });
 
-        mock.request({
-          error: mock.stream(this),
-        }, app, this.callback);
+        mock.call(app, mock.env({
+          error: mock.stream(this)
+        }), this.callback);
       },
       "should write to error": function (err) {
         assert.match(this.data, /body with no length/);

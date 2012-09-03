@@ -18,7 +18,7 @@ vows.describe("file").addBatch({
     "when a static file is requested": {
       topic: function (app) {
         this.body = fs.readFileSync(path.join(root, "text"), "utf8");
-        mock.request("/text", app, this.callback);
+        mock.call(app, "/text", this.callback);
       },
       "should return a 200": function (err, status, headers, body) {
         assert.equal(status, 200);
@@ -33,7 +33,7 @@ vows.describe("file").addBatch({
     "when a directory is requested": {
       topic: function (app) {
         this.body = fs.readFileSync(path.join(root, "index.html"), "utf8");
-        mock.request("/", app, this.callback);
+        mock.call(app, "/", this.callback);
       },
       "should return a 200": function (err, status, headers, body) {
         assert.equal(status, 200);
@@ -47,7 +47,7 @@ vows.describe("file").addBatch({
     },
     "when a matching file cannot be found": {
       topic: function (app) {
-        mock.request("/does-not-exist", app, this.callback);
+        mock.call(app, "/does-not-exist", this.callback);
       },
       "should forward the request to the downstream app": function (err, status, headers, body) {
         assert.equal(status, 404);
@@ -55,7 +55,7 @@ vows.describe("file").addBatch({
     },
     "when the path contains ..": {
       topic: function (app) {
-        mock.request("/../etc/passwd", app, this.callback);
+        mock.call(app, "/../etc/passwd", this.callback);
       },
       "should respond with a 403": function (err, status, headers, body) {
         assert.equal(status, 403);
@@ -69,7 +69,7 @@ vows.describe("file").addBatch({
     "when a directory is requested": {
       topic: function (app) {
         this.body = fs.readFileSync(path.join(root, "index.html"), "utf8");
-        mock.request("/", app, this.callback);
+        mock.call(app, "/", this.callback);
       },
       "should return a 200": function (err, status, headers, body) {
         assert.equal(status, 200);

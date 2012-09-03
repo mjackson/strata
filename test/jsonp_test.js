@@ -16,7 +16,7 @@ vows.describe("jsonp").addBatch({
           callback(200, { "Content-Type": "application/json" }, self.body);
         });
 
-        mock.request("", app, this.callback);
+        mock.call(app, '/', this.callback);
       },
       "should wrap it in a JavaScript callback": function (err, status, headers, body) {
         assert.equal(headers["Content-Type"], "application/javascript");
@@ -32,7 +32,7 @@ vows.describe("jsonp").addBatch({
             callback(200, { "Content-Type": "application/json" }, self.body);
           }, "aCallback");
 
-          mock.request("", app, this.callback);
+          mock.call(app, '/', this.callback);
         },
         "should wrap it in a JavaScript callback with that name": function (err, status, headers, body) {
           assert.equal(headers["Content-Type"], "application/javascript");
@@ -48,7 +48,7 @@ vows.describe("jsonp").addBatch({
               callback(200, { "Content-Type": "application/json" }, self.body);
             }, "aCallback");
 
-            mock.request("/?callback=customCallback", app, this.callback);
+            mock.call(app, "/?callback=customCallback", this.callback);
           },
           "should wrap it in a JavaScript callback with the name in that parameter": function (err, status, headers, body) {
             assert.equal(headers["Content-Type"], "application/javascript");
@@ -68,7 +68,7 @@ vows.describe("jsonp").addBatch({
           callback(200, { "Content-Type": "application/json" }, stream);
         });
 
-        mock.request("", app, this.callback);
+        mock.call(app, '/', this.callback);
       },
       "should wrap it in a JavaScript callback": function (err, status, headers, body) {
         assert.equal(headers["Content-Type"], "application/javascript");

@@ -14,7 +14,7 @@ vows.describe("redirect").addBatch({
         redirect(env, callback, self.location);
       };
 
-      mock.request("", app, this.callback);
+      mock.call(app, '/', this.callback);
     },
     "should return a 302": function (err, status, headers, body) {
       assert.equal(status, 302);
@@ -42,7 +42,7 @@ vows.describe("redirect").addBatch({
         redirect.forward(env, callback, self.location);
       });
 
-      mock.request("/admin", app, this.callback);
+      mock.call(app, "/admin", this.callback);
     },
     "should return a 302": function (err, status, headers, body) {
       assert.equal(status, 302);
@@ -76,7 +76,7 @@ vows.describe("redirect").addBatch({
         redirect.back(env, callback);
       });
 
-      mock.request("", app, this.callback);
+      mock.call(app, '/', this.callback);
     },
     "should return a 302": function (err, status, headers, body) {
       assert.equal(status, 302);

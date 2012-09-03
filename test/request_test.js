@@ -177,14 +177,16 @@ vows.describe("request").addBatch({
         this.cookie = "a=1, a=2,b=3";
 
         var self = this;
-        mock.request({
+        var app = function (env, callback) {
+          var req = new Request(env);
+          req.cookies(self.callback);
+        };
+
+        mock.call(app, mock.env({
           headers: {
             "Cookie": this.cookie
           }
-        }, function (env, callback) {
-          var req = new Request(env);
-          req.cookies(self.callback);
-        });
+        }), noop);
       },
       "should parse them correctly": function (cookies) {
         assert.deepEqual(cookies, { a: "1", b: "3" });
@@ -195,10 +197,12 @@ vows.describe("request").addBatch({
         this.queryString = "a=1&a=2&b=3";
 
         var self = this;
-        mock.request("/?" + this.queryString, function (env, callback) {
+        var app = function (env, callback) {
           var req = new Request(env);
           req.query(self.callback);
-        });
+        };
+
+        mock.call(app, '/?' + this.queryString, noop);
       },
       "should parse it correctly": function (query) {
         assert.deepEqual(query, qs.parse(this.queryString));
@@ -209,16 +213,18 @@ vows.describe("request").addBatch({
         this.body = "This is some plain text.";
 
         var self = this;
-        mock.request({
+        var app = function (env, callback) {
+          var req = new Request(env);
+          req.body(self.callback);
+        };
+
+        mock.call(app, mock.env({
           headers: {
             "Content-Type": "text/plain",
             "Content-Length": this.body.length.toString(10)
           },
           input: new BufferedStream(this.body)
-        }, function (env, callback) {
-          var req = new Request(env);
-          req.body(self.callback);
-        });
+        }), noop);
       },
       "should pass through unparsed": function (body) {
         assert.equal(body, this.body);
@@ -229,16 +235,18 @@ vows.describe("request").addBatch({
         this.body = '{ "a": 1, "b": 2 }';
 
         var self = this;
-        mock.request({
+        var app = function (env, callback) {
+          var req = new Request(env);
+          req.body(self.callback);
+        };
+
+        mock.call(app, mock.env({
           headers: {
             "Content-Type": "application/json",
             "Content-Length": this.body.length.toString(10)
           },
           input: new BufferedStream(this.body)
-        }, function (env, callback) {
-          var req = new Request(env);
-          req.body(self.callback);
-        });
+        }), noop);
       },
       "should parse it correctly": function (body) {
         assert.deepEqual(body, JSON.parse(this.body));
@@ -249,16 +257,18 @@ vows.describe("request").addBatch({
         this.body = "a=1&a=2";
 
         var self = this;
-        mock.request({
+        var app = function (env, callback) {
+          var req = new Request(env);
+          req.body(self.callback);
+        };
+
+        mock.call(app, mock.env({
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
             "Content-Length": this.body.length.toString(10)
           },
           input: new BufferedStream(this.body)
-        }, function (env, callback) {
-          var req = new Request(env);
-          req.body(self.callback);
-        });
+        }), noop);
       },
       "should parse it correctly": function (body) {
         assert.deepEqual(body, qs.parse(this.body));
@@ -273,16 +283,18 @@ hello world\r\n\
 --AaB03x--\r';
 
         var self = this;
-        mock.request({
+        var app = function (env, callback) {
+          var req = new Request(env);
+          req.body(self.callback);
+        };
+
+        mock.call(app, mock.env({
           headers: {
             "Content-Type": 'multipart/form-data; boundary="AaB03x"',
             "Content-Length": body.length.toString(10)
           },
           input: new BufferedStream(body)
-        }, function (env, callback) {
-          var req = new Request(env);
-          req.body(self.callback);
-        });
+        }), noop);
       },
       "should parse it correctly": function (body) {
         assert.equal(body.a, "hello world");
@@ -299,17 +311,19 @@ hello world\r\n\
 --AaB03x--\r';
 
         var self = this;
-        mock.request({
+        var app = function (env, callback) {
+          var req = new Request(env);
+          req.params(self.callback);
+        };
+
+        mock.call(app, mock.env({
           queryString: this.queryString,
           headers: {
             "Content-Type": 'multipart/form-data; boundary="AaB03x"',
             "Content-Length": body.length.toString(10)
           },
           input: new BufferedStream(body)
-        }, function (env, callback) {
-          var req = new Request(env);
-          req.params(self.callback);
-        });
+        }), noop);
       },
       "should parse all params correctly": function (params) {
         // The "a" parameter in the body should overwrite the value
@@ -319,3 +333,5 @@ hello world\r\n\
     }
   }
 }).export(module);
+
+function noop(status, headers, body) {}
