@@ -9,7 +9,7 @@ var utils = strata.utils;
 vows.describe('authenticityToken').addBatch({
   'An authenticityToken middleware': {
     topic: function () {
-      return sessionCookie(authenticityToken(utils.ok));
+      return sessionCookie(putTokenInHeader(authenticityToken(utils.ok)));
     },
     'when the request is "safe"': {
       topic: function (app) {
@@ -17,6 +17,9 @@ vows.describe('authenticityToken').addBatch({
       },
       'returns 200': function (err, status, headers, body) {
         assert.equal(status, 200);
+      },
+      'generates a token': function (err, status, headers, body) {
+        assert(headers['X-Authenticity-Token']);
       }
     },
     'when the request is not "safe"': {
@@ -75,3 +78,12 @@ vows.describe('authenticityToken').addBatch({
     }
   }
 }).export(module);
+
+function putTokenInHeader(app) {
+  return function (env, callback) {
+    app(env, function (status, headers, body) {
+      headers['X-Authenticity-Token'] = env.session['strata.csrf'];
+      callback(status, headers, body);
+    });
+  }
+}

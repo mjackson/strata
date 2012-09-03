@@ -1,3 +1,7 @@
+= HEAD
+
+  * strata.authenticityToken always generates a token, even on GET requests.
+
 = 0.17.0 / 2012-09-03
 
   * Added strata.authenticityToken middleware.
