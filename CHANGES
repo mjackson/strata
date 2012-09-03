@@ -1,4 +1,4 @@
-= HEAD
+= 0.17.0 / 2012-09-03
 
   * Added strata.authenticityToken middleware.
   * Renamed strata.authBasic to strata.basicAuth.
@@ -8,11 +8,11 @@
     utils helper methods.
   * Removed strata.InvalidRequestBodyError in favor of strata.Error.
 
-= 0.16.1
+= 0.16.1 / 2012-08-18
 
   * Fixed a file name in a require call.
 
-= 0.16.0
+= 0.16.0 / 2012-08-18
 
   * Added the ability to pass a callback as the second argument to a build
     middleware. This callback receives the build as its only argument.
