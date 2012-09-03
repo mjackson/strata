@@ -3,7 +3,7 @@ var vows = require("vows");
 var strata = require("../lib");
 var Accept = strata.Accept;
 
-vows.describe("header/accept").addBatch({
+vows.describe("Accept").addBatch({
   "An Accept header": {
     "may be instantiated without using new": function () {
       assert.instanceOf(Accept(), Accept);

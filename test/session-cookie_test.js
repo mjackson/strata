@@ -4,7 +4,7 @@ var strata = require("../lib");
 var mock = strata.mock;
 var sessionCookie = strata.sessionCookie;
 
-vows.describe("session/cookie").addBatch({
+vows.describe("sessionCookie").addBatch({
   "A sessionCookie middleware": {
     "should properly serialize and deserialize cookie data": function () {
       var sync = false;

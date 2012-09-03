@@ -4,7 +4,7 @@ var strata = require("../lib");
 var mock = strata.mock;
 var methodOverride = strata.methodOverride;
 
-vows.describe("methodoverride").addBatch({
+vows.describe("methodOverride").addBatch({
   "A methodOverride middleware": {
     topic: function () {
       var app = methodOverride(function (env, callback) {

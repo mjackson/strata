@@ -3,7 +3,7 @@ var vows = require("vows");
 var strata = require("../lib");
 var AcceptLanguage = strata.AcceptLanguage;
 
-vows.describe("header/acceptlanguage").addBatch({
+vows.describe("AcceptLanguage").addBatch({
   "An AcceptLanguage header": {
     "may be instantiated without using new": function () {
       assert.instanceOf(AcceptLanguage(), AcceptLanguage);

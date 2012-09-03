@@ -61,7 +61,7 @@ In addition to these, the environment MAY include the following properties:
                       strata.flash middleware
   - remoteUser        A string containing the name of the authorized user when
                       using HTTP basic auth. Available to all applications
-                      downstream from a strata.authBasic middleware
+                      downstream from a strata.basicAuth middleware
   - route             An object containing information about the route that was
                       triggered. Available to all applications downstream from a
                       strata.Router application

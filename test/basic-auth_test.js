@@ -3,14 +3,14 @@ var vows = require("vows");
 var strata = require("../lib");
 var utils = strata.utils;
 var mock = strata.mock;
-var authBasic = strata.authBasic;
+var basicAuth = strata.basicAuth;
 
-vows.describe("auth/basic").addBatch({
-  "An authBasic middleware": {
+vows.describe("basicAuth").addBatch({
+  "An basicAuth middleware": {
     "when no validation function is given": {
       "should throw": function () {
         assert.throws(function () {
-          var app = authBasic(utils.ok);
+          var app = basicAuth(utils.ok);
         }, /validation function/);
       }
     },
@@ -20,7 +20,7 @@ vows.describe("auth/basic").addBatch({
         var pass = "s3krit";
         var credentials = new Buffer(user + ":" + pass).toString("base64");
 
-        var app = authBasic(utils.ok, function (user, pass, callback) {
+        var app = basicAuth(utils.ok, function (user, pass, callback) {
           callback(null, false);
         });
 
@@ -41,7 +41,7 @@ vows.describe("auth/basic").addBatch({
         var pass = "s3krit";
         var credentials = new Buffer(user + ":" + pass).toString("base64");
 
-        var app = authBasic(function (env, callback) {
+        var app = basicAuth(function (env, callback) {
           callback(200, {
             "Content-Type": "text/plain",
             "X-RemoteUser": env.remoteUser

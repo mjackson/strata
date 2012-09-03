@@ -5,7 +5,7 @@ var strata = require("../lib");
 var mock = strata.mock;
 var contentLength = strata.contentLength;
 
-vows.describe("contentlength").addBatch({
+vows.describe("contentLength").addBatch({
   "A contentLength middleware": {
     "with a string body": {
       topic: function () {

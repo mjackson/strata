@@ -3,7 +3,7 @@ var vows = require("vows");
 var strata = require("../lib");
 var AcceptCharset = strata.AcceptCharset;
 
-vows.describe("header/acceptcharset").addBatch({
+vows.describe("AcceptCharset").addBatch({
   "An AcceptCharset header": {
     "may be instantiated without using new": function () {
       assert.instanceOf(AcceptCharset(), AcceptCharset);

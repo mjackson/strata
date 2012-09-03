@@ -5,7 +5,7 @@ var utils = strata.utils;
 var mock = strata.mock;
 var commonLogger = strata.commonLogger;
 
-vows.describe("commonlogger").addBatch({
+vows.describe("commonLogger").addBatch({
   "A commonLogger middleware": {
     topic: function () {
       this.output = "";

@@ -4,7 +4,7 @@ var strata = require("../lib");
 var mock = strata.mock;
 var contentType = strata.contentType;
 
-vows.describe("contenttype").addBatch({
+vows.describe("contentType").addBatch({
   "A contentType middleware": {
     topic: function () {
       this.type = "text/plain";

@@ -3,7 +3,7 @@ var vows = require("vows");
 var strata = require("../lib");
 var AcceptEncoding = strata.AcceptEncoding;
 
-vows.describe("header/acceptencoding").addBatch({
+vows.describe("AcceptEncoding").addBatch({
   "An AcceptEncoding header": {
     "may be instantiated without using new": function () {
       assert.instanceOf(AcceptEncoding(), AcceptEncoding);
