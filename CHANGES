@@ -1,3 +1,12 @@
+= HEAD
+
+  * Added strata.authenticityToken middleware.
+  * Removed mock.request in favor of mock.call. This provides a more consistent
+    interface with strata.call.
+  * Moved utils.empty to utils.ok. This is more consistent with the other
+    utils helper methods.
+  * Removed strata.InvalidRequestBodyError in favor of strata.Error.
+
 = 0.16.1
 
   * Fixed a file name in a require call.
