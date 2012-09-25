@@ -1,4 +1,5 @@
 var assert = require("assert");
+var qs = require("querystring");
 var vows = require("vows");
 var strata = require("../lib");
 var utils = strata.utils;
@@ -15,7 +16,7 @@ vows.describe("mock").addBatch({
     "should return the correct headers": function (err, status, headers, body) {
       assert.deepEqual(headers, { 'Content-Type': 'text/plain', 'Content-Length': '2' });
     },
-    "should return an empty body": function (err, status, headers, body) {
+    "should return an OK body": function (err, status, headers, body) {
       assert.equal(body, 'OK');
     }
   },
@@ -35,6 +36,18 @@ vows.describe("mock").addBatch({
     },
     "should return an empty body": function (err, status, headers, body) {
       assert.equal(body, "");
+    }
+  },
+  "env": {
+    "when given a params object": {
+      topic: function () {
+        return mock.env({ params: { a: 'a', b: 'b' } });
+      },
+      "encodes it in the query string": function (env) {
+        var query = qs.parse(env.queryString);
+        assert.equal(query.a, 'a');
+        assert.equal(query.b, 'b');
+      }
     }
   }
 }).export(module);
