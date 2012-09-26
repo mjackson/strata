@@ -1,154 +1,176 @@
-var assert = require("assert");
-var vows = require("vows");
-var strata = require("../lib");
+require('./helper');
 var Response = strata.Response;
 
-vows.describe("response").addBatch({
-  "A Response": {
-    topic: function () {
-      this.status = 200;
-      this.body = "hello world";
-      this.contentType = "text/plain";
-      this.contentLength = this.body.length.toString(10);
-      this.headers = {
-        "Content-Type": this.contentType,
-        "Content-Length": this.contentLength
-      };
+describe('Response', function () {
+  it('may be instantiated without using new', function () {
+    assert.ok(Response() instanceof Response);
+  });
 
-      var res = new Response(this.body, this.headers, this.status);
+  describe('when newly created', function () {
+    var code = 200;
+    var content = 'Hello world!';
+    var contentType = 'text/plain';
+    var contentLength = String(Buffer.byteLength(content));
+    var headersMap = {
+      'Content-Type': contentType,
+      'Content-Length': contentLength
+    };
 
-      return res;
-    },
-    "may be instantiated without using new": function (res) {
-      assert.instanceOf(Response(), Response);
-    },
-    "should know its status": function (res) {
-      assert.equal(res.status, this.status);
-    },
-    "should know its headers": function (res) {
-      assert.deepEqual(res.headers, this.headers);
-    },
-    "should know its body": function (res) {
-      assert.equal(res.body, this.body);
-    },
-    "should know its content type": function (res) {
-      assert.equal(res.contentType, this.contentType);
-    },
-    "should know its content length": function (res) {
-      assert.equal(res.contentLength, this.contentLength);
-    },
-    "with a redirect": {
-      topic: function (res) {
-        this.location = "http://www.example.com";
-        this.status = 301;
+    var res;
+    beforeEach(function () {
+      res = new Response(content, headersMap, code);
+    });
 
-        res.redirect(this.location, this.status);
+    it('knows its status', function () {
+      assert.equal(res.status, code);
+    });
 
-        return res;
-      },
-      "should know its new location": function (res) {
-        assert.equal(res.location, this.location);
-      },
-      "should know its new status": function (res) {
-        assert.equal(res.status, this.status);
-      }
-    },
-    "with a cookie string": {
-      topic: function () {
-        this.name = "the_cookie";
-        this.value = "the value";
+    it('knows its headers', function () {
+      assert.deepEqual(res.headers, headersMap);
+    });
 
-        var res = new Response;
-        res.setCookie(this.name, this.value);
+    it('knows its body', function () {
+      assert.equal(res.body, content);
+    });
 
-        return res;
-      },
-      "should have the correct Set-Cookie header": function (res) {
-        assert.ok(res.headers["Set-Cookie"]);
-        assert.equal(res.headers["Set-Cookie"], "the_cookie=the%20value");
-        res.removeCookie(this.name, this.value);
-        assert.equal(res.headers["Set-Cookie"], "the_cookie=; expires=Thu, 01 Jan 1970 00:00:00 GMT");
-      }
-    },
-    "with a cookie object": {
-      topic: function () {
-        this.name = "the_cookie";
-        this.value = {
-          value: "the value",
-          domain: "example.org",
-          path: "/account",
-          expires: new Date(98765432100)
-        };
+    it('knows its content type', function () {
+      assert.equal(res.contentType, contentType);
+    });
 
-        var res = new Response;
-        res.setCookie(this.name, this.value);
+    it('knows its content length', function () {
+      assert.equal(res.contentLength, contentLength);
+    });
+  });
 
-        return res;
-      },
-      "should have the correct Set-Cookie header": function (res) {
-        assert.ok(res.headers["Set-Cookie"]);
-        assert.equal(res.headers["Set-Cookie"], "the_cookie=the%20value; domain=example.org; path=/account; expires=Sat, 17 Feb 1973 02:50:32 GMT");
-        res.removeCookie(this.name, this.value);
-        assert.equal(res.headers["Set-Cookie"], "the_cookie=; domain=example.org; path=/account; expires=Thu, 01 Jan 1970 00:00:00 GMT");
-      }
-    },
-    "with two cookies": {
-      topic: function () {
-        this.firstName = "cookie1";
-        this.firstValue = {
-          value: "value 1",
-          domain: "example.org",
-          path: "/account",
-          expires: new Date(98765432100)
-        };
+  describe('with a redirect', function () {
+    var code = 301;
+    var location = 'http://www.example.com';
 
-        this.secondName = "cookie2";
-        this.secondValue = {
-          value: "value 2",
-          domain: "example.net",
-          path: "/users",
-          expires: new Date(98765432100)
-        };
+    var res;
+    beforeEach(function () {
+      res = new Response;
+      res.redirect(location, code);
+    });
 
-        var res = new Response;
-        res.setCookie(this.firstName, this.firstValue);
-        res.setCookie(this.secondName, this.secondValue);
+    it('knows its status', function () {
+      assert.equal(res.status, code);
+    });
 
-        return res;
-      },
-      "should have the correct Set-Cookie header": function (res) {
-        assert.ok(res.headers["Set-Cookie"]);
-        assert.equal(res.headers["Set-Cookie"], "cookie1=value%201; domain=example.org; path=/account; expires=Sat, 17 Feb 1973 02:50:32 GMT\ncookie2=value%202; domain=example.net; path=/users; expires=Sat, 17 Feb 1973 02:50:32 GMT");
-        res.removeCookie(this.firstName, this.firstValue);
-        assert.equal(res.headers["Set-Cookie"], "cookie2=value%202; domain=example.net; path=/users; expires=Sat, 17 Feb 1973 02:50:32 GMT\ncookie1=; domain=example.org; path=/account; expires=Thu, 01 Jan 1970 00:00:00 GMT");
-      }
-    },
-    "with two cookies from the same domain": {
-      topic: function () {
-        this.firstName = "cookie1";
-        this.firstValue = {
-          value: "value 1",
-          domain: "example.org"
-        };
+    it('knows its new location', function () {
+      assert.equal(res.location, location);
+    });
+  });
 
-        this.secondName = "cookie2";
-        this.secondValue = {
-          value: "value 2",
-          domain: "example.org"
-        };
+  describe('with a cookie string', function () {
+    var cookieName = 'the_cookie';
+    var cookieValue = 'the value';
 
-        var res = new Response;
-        res.setCookie(this.firstName, this.firstValue);
-        res.setCookie(this.secondName, this.secondValue);
+    var res;
+    beforeEach(function () {
+      res = new Response;
+      res.setCookie(cookieName, cookieValue);
+    });
 
-        return res;
-      },
-      "should have the correct Set-Cookie header": function (res) {
-        assert.ok(res.headers["Set-Cookie"]);
-        assert.equal(res.headers["Set-Cookie"], "cookie1=value%201; domain=example.org\ncookie2=value%202; domain=example.org");
-        res.removeCookie(this.firstName, this.firstValue);
-        assert.equal(res.headers["Set-Cookie"], "cookie2=value%202; domain=example.org\ncookie1=; domain=example.org; expires=Thu, 01 Jan 1970 00:00:00 GMT");
-      }
-    }
-  }
-}).export(module);
+    it('has the correct Set-Cookie header', function () {
+      assert.ok(res.headers['Set-Cookie']);
+      assert.equal(res.headers['Set-Cookie'], 'the_cookie=the%20value');
+    });
+
+    it('is able to remove the cookie', function () {
+      res.removeCookie(cookieName, cookieValue);
+      assert.equal(res.headers['Set-Cookie'], 'the_cookie=; expires=Thu, 01 Jan 1970 00:00:00 GMT');
+    });
+  });
+
+  describe('with a cookie object', function () {
+    var cookieName = 'the_cookie';
+    var cookieValue = {
+      value: 'the value',
+      domain: 'example.org',
+      path: '/account',
+      expires: new Date(98765432100)
+    };
+
+    var res;
+    beforeEach(function () {
+      res = new Response;
+      res.setCookie(cookieName, cookieValue);
+    });
+
+    it('has the correct Set-Cookie header', function () {
+      assert.ok(res.headers['Set-Cookie']);
+      assert.equal(res.headers['Set-Cookie'], 'the_cookie=the%20value; domain=example.org; path=/account; expires=Sat, 17 Feb 1973 02:50:32 GMT');
+    });
+
+    it('is able to remove the cookie', function () {
+      res.removeCookie(cookieName, cookieValue);
+      assert.equal(res.headers['Set-Cookie'], 'the_cookie=; domain=example.org; path=/account; expires=Thu, 01 Jan 1970 00:00:00 GMT');
+    });
+  });
+
+  describe('with two cookies', function () {
+    var firstName = 'cookie1';
+    var firstValue = {
+      value: 'value 1',
+      domain: 'example.org',
+      path: '/account',
+      expires: new Date(98765432100)
+    };
+
+    var secondName = 'cookie2';
+    var secondValue = {
+      value: 'value 2',
+      domain: 'example.net',
+      path: '/users',
+      expires: new Date(98765432100)
+    };
+
+    var res;
+    beforeEach(function () {
+      res = new Response;
+      res.setCookie(firstName, firstValue);
+      res.setCookie(secondName, secondValue);
+    });
+
+    it('has the correct Set-Cookie header', function () {
+      assert.ok(res.headers['Set-Cookie']);
+      assert.equal(res.headers['Set-Cookie'], 'cookie1=value%201; domain=example.org; path=/account; expires=Sat, 17 Feb 1973 02:50:32 GMT\ncookie2=value%202; domain=example.net; path=/users; expires=Sat, 17 Feb 1973 02:50:32 GMT');
+    });
+
+    it('is able to remove one of the cookies', function () {
+      res.removeCookie(firstName, firstValue);
+      assert.equal(res.headers['Set-Cookie'], 'cookie2=value%202; domain=example.net; path=/users; expires=Sat, 17 Feb 1973 02:50:32 GMT\ncookie1=; domain=example.org; path=/account; expires=Thu, 01 Jan 1970 00:00:00 GMT');
+    });
+  });
+
+  describe('with two cookies from the same domain', function () {
+    var firstName = 'cookie1';
+    var firstValue = {
+      value: 'value 1',
+      domain: 'example.org'
+    };
+
+    var secondName = 'cookie2';
+    var secondValue = {
+      value: 'value 2',
+      domain: 'example.org'
+    };
+
+    var res;
+    beforeEach(function () {
+      res = new Response;
+      res.setCookie(firstName, firstValue);
+      res.setCookie(secondName, secondValue);
+    });
+
+    it('has the correct Set-Cookie header', function () {
+      assert.ok(res.headers['Set-Cookie']);
+      assert.equal(res.headers['Set-Cookie'], 'cookie1=value%201; domain=example.org\ncookie2=value%202; domain=example.org');
+    });
+
+    it('is able to remove one of the cookies', function () {
+      res.removeCookie(firstName, firstValue);
+      assert.equal(res.headers['Set-Cookie'], 'cookie2=value%202; domain=example.org\ncookie1=; domain=example.org; expires=Thu, 01 Jan 1970 00:00:00 GMT');
+    });
+  });
+});

@@ -1,91 +1,88 @@
-var assert = require("assert");
-var vows = require("vows");
-var strata = require("../lib");
-var mock = strata.mock;
+require('./helper');
 var redirect = strata.redirect;
 
-vows.describe("redirect").addBatch({
-  "redirect": {
-    topic: function () {
-      this.location = "/login";
+describe('redirect', function () {
+  var location = '/login';
+  var app = function (env, callback) {
+    redirect(env, callback, location);
+  };
 
-      var self = this;
-      var app = function (env, callback) {
-        redirect(env, callback, self.location);
-      };
+  beforeEach(function (callback) {
+    call(app, '/', callback);
+  });
 
-      mock.call(app, '/', this.callback);
-    },
-    "should return a 302": function (err, status, headers, body) {
+  it('returns 302', function () {
+    assert.equal(status, 302);
+  });
+
+  it('redirects to the proper location', function () {
+    assert.equal(headers['Location'], location);
+  });
+
+  describe('.forward', function () {
+    var location = '/login';
+    var app = echoReferrer(function (env, callback) {
+      redirect.forward(env, callback, location);
+    });
+
+    beforeEach(function (callback) {
+      call(app, '/admin', callback);
+    });
+
+    it('returns 302', function () {
       assert.equal(status, 302);
-    },
-    "should redirect to the proper location": function (err, status, headers, body) {
-      assert.equal(headers["Location"], this.location);
-    }
-  },
-  "redirect.forward": {
-    topic: function () {
-      this.location = "/login";
+    });
 
-      var recordLocation = function (app) {
-        return function (env, callback) {
-          app(env, function (status, headers, body) {
-            var session = env.session;
-            headers["X-Referrer"] = session["strata.referrer"];
-            callback(status, headers, body);
-          });
-        }
-      };
+    it('redirects to the proper location', function () {
+      assert.equal(headers['Location'], location);
+    });
 
-      var self = this;
-      var app = recordLocation(function (env, callback) {
-        redirect.forward(env, callback, self.location);
-      });
+    it('records the current location in the session', function () {
+      assert.equal(headers['X-Referrer'], '/admin');
+    });
+  });
 
-      mock.call(app, "/admin", this.callback);
-    },
-    "should return a 302": function (err, status, headers, body) {
+  describe('.back', function () {
+    var location = '/admin';
+    var app = forwardLocation(function (env, callback) {
+      redirect.back(env, callback);
+    }, location);
+
+    beforeEach(function (callback) {
+      call(app, '/', callback);
+    });
+
+    it('returns 302', function () {
       assert.equal(status, 302);
-    },
-    "should redirect to the proper location": function (err, status, headers, body) {
-      assert.equal(headers["Location"], this.location);
-    },
-    "should record the current location in the session": function (err, status, headers, body) {
-      assert.equal(headers["X-Referrer"], "/admin");
-    }
-  },
-  "redirect.back": {
-    topic: function () {
-      this.location = "/admin";
+    });
 
-      var self = this;
-      var forwardLocation = function (app) {
-        return function (env, callback) {
-          // Simulate a redirect.forward.
-          env.session = { "strata.referrer": self.location };
+    it('redirects to the proper location', function () {
+      assert.equal(headers['Location'], location);
+    });
 
-          app(env, function (status, headers, body) {
-            var session = env.session;
-            headers["X-Referrer"] = session["strata.referrer"] || "";
-            callback(status, headers, body);
-          });
-        }
-      };
+    it('deletes the old location from the session', function () {
+      assert.equal(headers['X-Referrer'], '');
+    });
+  });
+});
 
-      var app = forwardLocation(function (env, callback) {
-        redirect.back(env, callback);
-      });
+function echoReferrer(app) {
+  return function (env, callback) {
+    app(env, function (status, headers, body) {
+      headers['X-Referrer'] = env.session['strata.referrer'];
+      callback(status, headers, body);
+    });
+  };
+}
 
-      mock.call(app, '/', this.callback);
-    },
-    "should return a 302": function (err, status, headers, body) {
-      assert.equal(status, 302);
-    },
-    "should redirect to the proper location": function (err, status, headers, body) {
-      assert.equal(headers["Location"], this.location);
-    },
-    "should delete the old location from the session": function (err, status, headers, body) {
-      assert.equal(headers["X-Referrer"], "");
-    }
-  }
-}).export(module);
+function forwardLocation(app, location) {
+  return function (env, callback) {
+    // Simulate redirect.forward
+    env.session = { 'strata.referrer': location };
+
+    app(env, function (status, headers, body) {
+      headers['X-Referrer'] = env.session['strata.referrer'] || '';
+      callback(status, headers, body);
+    });
+  };
+}

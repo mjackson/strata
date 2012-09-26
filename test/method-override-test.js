@@ -1,75 +1,78 @@
-var assert = require("assert");
-var vows = require("vows");
-var strata = require("../lib");
-var mock = strata.mock;
+require('./helper');
 var methodOverride = strata.methodOverride;
 
-vows.describe("methodOverride").addBatch({
-  "A methodOverride middleware": {
-    topic: function () {
-      var app = methodOverride(function (env, callback) {
-        callback(200, {
-          "Content-Type": "text/plain",
-          "X-RequestMethod": env.requestMethod
-        }, "");
-      });
+describe('methodOverride', function () {
+  var app = methodOverride(function (env, callback) {
+    callback(200, {
+      'Content-Type': 'text/plain',
+      'X-Request-Method': env.requestMethod
+    }, '');
+  });
 
-      return app;
-    },
-    "when using GET": {
-      topic: function (app) {
-        mock.call(app, "/?_method=put", this.callback);
-      },
-      "should return 200": function (err, status, headers, body) {
-        assert.equal(status, 200);
-      },
-      "should not modify the request method": function (err, status, headers, body) {
-        assert.equal(headers["X-RequestMethod"], "GET");
-      }
-    },
-    "when using POST with a method in the queryString": {
-      topic: function (app) {
-        mock.call(app, mock.env({
-          requestMethod: "POST",
-          queryString: "_method=put"
-        }), this.callback);
-      },
-      "should return 200": function (err, status, headers, body) {
-        assert.equal(status, 200);
-      },
-      "should modify the request method": function (err, status, headers, body) {
-        assert.equal(headers["X-RequestMethod"], "PUT");
-      }
-    },
-    "when using POST with a method in the post body": {
-      topic: function (app) {
-        mock.call(app, mock.env({
-          requestMethod: "POST",
-          input: "_method=put"
-        }), this.callback);
-      },
-      "should return 200": function (err, status, headers, body) {
-        assert.equal(status, 200);
-      },
-      "should modify the request method": function (err, status, headers, body) {
-        assert.equal(headers["X-RequestMethod"], "PUT");
-      }
-    },
-    "when using POST with a method in the HTTP headers": {
-      topic: function (app) {
-        mock.call(app, mock.env({
-          requestMethod: "POST",
-          headers: {
-            "X-Http-Method-Override": "put"
-          }
-        }), this.callback);
-      },
-      "should return 200": function (err, status, headers, body) {
-        assert.equal(status, 200);
-      },
-      "should modify the request method": function (err, status, headers, body) {
-        assert.equal(headers["X-RequestMethod"], "PUT");
-      }
-    }
-  }
-}).export(module);
+  describe('when using GET', function () {
+    beforeEach(function (callback) {
+      call(app, '/?_method=put', callback);
+    });
+
+    it('returns 200', function () {
+      assert.equal(status, 200);
+    });
+
+    it('does not modify the request method', function () {
+      assert.equal(headers['X-Request-Method'], 'GET');
+    });
+  });
+
+  describe('when using POST with a method in the queryString', function () {
+    beforeEach(function (callback) {
+      call(app, mock.env({
+        requestMethod: 'POST',
+        queryString: '_method=put'
+      }), callback);
+    });
+
+    it('returns 200', function () {
+      assert.equal(status, 200);
+    });
+
+    it('modifies the request method', function () {
+      assert.equal(headers['X-Request-Method'], 'PUT');
+    });
+  });
+
+  describe('when using POST with a method in the post body', function () {
+    beforeEach(function (callback) {
+      call(app, mock.env({
+        requestMethod: 'POST',
+        input: '_method=put'
+      }), callback);
+    });
+
+    it('returns 200', function () {
+      assert.equal(status, 200);
+    });
+
+    it('modifies the request method', function () {
+      assert.equal(headers['X-Request-Method'], 'PUT');
+    });
+  });
+
+  describe('when using POST with a method in the HTTP headers', function () {
+    beforeEach(function (callback) {
+      call(app, mock.env({
+        requestMethod: 'POST',
+        headers: {
+          'X-Http-Method-Override': 'put'
+        }
+      }), callback);
+    });
+
+    it('returns 200', function () {
+      assert.equal(status, 200);
+    });
+
+    it('modifies the request method', function () {
+      assert.equal(headers['X-Request-Method'], 'PUT');
+    });
+  });
+});

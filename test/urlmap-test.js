@@ -1,469 +1,346 @@
-var assert = require("assert");
-var vows = require("vows");
-var strata = require("../lib");
-var utils = strata.utils;
-var mock = strata.mock;
+require('./helper');
 var urlMap = strata.urlMap;
 
-vows.describe("urlMap").addBatch({
-  "A urlMap middleware": {
-    topic: function () {
-      var app = urlMap();
-      mock.call(app, '/', this.callback);
-    },
-    "should return 404 by default": function (err, status, headers, body) {
+describe('urlMap', function () {
+  describe('by default', function () {
+    beforeEach(function (callback) {
+      call(urlMap(), '/', callback);
+    });
+
+    it('returns 404', function () {
       assert.equal(status, 404);
-    },
-    "with path-based definitions": {
-      topic: function () {
-        var app = function (env, callback) {
-          callback(200, {
-            "X-ScriptName": env.scriptName,
-            "X-PathInfo": env.pathInfo,
-            "Content-Type": "text/plain"
-          }, "");
-        };
+    });
+  });
 
-        return makeMap({
-          "http://example.org/static": app,
-          "/path": app,
-          "/some/path": app
-        });
-      },
-      "when / is requested": {
-        topic: function (app) {
-          mock.call(app, "/", this.callback);
-        },
-        "should return 404": function (err, status, headers, body) {
-          assert.equal(status, 404);
-        }
-      },
-      "when /foo is requested": {
-        topic: function (app) {
-          mock.call(app, "/foo", this.callback);
-        },
-        "should return 404": function (err, status, headers, body) {
-          assert.equal(status, 404);
-        }
-      },
-      "when /path is requested": {
-        topic: function (app) {
-          mock.call(app, "/path", this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should have the proper scriptName": function (err, status, headers, body) {
-          assert.equal(headers["X-ScriptName"], "/path");
-        },
-        "should have the proper pathInfo": function (err, status, headers, body) {
-          assert.equal(headers["X-PathInfo"], "");
-        }
-      },
-      "when /path/ is requested": {
-        topic: function (app) {
-          mock.call(app, "/path/", this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should have the proper scriptName": function (err, status, headers, body) {
-          assert.equal(headers["X-ScriptName"], "/path");
-        },
-        "should have the proper pathInfo": function (err, status, headers, body) {
-          assert.equal(headers["X-PathInfo"], "/");
-        }
-      },
-      "when /some/path is requested": {
-        topic: function (app) {
-          mock.call(app, "/some/path", this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should have the proper scriptName": function (err, status, headers, body) {
-          assert.equal(headers["X-ScriptName"], "/some/path");
-        },
-        "should have the proper pathInfo": function (err, status, headers, body) {
-          assert.equal(headers["X-PathInfo"], "");
-        }
-      },
-      "when /some/path/ is requested": {
-        topic: function (app) {
-          mock.call(app, "/some/path/", this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should have the proper scriptName": function (err, status, headers, body) {
-          assert.equal(headers["X-ScriptName"], "/some/path");
-        },
-        "should have the proper pathInfo": function (err, status, headers, body) {
-          assert.equal(headers["X-PathInfo"], "/");
-        }
-      },
-      "when /some///path//name is requested": {
-        topic: function (app) {
-          mock.call(app, "/some///path//name", this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should have the proper scriptName": function (err, status, headers, body) {
-          assert.equal(headers["X-ScriptName"], "/some/path");
-        },
-        "should have the proper pathInfo": function (err, status, headers, body) {
-          assert.equal(headers["X-PathInfo"], "//name");
-        }
-      },
-      "when scriptName is /elsewhere and pathInfo is /path/name": {
-        topic: function (app) {
-          mock.call(app, mock.env({
-            scriptName: "/elsewhere",
-            pathInfo: "/path/name"
-          }), this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should have the proper scriptName": function (err, status, headers, body) {
-          assert.equal(headers["X-ScriptName"], "/elsewhere/path");
-        },
-        "should have the proper pathInfo": function (err, status, headers, body) {
-          assert.equal(headers["X-PathInfo"], "/name");
-        }
-      },
-      "when pathInfo is /static and httpHost is example.org": {
-        topic: function (app) {
-          mock.call(app, mock.env({
-            pathInfo: "/static",
-            headers: {
-              "Host": "example.org"
-            }
-          }), this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should have the proper scriptName": function (err, status, headers, body) {
-          assert.equal(headers["X-ScriptName"], "/static");
-        },
-        "should have the proper pathInfo": function (err, status, headers, body) {
-          assert.equal(headers["X-PathInfo"], "");
-        }
-      },
-      "when pathInfo is /static/ and httpHost is example.org": {
-        topic: function (app) {
-          mock.call(app, mock.env({
-            pathInfo: "/static/",
-            headers: {
-              "Host": "example.org"
-            }
-          }), this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should have the proper scriptName": function (err, status, headers, body) {
-          assert.equal(headers["X-ScriptName"], "/static");
-        },
-        "should have the proper pathInfo": function (err, status, headers, body) {
-          assert.equal(headers["X-PathInfo"], "/");
-        }
-      }
-    },
-    "with host-based definitions": {
-      topic: function () {
-        return makeMap({
-          "/": function (env, callback) {
-            callback(200, {
-              "Content-Type": "text/plain",
-              "X-Position": "example.com",
-              "X-Host": env.headers['host'] || env.serverName
-            }, "");
-          },
-          "http://example.org/": function (env, callback) {
-            callback(200, {
-              "Content-Type": "text/plain",
-              "X-Position": "example.org",
-              "X-Host": env.headers['host'] || env.serverName
-            }, "");
-          },
-          "http://subdomain.example.org/": function (env, callback) {
-            callback(200, {
-              "Content-Type": "text/plain",
-              "X-Position": "subdomain.example.org",
-              "X-Host": env.headers['host'] || env.serverName
-            }, "");
-          },
-          "http://example.net/": function (env, callback) {
-            callback(200, {
-              "Content-Type": "text/plain",
-              "X-Position": "example.net",
-              "X-Host": env.headers['host'] || env.serverName
-            }, "");
-          }
-        });
-      },
-      "when / is requested": {
-        topic: function (app) {
-          mock.call(app, "/", this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should call the correct app": function (err, status, headers, body) {
-          assert.equal(headers["X-Position"], "example.com");
-        }
-      },
-      "when pathInfo is / and httpHost is example.org": {
-        topic: function (app) {
-          mock.call(app, mock.env({
-            pathInfo: "/",
-            headers: {
-              "Host": "example.org"
-            }
-          }), this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should call the correct app": function (err, status, headers, body) {
-          assert.equal(headers["X-Position"], "example.org");
-        }
-      },
-      "when pathInfo is / and httpHost is example.org": {
-        topic: function (app) {
-          mock.call(app, mock.env({
-            pathInfo: "/",
-            headers: {
-              "Host": "example.net"
-            }
-          }), this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should call the correct app": function (err, status, headers, body) {
-          assert.equal(headers["X-Position"], "example.net");
-        }
-      },
-      "when serverName is example.org, pathInfo is /, and httpHost is subdomain.example.org": {
-        topic: function (app) {
-          mock.call(app, mock.env({
-            serverName: "example.org",
-            pathInfo: "/",
-            headers: {
-              "Host": "subdomain.example.org"
-            }
-          }), this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should call the correct app": function (err, status, headers, body) {
-          assert.equal(headers["X-Position"], "subdomain.example.org");
-        }
-      },
-      "when http://example.org/ is requested": {
-        topic: function (app) {
-          mock.call(app, "http://example.org/", this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should call the correct app": function (err, status, headers, body) {
-          assert.equal(headers["X-Position"], "example.org");
-        }
-      },
-      "when serverName is example.info, pathInfo is /, and httpHost is example.info": {
-        topic: function (app) {
-          mock.call(app, mock.env({
-            serverName: "example.info",
-            pathInfo: "/",
-            headers: {
-              "Host": "example.info"
-            }
-          }), this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should call the correct app": function (err, status, headers, body) {
-          assert.equal(headers["X-Position"], "example.com");
-        }
-      },
-      "when serverName is example.info, serverPort is 9292, pathInfo is /, and httpHost is example.info:9292": {
-        topic: function (app) {
-          mock.call(app, mock.env({
-            serverName: "example.info",
-            serverPort: "9292",
-            pathInfo: "/",
-            headers: {
-              "Host": "example.info:9292"
-            }
-          }), this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should call the correct app": function (err, status, headers, body) {
-          assert.equal(headers["X-Position"], "example.com");
-        }
-      }
-    },
-    "with nested Mappers": {
-      topic: function () {
-        return makeMap({
-          "/some": makeMap({
-            "/path": makeMap({
-              "/name": function (env, callback) {
-                callback(200, {
-                  "Content-Type": "text/plain",
-                  "X-Position": "/some/path/name",
-                  "X-ScriptName": env.scriptName,
-                  "X-PathInfo": env.pathInfo
-                }, "");
-              }
-            })
-          })
-        });
-      },
-      "when /some/path is requested": {
-        topic: function (app) {
-          mock.call(app, "/some/path", this.callback);
-        },
-        "should return 404": function (err, status, headers, body) {
-          assert.equal(status, 404);
-        }
-      },
-      "when /some/path/name is requested": {
-        topic: function (app) {
-          mock.call(app, "/some/path/name", this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should call the correct app": function (err, status, headers, body) {
-          assert.equal(headers["X-Position"], "/some/path/name");
-        },
-        "should have the proper scriptName": function (err, status, headers, body) {
-          assert.equal(headers["X-ScriptName"], "/some/path/name");
-        },
-        "should have the proper pathInfo": function (err, status, headers, body) {
-          assert.equal(headers["X-PathInfo"], "");
-        }
-      }
-    },
-    "with multiple root apps": {
-      topic: function () {
-        return makeMap({
-          "/": function (env, callback) {
-            callback(200, {
-              "Content-Type": "text/plain",
-              "X-Position": "root",
-              "X-ScriptName": env.scriptName,
-              "X-PathInfo": env.pathInfo
-            }, "");
-          },
-          "/path": function (env, callback) {
-            callback(200, {
-              "Content-Type": "text/plain",
-              "X-Position": "path",
-              "X-ScriptName": env.scriptName,
-              "X-PathInfo": env.pathInfo
-            }, "");
-          }
-        });
-      },
-      "when /path is requested": {
-        topic: function (app) {
-          mock.call(app, "/path", this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should call the correct app": function (err, status, headers, body) {
-          assert.equal(headers["X-Position"], "path");
-        },
-        "should have the proper scriptName": function (err, status, headers, body) {
-          assert.equal(headers["X-ScriptName"], "/path");
-        },
-        "should have the proper pathInfo": function (err, status, headers, body) {
-          assert.equal(headers["X-PathInfo"], "");
-        }
-      },
-      "when /path/name is requested": {
-        topic: function (app) {
-          mock.call(app, "/path/name", this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should call the correct app": function (err, status, headers, body) {
-          assert.equal(headers["X-Position"], "path");
-        },
-        "should have the proper scriptName": function (err, status, headers, body) {
-          assert.equal(headers["X-ScriptName"], "/path");
-        },
-        "should have the proper pathInfo": function (err, status, headers, body) {
-          assert.equal(headers["X-PathInfo"], "/name");
-        }
-      },
-      "when / is requested": {
-        topic: function (app) {
-          mock.call(app, "/", this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should call the correct app": function (err, status, headers, body) {
-          assert.equal(headers["X-Position"], "root");
-        },
-        "should have the proper scriptName": function (err, status, headers, body) {
-          assert.equal(headers["X-ScriptName"], "");
-        },
-        "should have the proper pathInfo": function (err, status, headers, body) {
-          assert.equal(headers["X-PathInfo"], "/");
-        }
-      },
-      "when /name is requested": {
-        topic: function (app) {
-          mock.call(app, "/name", this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should call the correct app": function (err, status, headers, body) {
-          assert.equal(headers["X-Position"], "root");
-        },
-        "should have the proper scriptName": function (err, status, headers, body) {
-          assert.equal(headers["X-ScriptName"], "");
-        },
-        "should have the proper pathInfo": function (err, status, headers, body) {
-          assert.equal(headers["X-PathInfo"], "/name");
-        }
-      },
-      "when /http://example.org/another is requested": {
-        topic: function (app) {
-          mock.call(app, "/http://example.org/another", this.callback);
-        },
-        "should return 200": function (err, status, headers, body) {
-          assert.equal(status, 200);
-        },
-        "should call the correct app": function (err, status, headers, body) {
-          assert.equal(headers["X-Position"], "root");
-        },
-        "should not squeeze slashes": function (err, status, headers, body) {
-          assert.equal(headers["X-ScriptName"], "");
-          assert.equal(headers["X-PathInfo"], "/http://example.org/another");
-        }
-      }
-    }
-  }
-}).export(module);
+  describe('with path-based definitions', function () {
+    var innerApp = function (env, callback) {
+      callback(200, {
+        'X-Script-Name': env.scriptName,
+        'X-Path-Info': env.pathInfo,
+        'Content-Type': 'text/plain'
+      }, '');
+    };
 
-// Creates a new urlMap from the location/app pairs in `locationsMap`.
+    var app = makeMap({
+      'http://example.org/static': innerApp,
+      '/path': innerApp,
+      '/some/path': innerApp
+    });
+
+    describe('GET /', function () {
+      beforeEach(function (callback) {
+        call(app, '/', callback);
+      });
+
+      checkStatus(404);
+    });
+
+    describe('GET /miss', function () {
+      beforeEach(function (callback) {
+        call(app, '/miss', callback);
+      });
+
+      checkStatus(404);
+    });
+
+    describe('GET /path', function () {
+      beforeEach(function (callback) {
+        call(app, '/path', callback);
+      });
+
+      checkLocation(200, '/path', '');
+    });
+
+    describe('GET /path/', function () {
+      beforeEach(function (callback) {
+        call(app, '/path/', callback);
+      });
+
+      checkLocation(200, '/path', '/');
+    });
+
+    describe('GET /some/path', function () {
+      beforeEach(function (callback) {
+        call(app, '/some/path', callback);
+      });
+
+      checkLocation(200, '/some/path', '');
+    });
+
+    describe('GET /some/path/', function () {
+      beforeEach(function (callback) {
+        call(app, '/some/path/', callback);
+      });
+
+      checkLocation(200, '/some/path', '/');
+    });
+
+    describe('GET /some///path//name', function () {
+      beforeEach(function (callback) {
+        call(app, '/some///path//name', callback);
+      });
+
+      checkLocation(200, '/some/path', '//name');
+    });
+
+    describe('when scriptName is /elsewhere and pathInfo is /path/name', function () {
+      beforeEach(function (callback) {
+        call(app, mock.env({
+          scriptName: '/elsewhere',
+          pathInfo: '/path/name'
+        }), callback);
+      });
+
+      checkLocation(200, '/elsewhere/path', '/name');
+    });
+
+    describe('when pathInfo is /static and Host is example.org', function () {
+      beforeEach(function (callback) {
+        call(app, mock.env({
+          pathInfo: '/static',
+          headers: {
+            'Host': 'example.org'
+          }
+        }), callback);
+      });
+
+      checkLocation(200, '/static', '');
+    });
+
+    describe('when pathInfo is /static/ and Host is example.org', function () {
+      beforeEach(function (callback) {
+        call(app, mock.env({
+          pathInfo: '/static/',
+          headers: {
+            'Host': 'example.org'
+          }
+        }), callback);
+      });
+
+      checkLocation(200, '/static', '/');
+    });
+  });
+
+  describe('with host-based definitions', function () {
+    var app = makeMap({
+      '/': function (env, callback) {
+        callback(200, {
+          'Content-Type': 'text/plain',
+          'X-Position': 'example.com',
+          'X-Host': env.headers['host'] || env.serverName
+        }, '');
+      },
+      'http://example.org/': function (env, callback) {
+        callback(200, {
+          'Content-Type': 'text/plain',
+          'X-Position': 'example.org',
+          'X-Host': env.headers['host'] || env.serverName
+        }, '');
+      },
+      'http://subdomain.example.org/': function (env, callback) {
+        callback(200, {
+          'Content-Type': 'text/plain',
+          'X-Position': 'subdomain.example.org',
+          'X-Host': env.headers['host'] || env.serverName
+        }, '');
+      },
+      'http://example.net/': function (env, callback) {
+        callback(200, {
+          'Content-Type': 'text/plain',
+          'X-Position': 'example.net',
+          'X-Host': env.headers['host'] || env.serverName
+        }, '');
+      }
+    });
+
+    describe('GET /', function () {
+      beforeEach(function (callback) {
+        call(app, '/', callback);
+      });
+
+      checkPosition(200, 'example.com');
+    });
+
+    describe('when pathInfo is / and Host is example.org', function () {
+      beforeEach(function (callback) {
+        call(app, mock.env({
+          pathInfo: '/',
+          headers: {
+            'Host': 'example.org'
+          }
+        }), callback);
+      });
+
+      checkPosition(200, 'example.org');
+    });
+
+    describe('when pathInfo is / and Host is example.net', function () {
+      beforeEach(function (callback) {
+        call(app, mock.env({
+          pathInfo: '/',
+          headers: {
+            'Host': 'example.net'
+          }
+        }), callback);
+      });
+
+      checkPosition(200, 'example.net');
+    });
+
+    describe('when serverName is example.org, pathInfo is /, and Host is subdomain.example.org', function () {
+      beforeEach(function (callback) {
+        call(app, mock.env({
+          serverName: 'example.org',
+          pathInfo: '/',
+          headers: {
+            'Host': 'subdomain.example.org'
+          }
+        }), callback);
+      });
+
+      checkPosition(200, 'subdomain.example.org');
+    });
+
+    describe('GET / on Host example.org', function () {
+      beforeEach(function (callback) {
+        call(app, 'http://example.org/', callback);
+      });
+
+      checkPosition(200, 'example.org');
+    });
+
+    describe('when serverName is example.info, pathInfo is /, and Host is example.info', function () {
+      beforeEach(function (callback) {
+        call(app, mock.env({
+          serverName: 'example.info',
+          pathInfo: '/',
+          headers: {
+            'Host': 'example.info'
+          }
+        }), callback);
+      });
+
+      checkPosition(200, 'example.com');
+    });
+
+    describe('when serverName is example.info, serverPort is 9292, pathInfo is /, and Host is example.info:9292', function () {
+      beforeEach(function (callback) {
+        call(app, mock.env({
+          serverName: 'example.info',
+          serverPort: '9292',
+          pathInfo: '/',
+          headers: {
+            'Host': 'example.info:9292'
+          }
+        }), callback);
+      });
+
+      checkPosition(200, 'example.com');
+    });
+  });
+
+  describe('with nested urlMaps', function () {
+    var app = makeMap({
+      '/some': makeMap({
+        '/path': makeMap({
+          '/name': function (env, callback) {
+            callback(200, {
+              'Content-Type': 'text/plain',
+              'X-Position': '/some/path/name',
+              'X-Script-Name': env.scriptName,
+              'X-Path-Info': env.pathInfo
+            }, '');
+          }
+        })
+      })
+    });
+
+    describe('GET /some/path', function () {
+      beforeEach(function (callback) {
+        call(app, '/some/path', callback);
+      });
+
+      checkStatus(404);
+    });
+
+    describe('GET /some/path/name', function () {
+      beforeEach(function (callback) {
+        call(app, '/some/path/name', callback);
+      });
+
+      checkPosition(200, '/some/path/name');
+      checkLocation(200, '/some/path/name', '');
+    });
+  });
+
+  describe('with multiple root apps', function () {
+    var app = makeMap({
+      '/': function (env, callback) {
+        callback(200, {
+          'Content-Type': 'text/plain',
+          'X-Position': 'root',
+          'X-Script-Name': env.scriptName,
+          'X-Path-Info': env.pathInfo
+        }, '');
+      },
+      '/path': function (env, callback) {
+        callback(200, {
+          'Content-Type': 'text/plain',
+          'X-Position': 'path',
+          'X-Script-Name': env.scriptName,
+          'X-Path-Info': env.pathInfo
+        }, '');
+      }
+    });
+
+    describe('GET /path', function () {
+      beforeEach(function (callback) {
+        call(app, '/path', callback);
+      });
+
+      checkPosition(200, 'path');
+      checkLocation(200, '/path', '');
+    });
+
+    describe('GET /path/name', function () {
+      beforeEach(function (callback) {
+        call(app, '/path/name', callback);
+      });
+
+      checkPosition(200, 'path');
+      checkLocation(200, '/path', '/name');
+    });
+
+    describe('GET /', function () {
+      beforeEach(function (callback) {
+        call(app, '/', callback);
+      });
+
+      checkPosition(200, 'root');
+      checkLocation(200, '', '/');
+    });
+
+    describe('GET /name', function () {
+      beforeEach(function (callback) {
+        call(app, '/name', callback);
+      });
+
+      checkPosition(200, 'root');
+      checkLocation(200, '', '/name');
+    });
+
+    describe('GET /http://example.org/another', function () {
+      beforeEach(function (callback) {
+        call(app, '/http://example.org/another', callback);
+      });
+
+      checkPosition(200, 'root');
+      checkLocation(200, '', '/http://example.org/another');
+    });
+  });
+});
+
+// Creates a new urlMap from the location/app pairs in locationsMap.
 function makeMap(locationsMap) {
   var map = urlMap();
 
@@ -472,4 +349,17 @@ function makeMap(locationsMap) {
   }
 
   return map;
+}
+
+// Checks the last response for the given variables.
+function checkLocation(code, scriptName, pathInfo) {
+  checkStatus(code);
+  checkHeader('X-Script-Name', scriptName);
+  checkHeader('X-Path-Info', pathInfo);
+}
+
+// Checks the last response for the given variables.
+function checkPosition(code, position) {
+  checkStatus(code);
+  checkHeader('X-Position', position);
 }

@@ -1,337 +1,401 @@
-var qs = require("querystring");
-var assert = require("assert");
-var vows = require("vows");
-var BufferedStream = require("bufferedstream");
-var strata = require("../lib");
-var mock = strata.mock;
+require('./helper');
+var qs = require('querystring');
+var BufferedStream = require('bufferedstream');
 var Request = strata.Request;
 
-vows.describe("request").addBatch({
-  "A Request": {
-    topic: function () {
-      this.protocol = "https:";
-      this.protocolVersion = "1.1";
-      this.requestMethod = "POST";
-      this.serverName = "example.org";
-      this.serverPort = "1234";
-      this.pathInfo = "/some/path";
-      this.queryString = "a=1&b=hello%20world";
-      this.contentType = 'application/json; charset="utf-8"';
-      this.contentLength = "0";
-      this.userAgent = "test";
-      this.referrer = "http://example.com/phony";
-      this.headers = {
-        "Content-Type": this.contentType,
-        "Content-Length": this.contentLength,
-        "User-Agent": this.userAgent,
-        "Referer": this.referrer,
-        "X-Requested-With": "XMLHttpRequest",
-        "Accept": "text/html, */*",
-        "Accept-Charset": "iso-8859-1, *",
-        "Accept-Encoding": "gzip, *",
-        "Accept-Language": "en"
-      };
+describe('Request', function () {
+  it('may be instantiated without using new', function () {
+    assert.ok(Request() instanceof Request);
+  });
 
-      var env = mock.env({
-        protocol: this.protocol,
-        protocolVersion: this.protocolVersion,
-        requestMethod: this.requestMethod,
-        serverName: this.serverName,
-        serverPort: this.serverPort,
-        pathInfo: this.pathInfo,
-        queryString: this.queryString,
-        headers: this.headers
+  var protocol = 'https:';
+  var protocolVersion = '1.1';
+  var requestMethod = 'POST';
+  var serverName = 'example.org';
+  var serverPort = '1234';
+  var pathInfo = '/some/path';
+  var queryString = 'a=1&b=hello%20world';
+  var contentType = 'application/json; charset="utf-8"';
+  var contentLength = '0';
+  var userAgent = 'test';
+  var referrer = 'http://example.com/phony';
+  var headers = {
+    'Content-Type': contentType,
+    'Content-Length': contentLength,
+    'User-Agent': userAgent,
+    'Referer': referrer,
+    'X-Requested-With': 'XMLHttpRequest',
+    'Accept': 'text/html, */*',
+    'Accept-Charset': 'iso-8859-1, *',
+    'Accept-Encoding': 'gzip, *',
+    'Accept-Language': 'en'
+  };
+
+  describe('when newly created', function () {
+    var env, req;
+    beforeEach(function () {
+      env = mock.env({
+        protocol: protocol,
+        protocolVersion: protocolVersion,
+        requestMethod: requestMethod,
+        serverName: serverName,
+        serverPort: serverPort,
+        pathInfo: pathInfo,
+        queryString: queryString,
+        headers: headers
       });
 
-      var req = new Request(env);
+      req = new Request(env);
+    });
 
-      return req;
-    },
-    "may be instantiated without using new": function (req) {
-      assert.instanceOf(Request(), Request);
-    },
-    "should know its protocol": function (req) {
-      assert.equal(req.protocol, this.protocol);
-    },
-    "should know its protocol version": function (req) {
-      assert.equal(req.protocolVersion, this.protocolVersion);
-    },
-    "should know its method": function (req) {
-      assert.equal(req.method, this.requestMethod);
-    },
-    "should know its script name": function (req) {
-      assert.equal(req.scriptName, "");
-    },
-    "should be able to modify its script name": function (req) {
+    it('knows its protocol', function () {
+      assert.equal(req.protocol, protocol);
+    });
+
+    it('knows its protocol version', function () {
+      assert.equal(req.protocolVersion, protocolVersion);
+    });
+
+    it('knows its method', function () {
+      assert.equal(req.method, requestMethod);
+    });
+
+    it('knows its script name', function () {
+      assert.equal(req.scriptName, '');
+    });
+
+    it('is able to modify its script name', function () {
       var old = req.scriptName;
-      req.scriptName = "/another/path";
-      assert.equal(req.scriptName, "/another/path");
+      req.scriptName = '/another/path';
+      assert.equal(req.scriptName, '/another/path');
       req.scriptName = old;
       assert.equal(req.scriptName, old);
-    },
-    "should know its path info": function (req) {
-      assert.equal(req.pathInfo, this.pathInfo);
-    },
-    "should be able to modify its path info": function (req) {
+    });
+
+    it('knows its path info', function () {
+      assert.equal(req.pathInfo, pathInfo);
+    });
+
+    it('is able to modify its path info', function () {
       var old = req.pathInfo;
-      req.pathInfo = "/another/path";
-      assert.equal(req.pathInfo, "/another/path");
+      req.pathInfo = '/another/path';
+      assert.equal(req.pathInfo, '/another/path');
       req.pathInfo = old;
       assert.equal(req.pathInfo, old);
-    },
-    "should know its query string": function (req) {
-      assert.equal(req.queryString, this.queryString);
-    },
-    "should be able to modify its query string": function (req) {
+    });
+
+    it('knows its query string', function () {
+      assert.equal(req.queryString, queryString);
+    });
+
+    it('is able to modify its query string', function () {
       var old = req.queryString;
-      req.queryString = "a=2";
-      assert.equal(req.queryString, "a=2");
+      req.queryString = 'a=2';
+      assert.equal(req.queryString, 'a=2');
       req.queryString = old;
       assert.equal(req.queryString, old);
-    },
-    "should know its content type": function (req) {
-      assert.equal(req.contentType, this.contentType);
-    },
-    "should know its content length": function (req) {
-      assert.equal(req.contentLength, this.contentLength);
-    },
-    "should know its media type": function (req) {
-      assert.equal(req.mediaType, "application/json");
-    },
-    "should know if it's parseable": function (req) {
+    });
+
+    it('knows its content type', function () {
+      assert.equal(req.contentType, contentType);
+    });
+
+    it('knows its content length', function () {
+      assert.equal(req.contentLength, contentLength);
+    });
+
+    it('knows its media type', function () {
+      assert.equal(req.mediaType, 'application/json');
+    });
+
+    it("knows if it's parseable", function () {
       assert.ok(req.parseableData);
-    },
-    "should know its user agent": function (req) {
-      assert.equal(req.userAgent, this.userAgent);
-    },
-    "should know its referrer": function (req) {
-      assert.equal(req.referrer, this.referrer);
-    },
-    "should know what content types are acceptable": function (req) {
-      assert.ok(req.accepts("text/html"));
-      assert.ok(req.accepts("application/json"));
-    },
-    "should know what character sets are acceptable": function (req) {
-      assert.ok(req.acceptsCharset("iso-8859-1"));
-      assert.ok(req.acceptsCharset("utf-8"));
-    },
-    "should know what content encodings are acceptable": function (req) {
-      assert.ok(req.acceptsEncoding("gzip"));
-      assert.ok(req.acceptsEncoding("compress"));
-    },
-    "should know what languages are acceptable": function (req) {
-      assert.ok(req.acceptsLanguage("en"));
-      assert.ok(!req.acceptsLanguage("jp"));
-    },
-    "should know if it is secure": function (req) {
+    });
+
+    it('knows its user agent', function () {
+      assert.equal(req.userAgent, userAgent);
+    });
+
+    it('knows its referrer', function () {
+      assert.equal(req.referrer, referrer);
+    });
+
+    it('knows what content types are acceptable', function () {
+      assert.ok(req.accepts('text/html'));
+      assert.ok(req.accepts('application/json'));
+    });
+
+    it('knows what character sets are acceptable', function () {
+      assert.ok(req.acceptsCharset('iso-8859-1'));
+      assert.ok(req.acceptsCharset('utf-8'));
+    });
+
+    it('knows what content encodings are acceptable', function () {
+      assert.ok(req.acceptsEncoding('gzip'));
+      assert.ok(req.acceptsEncoding('compress'));
+    });
+
+    it('knows what languages are acceptable', function () {
+      assert.ok(req.acceptsLanguage('en'));
+      assert.ok(!req.acceptsLanguage('jp'));
+    });
+
+    it('knows if it is secure', function () {
       assert.ok(req.ssl);
-    },
-    "should know if it was made via XMLHttpRequest": function (req) {
+    });
+
+    it('knows if it was made via XMLHttpRequest', function () {
       assert.ok(req.xhr);
-    },
-    "should know its host and port": function (req) {
-      assert.equal(req.hostWithPort, this.serverName + ":" + this.serverPort);
-    },
-    "should know its host": function (req) {
-      assert.equal(req.host, this.serverName);
-    },
-    "should know its port": function (req) {
-      assert.equal(req.port, this.serverPort);
-    },
-    "should know its base URL": function (req) {
-      assert.equal(req.baseUrl, this.protocol + "//" + this.serverName + ":" + this.serverPort);
-    },
-    "should know its path": function (req) {
-      assert.equal(req.path, this.pathInfo);
-    },
-    "should know its full path": function (req) {
-      assert.equal(req.fullPath, this.pathInfo + "?" + this.queryString);
-    },
-    "should know its URL": function (req) {
-      assert.equal(req.url, this.protocol + "//" + this.serverName + ":" + this.serverPort + this.pathInfo + "?" + this.queryString);
-    },
-    "behind a reverse HTTP proxy": {
-      topic: function () {
-        this.headers = {
-          "X-Forwarded-Ssl": "on",
-          "X-Forwarded-Host": this.serverName
-        };
+    });
 
-        var env = mock.env({ headers: this.headers });
+    it('knows its host and port', function () {
+      assert.equal(req.hostWithPort, serverName + ':' + serverPort);
+    });
+
+    it('knows its host', function () {
+      assert.equal(req.host, serverName);
+    });
+
+    it('knows its port', function () {
+      assert.equal(req.port, serverPort);
+    });
+
+    it('knows its base URL', function () {
+      assert.equal(req.baseUrl, protocol + '//' + serverName + ':' + serverPort);
+    });
+
+    it('knows its path', function () {
+      assert.equal(req.path, pathInfo);
+    });
+
+    it('knows its full path', function () {
+      assert.equal(req.fullPath, pathInfo + '?' + queryString);
+    });
+
+    it('knows its URL', function () {
+      assert.equal(req.url, protocol + '//' + serverName + ':' + serverPort + pathInfo + '?' + queryString);
+    });
+  });
+
+  describe('behind a reverse HTTP proxy', function () {
+    var headers = {
+      'X-Forwarded-Ssl': 'on',
+      'X-Forwarded-Host': serverName
+    };
+
+    var env, req;
+    beforeEach(function () {
+      env = mock.env({ headers: headers });
+      req = new Request(env);
+    });
+
+    it('knows its protocol', function () {
+      assert.equal(req.protocol, protocol);
+    });
+
+    it('knows its host', function () {
+      assert.equal(req.host, serverName);
+    });
+
+    it('knows its port', function () {
+      assert.equal(req.port, '443');
+    });
+  });
+
+  describe('with cookies', function () {
+    var cookieString = 'a=1, a=2,b=3';
+
+    var cookies;
+    beforeEach(function (callback) {
+      var app = function (env, cb) {
         var req = new Request(env);
+        req.cookies(function (err, c) {
+          cookies = c;
+          callback(err);
+        });
+      };
 
-        return req;
-      },
-      "should know its protocol": function (req) {
-        assert.equal(req.protocol, this.protocol);
-      },
-      "should know its host": function (req) {
-        assert.equal(req.host, this.serverName);
-      },
-      "should know its port": function (req) {
-        assert.equal(req.port, "443");
-      }
-    },
-    "with cookies": {
-      topic: function () {
-        this.cookie = "a=1, a=2,b=3";
+      call(app, mock.env({
+        headers: {
+          'Cookie': cookieString
+        }
+      }), noop);
+    });
 
-        var self = this;
-        var app = function (env, callback) {
-          var req = new Request(env);
-          req.cookies(self.callback);
-        };
+    it('should parse them correctly', function () {
+      assert.equal(cookies.a, '1');
+      assert.equal(cookies.b, '3');
+    });
+  });
 
-        mock.call(app, mock.env({
-          headers: {
-            "Cookie": this.cookie
-          }
-        }), noop);
-      },
-      "should parse them correctly": function (cookies) {
-        assert.deepEqual(cookies, { a: "1", b: "3" });
-      }
-    },
-    "with a query string": {
-      topic: function () {
-        this.queryString = "a=1&a=2&b=3";
+  describe('with a query string', function () {
+    var queryString = 'a=1&a=2&b=3';
 
-        var self = this;
-        var app = function (env, callback) {
-          var req = new Request(env);
-          req.query(self.callback);
-        };
+    var query;
+    beforeEach(function (callback) {
+      var app = function (env, cb) {
+        var req = new Request(env);
+        req.query(function (err, q) {
+          query = q;
+          callback(err);
+        });
+      };
 
-        mock.call(app, '/?' + this.queryString, noop);
-      },
-      "should parse it correctly": function (query) {
-        assert.deepEqual(query, qs.parse(this.queryString));
-      }
-    },
-    "with a text/plain body": {
-      topic: function () {
-        this.body = "This is some plain text.";
+      call(app, '/?' + queryString, noop);
+    });
 
-        var self = this;
-        var app = function (env, callback) {
-          var req = new Request(env);
-          req.body(self.callback);
-        };
+    it('should parse it correctly', function () {
+      assert.deepEqual(query, qs.parse(queryString));
+    });
+  });
 
-        mock.call(app, mock.env({
-          headers: {
-            "Content-Type": "text/plain",
-            "Content-Length": this.body.length.toString(10)
-          },
-          input: new BufferedStream(this.body)
-        }), noop);
-      },
-      "should pass through unparsed": function (body) {
-        assert.equal(body, this.body);
-      }
-    },
-    "with an application/json body": {
-      topic: function () {
-        this.body = '{ "a": 1, "b": 2 }';
+  describe('with a text/plain body', function () {
+    var content = 'This is some plain text.';
 
-        var self = this;
-        var app = function (env, callback) {
-          var req = new Request(env);
-          req.body(self.callback);
-        };
+    var body;
+    beforeEach(function (callback) {
+      var app = function (env, cb) {
+        var req = new Request(env);
+        req.body(function (err, b) {
+          body = b;
+          callback(err);
+        });
+      };
 
-        mock.call(app, mock.env({
-          headers: {
-            "Content-Type": "application/json",
-            "Content-Length": this.body.length.toString(10)
-          },
-          input: new BufferedStream(this.body)
-        }), noop);
-      },
-      "should parse it correctly": function (body) {
-        assert.deepEqual(body, JSON.parse(this.body));
-      }
-    },
-    "with an application/x-www-form-urlencoded body": {
-      topic: function () {
-        this.body = "a=1&a=2";
+      call(app, mock.env({
+        headers: {
+          'Content-Type': 'text/plain',
+          'Content-Length': String(Buffer.byteLength(content))
+        },
+        input: new BufferedStream(content)
+      }), noop);
+    });
 
-        var self = this;
-        var app = function (env, callback) {
-          var req = new Request(env);
-          req.body(self.callback);
-        };
+    it('should pass through unparsed', function () {
+      assert.equal(body, content);
+    });
+  });
 
-        mock.call(app, mock.env({
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Content-Length": this.body.length.toString(10)
-          },
-          input: new BufferedStream(this.body)
-        }), noop);
-      },
-      "should parse it correctly": function (body) {
-        assert.deepEqual(body, qs.parse(this.body));
-      }
-    },
-    "with a multipart/form-data body": {
-      topic: function () {
-        var body = '--AaB03x\r\n\
+  describe('with an application/json body', function () {
+    var content = '{ "a": 1, "b": 2 }';
+
+    var body;
+    beforeEach(function (callback) {
+      var app = function (env, cb) {
+        var req = new Request(env);
+        req.body(function (err, b) {
+          body = b;
+          callback(err);
+        });
+      };
+
+      call(app, mock.env({
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': String(Buffer.byteLength(content))
+        },
+        input: new BufferedStream(content)
+      }), noop);
+    });
+
+    it('should parse it correctly', function () {
+      assert.deepEqual(body, JSON.parse(content));
+    });
+  });
+
+  describe('with an application/x-www-form-urlencoded body', function () {
+    var content = 'a=1&a=2';
+
+    var body;
+    beforeEach(function (callback) {
+      var app = function (env, cb) {
+        var req = new Request(env);
+        req.body(function (err, b) {
+          body = b;
+          callback(err);
+        });
+      };
+
+      call(app, mock.env({
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': String(Buffer.byteLength(content))
+        },
+        input: new BufferedStream(content)
+      }), noop);
+    });
+
+    it('should parse it correctly', function () {
+      assert.deepEqual(body, qs.parse(content));
+    });
+  });
+
+  describe('with a multipart/form-data body', function () {
+    var content = '--AaB03x\r\n\
 Content-Disposition: form-data; name="a"\r\n\
 \r\n\
-hello world\r\n\
+Hello world!\r\n\
 --AaB03x--\r';
 
-        var self = this;
-        var app = function (env, callback) {
-          var req = new Request(env);
-          req.body(self.callback);
-        };
+    var body;
+    beforeEach(function (callback) {
+      var app = function (env, cb) {
+        var req = new Request(env);
+        req.body(function (err, b) {
+          body = b;
+          callback(err);
+        });
+      };
 
-        mock.call(app, mock.env({
-          headers: {
-            "Content-Type": 'multipart/form-data; boundary="AaB03x"',
-            "Content-Length": body.length.toString(10)
-          },
-          input: new BufferedStream(body)
-        }), noop);
-      },
-      "should parse it correctly": function (body) {
-        assert.equal(body.a, "hello world");
-      }
-    },
-    "with a query string and a multipart/form-data body": {
-      topic: function () {
-        this.queryString = "a=1&a=2&b=3";
+      call(app, mock.env({
+        headers: {
+          'Content-Type': 'multipart/form-data; boundary="AaB03x"',
+          'Content-Length': String(Buffer.byteLength(content))
+        },
+        input: new BufferedStream(content)
+      }), noop);
+    });
 
-        var body = '--AaB03x\r\n\
+    it('should parse it correctly', function () {
+      assert.equal(body.a, 'Hello world!');
+    });
+  });
+
+  describe('with a query string and a multipart/form-data body', function () {
+    var queryString = 'a=1&a=2&b=3';
+    var content = '--AaB03x\r\n\
 Content-Disposition: form-data; name="a"\r\n\
 \r\n\
-hello world\r\n\
+Hello world!\r\n\
 --AaB03x--\r';
 
-        var self = this;
-        var app = function (env, callback) {
-          var req = new Request(env);
-          req.params(self.callback);
-        };
+    var params;
+    beforeEach(function (callback) {
+      var app = function (env, cb) {
+        var req = new Request(env);
+        req.params(function (err, p) {
+          params = p;
+          callback(err);
+        });
+      };
 
-        mock.call(app, mock.env({
-          queryString: this.queryString,
-          headers: {
-            "Content-Type": 'multipart/form-data; boundary="AaB03x"',
-            "Content-Length": body.length.toString(10)
-          },
-          input: new BufferedStream(body)
-        }), noop);
-      },
-      "should parse all params correctly": function (params) {
-        // The "a" parameter in the body should overwrite the value
-        // of the parameter with the same name in the query string.
-        assert.deepEqual(params, { a: "hello world", b: "3" });
-      }
-    }
-  }
-}).export(module);
+      call(app, mock.env({
+        queryString: queryString,
+        headers: {
+          'Content-Type': 'multipart/form-data; boundary="AaB03x"',
+          'Content-Length': String(Buffer.byteLength(content))
+        },
+        input: new BufferedStream(content)
+      }), noop);
+    });
+
+    it('should parse all params correctly', function () {
+      // The "a" parameter in the body should overwrite the value
+      // of the parameter with the same name in the query string.
+      assert.equal(params.a, 'Hello world!');
+      assert.equal(params.b, '3');
+    });
+  });
+});
 
 function noop(status, headers, body) {}

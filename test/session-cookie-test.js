@@ -1,91 +1,100 @@
-var assert = require("assert");
-var vows = require("vows");
-var strata = require("../lib");
-var mock = strata.mock;
+require('./helper');
 var sessionCookie = strata.sessionCookie;
 
-vows.describe("sessionCookie").addBatch({
-  "A sessionCookie middleware": {
-    "should properly serialize and deserialize cookie data": function () {
+describe('sessionCookie', function () {
+  var app = sessionCookie(increment);
+
+  describe('when the cookie is ok', function () {
+    it('properly serializes/deserializes cookie data', function () {
       var sync = false;
-      var app = sessionCookie(increment);
 
-      mock.call(app, '/', function (err, status, headers, body) {
-        assert.ok(headers["Set-Cookie"]);
-        var match = headers["Set-Cookie"].match(/(strata\.session=[^;]+)/);
+      call(app, '/', function (err) {
+        assert.ok(!err);
+        assert.ok(headers['Set-Cookie']);
+        var match = headers['Set-Cookie'].match(/(strata\.session=[^;]+)/);
         assert.ok(match);
-        assert.deepEqual(JSON.parse(body), { counter: 1 });
+        assert.equal(JSON.parse(body).counter, 1);
 
-        mock.call(app, mock.env({
+        call(app, mock.env({
           headers: {
-            "Cookie": match[1]
+            'Cookie': match[1]
           }
-        }), function (err, status, headers, body) {
+        }), function (err) {
           sync = true;
-          assert.ok(headers["Set-Cookie"]);
-          assert.deepEqual(JSON.parse(body), { counter: 2 });
+          assert.ok(!err);
+          assert.ok(headers['Set-Cookie']);
+          assert.equal(JSON.parse(body).counter, 2);
         });
       });
 
       assert.ok(sync);
-    },
-    "should reset the session when the cookie is tampered with": function () {
-      var sync = false;
-      var app = sessionCookie(increment);
+    });
+  });
 
-      mock.call(app, '/', function (err, status, headers, body) {
-        assert.ok(headers["Set-Cookie"]);
-        var match = headers["Set-Cookie"].match(/(strata\.session=[^;]+)/);
+  describe('when the cookie has been tampered with', function () {
+    it('erases the cookie data', function () {
+      var sync = false;
+
+      call(app, '/', function (err) {
+        assert.ok(!err);
+        assert.ok(headers['Set-Cookie']);
+        var match = headers['Set-Cookie'].match(/(strata\.session=[^;]+)/);
         assert.ok(match);
-        assert.deepEqual(JSON.parse(body), { counter: 1 });
+        assert.deepEqual(JSON.parse(body).counter, 1);
 
         // Tamper with the cookie.
         var cookie = match[1].substring(0, match[1].length - 2);
 
-        mock.call(app, mock.env({
+        call(app, mock.env({
           headers: {
-            "Cookie": cookie
+            'Cookie': cookie
           }
-        }), function (err, status, headers, body) {
+        }), function (err) {
           sync = true;
-          assert.ok(headers["Set-Cookie"]);
-          assert.deepEqual(JSON.parse(body), { counter: 1 });
+          assert.ok(!err);
+          assert.ok(headers['Set-Cookie']);
+          assert.deepEqual(JSON.parse(body).counter, 1);
         });
       });
 
       assert.ok(sync);
-    },
-    "when the cookie size exceeds 4k": {
-      topic: function () {
-        var app = sessionCookie(toobig);
+    });
+  });
 
-        mock.call(app, mock.env({
-          error: mock.stream(this)
-        }), this.callback);
-      },
-      "should not set the cookie": function (err, status, headers, body) {
-        assert.isUndefined(headers["Set-Cookie"]);
-      },
-      "should drop content": function (err, status, headers, body) {
-        assert.match(this.data, /content dropped/i);
-      }
-    }
-  }
-}).export(module);
+  describe('when the cookie size exceeds 4k', function () {
+    var app = sessionCookie(toobig);
+
+    var stream;
+    beforeEach(function (callback) {
+      stream = {};
+      call(app, mock.env({
+        error: mock.stream(stream)
+      }), callback);
+    });
+
+    it('does not set the cookie', function () {
+      assert.ok(!headers['Set-Cookie']);
+    });
+
+    it('drops content', function () {
+      assert.ok(stream.data.match(/content dropped/i));
+    });
+  });
+});
 
 function stringify(env, callback) {
   var content = JSON.stringify(env.session || {});
 
   callback(200, {
-    "Content-Type": "text/plain",
-    "Content-Length": content.length.toString(10)
+    'Content-Type': 'text/plain',
+    'Content-Length': String(Buffer.byteLength(content))
   }, content);
 }
 
 function increment(env, callback) {
   assert.ok(env.session);
 
-  if (!("counter" in env.session)) {
+  if (!('counter' in env.session)) {
     env.session.counter = 0;
   }
 
@@ -97,10 +106,10 @@ function increment(env, callback) {
 function toobig(env, callback) {
   assert.ok(env.session);
 
-  var value = "";
+  var value = '';
 
   for (var i = 0; i < 4096; ++i) {
-    value += "a";
+    value += 'a';
   }
 
   env.session.value = value;

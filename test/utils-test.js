@@ -1,73 +1,70 @@
-var assert = require("assert");
-var vows = require("vows");
-var strata = require("../lib");
-var utils = strata.utils;
+require('./helper');
 
-vows.describe("utils").addBatch({
-  'An "Accept" header': headerConversionContext("Accept", "Accept", "Accept", "accept"),
-  'An "accept" header': headerConversionContext("accept", "Accept", "Accept", "accept"),
-  'A "Content-Type" header': headerConversionContext("Content-Type", "Content-Type", "ContentType", "contentType"),
-  'A "content-type" header': headerConversionContext("content-type", "Content-Type", "ContentType", "contentType"),
-  'An "X-Forwarded-Ssl" header': headerConversionContext("X-Forwarded-Ssl", "X-Forwarded-Ssl", "XForwardedSsl", "xForwardedSsl"),
-  'An "x-forwarded-ssl" header': headerConversionContext("x-forwarded-ssl", "X-Forwarded-Ssl", "XForwardedSsl", "xForwardedSsl"),
-  "compileRoute": {
-    "should properly recognize valid identifiers": function () {
+describe('utils', function () {
+  testHeaderConversion('Accept', 'Accept', 'Accept', 'accept');
+  testHeaderConversion('accept', 'Accept', 'Accept', 'accept');
+  testHeaderConversion('Content-Type', 'Content-Type', 'ContentType', 'contentType');
+  testHeaderConversion('content-type', 'Content-Type', 'ContentType', 'contentType');
+  testHeaderConversion('X-Forwarded-Ssl', 'X-Forwarded-Ssl', 'XForwardedSsl', 'xForwardedSsl');
+  testHeaderConversion('x-forwarded-ssl', 'X-Forwarded-Ssl', 'XForwardedSsl', 'xForwardedSsl');
+
+  describe('compileRoute', function () {
+    it('should properly recognize valid identifiers', function () {
       var keys, pattern;
 
       keys = [];
-      pattern = utils.compileRoute("/users/:id", keys);
+      pattern = utils.compileRoute('/users/:id', keys);
 
       assert.ok(pattern);
-      assert.deepEqual(keys, ["id"]);
-      assert.match("/users/1", pattern);
-      assert.match("/users/asdf1324_", pattern);
+      assert.deepEqual(keys, ['id']);
+      assert.match('/users/1', pattern);
+      assert.match('/users/asdf1324_', pattern);
 
       keys = [];
-      pattern = utils.compileRoute("/users/:$id/photos/:_photo_id", keys);
+      pattern = utils.compileRoute('/users/:$id/photos/:_photo_id', keys);
 
       assert.ok(pattern);
-      assert.deepEqual(keys, ["$id", "_photo_id"]);
-      assert.match("/users/1/photos/1", pattern);
+      assert.deepEqual(keys, ['$id', '_photo_id']);
+      assert.match('/users/1/photos/1', pattern);
 
       keys = [];
-      pattern = utils.compileRoute("/users/:id.:format", keys);
+      pattern = utils.compileRoute('/users/:id.:format', keys);
 
       assert.ok(pattern);
-      assert.deepEqual(keys, ["id", "format"]);
-      assert.match("/users/2.json", pattern);
-    },
-    "should properly recognize the splat character": function () {
+      assert.deepEqual(keys, ['id', 'format']);
+      assert.match('/users/2.json', pattern);
+    });
+
+    it('recognizes the splat character', function () {
       var keys = [];
-      var pattern = utils.compileRoute("/users/*", keys);
+      var pattern = utils.compileRoute('/users/*', keys);
 
       assert.ok(pattern);
-      assert.deepEqual(keys, ["splat"]);
-      assert.match("/users/1", pattern);
-      assert.match("/users/1/photos/1", pattern);
-    },
-    "should ignore invalid identifiers": function () {
+      assert.deepEqual(keys, ['splat']);
+      assert.match('/users/1', pattern);
+      assert.match('/users/1/photos/1', pattern);
+    });
+
+    it('ignores invalid identifiers', function () {
       var keys = [];
-      var pattern = utils.compileRoute("/users/:1id");
+      var pattern = utils.compileRoute('/users/:1id');
 
       assert.ok(pattern);
-      assert.isEmpty(keys);
-    }
-  }
-}).export(module);
+      assert.empty(keys);
+    });
+  });
+});
 
-function headerConversionContext(header, canonical, capitalized, property) {
-  var context = {};
-
-  context.topic = header;
-  context["should be converted to the proper canonical name"] = function (header) {
+function testHeaderConversion(header, canonical, capitalized, property) {
+  it('converts a ' + header + ' header to the proper canonical name', function () {
     assert.equal(utils.canonicalHeaderName(header), canonical);
-  };
-  context["should be converted to the proper capitalized name"] = function (header) {
-    assert.equal(utils.capitalizedHeaderName(header), capitalized);
-  };
-  context["should be converted to the proper property name"] = function (header) {
-    assert.equal(utils.propertyName(header), property);
-  };
+  });
 
-  return context;
+  it('converts a ' + header + ' header to the proper capitalized name', function () {
+    assert.equal(utils.capitalizedHeaderName(header), capitalized);
+  });
+
+  it('converts a ' + header + ' header to the proper property name', function () {
+    assert.equal(utils.propertyName(header), property);
+  });
 }

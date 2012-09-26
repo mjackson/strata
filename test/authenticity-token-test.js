@@ -1,85 +1,82 @@
-var assert = require('assert');
-var vows = require('vows');
-var strata = require('../lib');
+require('./helper');
 var sessionCookie = strata.sessionCookie;
 var authenticityToken = strata.authenticityToken;
-var mock = strata.mock;
-var utils = strata.utils;
 
-vows.describe('authenticityToken').addBatch({
-  'An authenticityToken middleware': {
-    topic: function () {
-      return sessionCookie(putTokenInHeader(authenticityToken(utils.ok)));
-    },
-    'when the request is "safe"': {
-      topic: function (app) {
-        mock.call(app, '/', this.callback);
-      },
-      'returns 200': function (err, status, headers, body) {
-        assert.equal(status, 200);
-      },
-      'generates a token': function (err, status, headers, body) {
-        assert(headers['X-Authenticity-Token']);
-      }
-    },
-    'when the request is not "safe"': {
-      topic: function (app) {
-        this.requestMethod = 'POST';
-        return app;
-      },
-      'and an X-Authenticity-Token header is not provided': {
-        topic: function (app) {
-          mock.call(app, mock.env({
-            requestMethod: this.requestMethod
-          }), this.callback);
-        },
-        'returns 403': function (err, status, headers, body) {
+describe('authenticityToken', function () {
+  var app = sessionCookie(echoToken(authenticityToken(utils.ok)));
+
+  describe('when the request is "safe"', function () {
+    beforeEach(function (callback) {
+      call(app, '/', callback);
+    });
+
+    it('returns 200', function () {
+      assert.equal(status, 200);
+    });
+
+    it('generates a token', function () {
+      assert(headers['X-Authenticity-Token']);
+    });
+  });
+
+  describe('when the request is not "safe"', function () {
+    var requestMethod = 'POST';
+
+    describe('and an X-Authenticity-Token header is not provided', function () {
+      beforeEach(function (callback) {
+        call(app, mock.env({ requestMethod: requestMethod }), callback);
+      });
+
+      it('returns 403', function () {
+        assert.equal(status, 403);
+      });
+    });
+
+    describe('and an X-Authenticity-Token header is provided', function () {
+      describe('that matches the value in the session', function () {
+        beforeEach(function (callback) {
+          var env = mock.env({
+            requestMethod: requestMethod,
+            headers: {
+              'X-Authenticity-Token': 'abc'
+            }
+          });
+
+          env.session = {};
+          env.session['strata.csrf'] = 'abc';
+
+          call(app, env, callback);
+        });
+
+        it('returns 200', function () {
+          assert.equal(status, 200);
+        });
+      });
+
+      describe('that does not match the value in the session', function () {
+        beforeEach(function (callback) {
+          var env = mock.env({
+            requestMethod: requestMethod,
+            headers: {
+              'X-Authenticity-Token': 'abc'
+            }
+          });
+
+          env.session = {};
+          env.session['strata.csrf'] = 'def';
+
+          call(app, env, callback);
+        });
+
+        it('returns 403', function () {
           assert.equal(status, 403);
-        }
-      },
-      'and an X-Authenticity-Token header is provided': {
-        'that matches the value in the session': {
-          topic: function (app) {
-            var env = mock.env({
-              requestMethod: this.requestMethod,
-              headers: {
-                'X-Authenticity-Token': 'abc'
-              }
-            });
+        });
+      });
+    });
+  });
+});
 
-            env.session = {};
-            env.session['strata.csrf'] = 'abc';
-
-            mock.call(app, env, this.callback);
-          },
-          'returns 200': function (err, status, headers, body) {
-            assert.equal(status, 200);
-          }
-        },
-        'that does not match the value in the session': {
-          topic: function (app) {
-            var env = mock.env({
-              requestMethod: this.requestMethod,
-              headers: {
-                'X-Authenticity-Token': 'abc'
-              }
-            });
-
-            env.session = {};
-            env.session['strata.csrf'] = 'def';
-
-            mock.call(app, env, this.callback);
-          },
-          'return 403': function (err, status, headers, body) {
-            assert.equal(status, 403);
-          }
-        }
-      }
-    }
-  }
-}).export(module);
-
-function putTokenInHeader(app) {
+function echoToken(app) {
   return function (env, callback) {
     app(env, function (status, headers, body) {
       headers['X-Authenticity-Token'] = env.session['strata.csrf'];

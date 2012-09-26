@@ -1,74 +1,83 @@
-var assert = require('assert');
+require('./helper');
 var qs = require('querystring');
-var vows = require('vows');
-var strata = require('../lib');
-var utils = strata.utils;
-var mock = strata.mock;
 
-vows.describe('mock').addBatch({
-  'A mock request to utils.ok': {
-    topic: function () {
-      mock.call(utils.ok, '/', this.callback);
-    },
-    'should return a correct status code': function (err, status, headers, body) {
+describe('mock', function () {
+  describe('a request to utils.ok', function () {
+    beforeEach(function (callback) {
+      call(utils.ok, '/', callback);
+    });
+
+    it('returns 200', function () {
       assert.equal(status, 200);
-    },
-    'should return the correct headers': function (err, status, headers, body) {
-      assert.deepEqual(headers, { 'Content-Type': 'text/plain', 'Content-Length': '2' });
-    },
-    'should return an OK body': function (err, status, headers, body) {
-      assert.equal(body, 'OK');
-    }
-  },
-  'A mock HEAD request': {
-    topic: function () {
-      var app = function (env, callback) {
-        assert.equal(env.requestMethod, 'HEAD');
-        utils.ok(env, callback);
-      };
+    });
 
-      mock.call(app, mock.env({
+    it('returns the correct headers', function () {
+      assert.equal(headers['Content-Type'], 'text/plain');
+      assert.equal(headers['Content-Length'], '2');
+    });
+
+    it('returns the correct body', function () {
+      assert.equal(body, 'OK');
+    });
+  });
+
+  describe('a HEAD request to utils.ok', function () {
+    var app = function (env, callback) {
+      assert.equal(env.requestMethod, 'HEAD');
+      utils.ok(env, callback);
+    };
+
+    beforeEach(function (callback) {
+      call(app, mock.env({
         requestMethod: 'HEAD'
-      }), this.callback);
-    },
-    'should return a Content-Length of 0': function (err, status, headers, body) {
+      }), callback);
+    });
+
+    it('returns a Content-Length of 0', function () {
       assert.equal(headers['Content-Length'], '0');
-    },
-    'should return an empty body': function (err, status, headers, body) {
+    });
+
+    it('returns an empty body', function () {
       assert.equal(body, '');
-    }
-  },
-  'env': {
-    'when given a params object in a GET request': {
-      topic: function () {
+    });
+  });
+
+  describe('env', function () {
+    describe('when given a params object in a GET request', function () {
+      var queryString;
+      beforeEach(function () {
         var env = mock.env({ requestMethod: 'GET', params: { a: 'a', b: 'b' } });
-        return env.queryString;
-      },
-      'encodes it in the query string': function (queryString) {
+        queryString = env.queryString;
+      });
+
+      it('encodes it in the query string', function () {
         var data = qs.parse(queryString);
         assert.equal(data.a, 'a');
         assert.equal(data.b, 'b');
-      }
-    },
-    'when given a params object in a POST request': {
-      topic: function () {
+      });
+    });
+
+    describe('when given a params object in a POST request', function () {
+      var content;
+      beforeEach(function (callback) {
+        content = '';
         var env = mock.env({ requestMethod: 'POST', params: { a: 'a', b: 'b' } });
-        var body = '';
 
         env.input.on('data', function (chunk) {
-          body += chunk.toString('utf8');
+          content += chunk.toString('utf8');
         });
 
-        var callback = this.callback;
         env.input.on('end', function () {
-          callback(null, body);
+          callback(null);
         });
-      },
-      'encodes it in the body': function (body) {
-        var data = qs.parse(body);
+      });
+
+      it('encodes it in the body', function () {
+        var data = qs.parse(content);
         assert.equal(data.a, 'a');
         assert.equal(data.b, 'b');
-      }
-    }
-  }
-}).export(module);
+      });
+    });
+
+  });
+});

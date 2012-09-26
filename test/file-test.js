@@ -1,85 +1,91 @@
-var path = require("path");
-var fs = require("fs");
-var EventEmitter = require("events").EventEmitter;
-var assert = require("assert");
-var vows = require("vows");
-var strata = require("../lib");
-var utils = strata.utils;
-var mock = strata.mock;
+require('./helper');
+var path = require('path');
+var fs = require('fs');
 var file = strata.file;
 
-var root = path.join(__dirname, "_files");
+describe('file', function () {
+  var filename = path.basename(__filename);
+  var contents = fs.readFileSync(__filename, 'utf8');
 
-vows.describe("file").addBatch({
-  "A file middleware": {
-    topic: function () {
-      return file(utils.notFound, root, "index.html");
-    },
-    "when a static file is requested": {
-      topic: function (app) {
-        this.body = fs.readFileSync(path.join(root, "text"), "utf8");
-        mock.call(app, "/text", this.callback);
-      },
-      "should return a 200": function (err, status, headers, body) {
+  describe('with a single index file', function () {
+    var app = file(utils.notFound, __dirname, filename);
+
+    describe('when a file is requested', function () {
+      beforeEach(function (callback) {
+        call(app, '/' + filename, callback);
+      });
+
+      it('returns 200', function () {
         assert.equal(status, 200);
-      },
-      "should serve that file": function (err, status, headers, body) {
-        assert.equal(body, this.body);
-      },
-      "should set the correct Content-Type": function (err, status, headers, body) {
-        assert.equal(headers["Content-Type"], "text/plain");
-      }
-    },
-    "when a directory is requested": {
-      topic: function (app) {
-        this.body = fs.readFileSync(path.join(root, "index.html"), "utf8");
-        mock.call(app, "/", this.callback);
-      },
-      "should return a 200": function (err, status, headers, body) {
+      });
+
+      it('serves that file', function () {
+        assert.equal(body, contents);
+      });
+
+      it('sets the correct Content-Type', function () {
+        assert.equal(headers['Content-Type'], 'application/javascript');
+      });
+    });
+
+    describe('when a directory is requested', function () {
+      beforeEach(function (callback) {
+        call(app, '/', callback);
+      });
+
+      it('returns 200', function () {
         assert.equal(status, 200);
-      },
-      "should serve the index file": function (err, status, headers, body) {
-        assert.equal(body, this.body);
-      },
-      "should set the correct Content-Type": function (err, status, headers, body) {
-        assert.equal(headers["Content-Type"], "text/html");
-      }
-    },
-    "when a matching file cannot be found": {
-      topic: function (app) {
-        mock.call(app, "/does-not-exist", this.callback);
-      },
-      "should forward the request to the downstream app": function (err, status, headers, body) {
+      });
+
+      it('serves the index file', function () {
+        assert.equal(body, contents);
+      });
+
+      it('sets the correct Content-Type', function () {
+        assert.equal(headers['Content-Type'], 'application/javascript');
+      });
+    });
+
+    describe('when a matching file cannot be found', function () {
+      beforeEach(function (callback) {
+        call(app, '/does-not-exist', callback);
+      });
+
+      it('forwards the request to the downstream app', function () {
         assert.equal(status, 404);
-      }
-    },
-    "when the path contains ..": {
-      topic: function (app) {
-        mock.call(app, "/../etc/passwd", this.callback);
-      },
-      "should respond with a 403": function (err, status, headers, body) {
+      });
+    });
+
+    describe('when the path contains ".."', function () {
+      beforeEach(function (callback) {
+        call(app, '/../etc/passwd', callback);
+      });
+
+      it('returns 403', function () {
         assert.equal(status, 403);
-      }
-    }
-  },
-  "A file middleware with multiple index files": {
-    topic: function () {
-      return file(utils.notFound, root, ["index.htm", "index.html"]);
-    },
-    "when a directory is requested": {
-      topic: function (app) {
-        this.body = fs.readFileSync(path.join(root, "index.html"), "utf8");
-        mock.call(app, "/", this.callback);
-      },
-      "should return a 200": function (err, status, headers, body) {
+      });
+    });
+  });
+
+  describe('with multiple index files', function () {
+    var app = file(utils.notFound, __dirname, ['index.html', filename]);
+
+    describe('when a directory is requested', function () {
+      beforeEach(function (callback) {
+        call(app, '/', callback);
+      });
+
+      it('returns 200', function () {
         assert.equal(status, 200);
-      },
-      "should serve the first index file that exists": function (err, status, headers, body) {
-        assert.equal(body, this.body);
-      },
-      "should set the correct Content-Type": function (err, status, headers, body) {
-        assert.equal(headers["Content-Type"], "text/html");
-      }
-    }
-  }
-}).export(module);
+      });
+
+      it('serves the first index file that exists', function () {
+        assert.equal(body, contents);
+      });
+
+      it('sets the correct Content-Type', function () {
+        assert.equal(headers['Content-Type'], 'application/javascript');
+      });
+    });
+  });
+});

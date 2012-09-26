@@ -1,80 +1,71 @@
-var assert = require("assert");
-var vows = require("vows");
+require('./helper');
 var BufferedStream = require("bufferedstream");
-var strata = require("../lib");
-var mock = strata.mock;
 var jsonp = strata.jsonp;
 
-vows.describe("jsonp").addBatch({
-  "A jsonp middleware": {
-    "with a string body": {
-      topic: function () {
-        this.body = JSON.stringify({ message: "Hello world!" });
+describe('jsonp', function () {
+  describe('with a string body', function () {
+    var content = JSON.stringify({ message: "Hello world!" });
+    var app = jsonp(function (env, callback) {
+      callback(200, { "Content-Type": "application/json" }, content);
+    });
 
-        var self = this;
-        var app = jsonp(function (env, callback) {
-          callback(200, { "Content-Type": "application/json" }, self.body);
-        });
+    beforeEach(function (callback) {
+      call(app, '/', callback);
+    });
 
-        mock.call(app, '/', this.callback);
-      },
-      "should wrap it in a JavaScript callback": function (err, status, headers, body) {
-        assert.equal(headers["Content-Type"], "application/javascript");
-        var expect = "callback(" + this.body + ")";
-        assert.equal(body, expect);
-      },
-      "with a custom callback name": {
-        topic: function () {
-          this.body = JSON.stringify({ message: "Hello world!" });
+    it('wraps the body in a JavaScript callback', function () {
+      assert.equal(headers["Content-Type"], "application/javascript");
+      assert.equal(body, "callback(" + content + ")");
+    });
+  });
 
-          var self = this;
-          var app = jsonp(function (env, callback) {
-            callback(200, { "Content-Type": "application/json" }, self.body);
-          }, "aCallback");
+  describe('with a custom callback name', function () {
+    var content = JSON.stringify({ message: "Hello world!" });
+    var callbackName = 'aCallback';
+    var app = jsonp(function (env, callback) {
+      callback(200, { "Content-Type": "application/json" }, content);
+    }, callbackName);
 
-          mock.call(app, '/', this.callback);
-        },
-        "should wrap it in a JavaScript callback with that name": function (err, status, headers, body) {
-          assert.equal(headers["Content-Type"], "application/javascript");
-          var expect = "aCallback(" + this.body + ")";
-          assert.equal(body, expect);
-        },
-        "when the request contains a `callback` parameter": {
-          topic: function () {
-            this.body = JSON.stringify({ message: "Hello world!" });
+    beforeEach(function (callback) {
+      call(app, '/', callback);
+    });
 
-            var self = this;
-            var app = jsonp(function (env, callback) {
-              callback(200, { "Content-Type": "application/json" }, self.body);
-            }, "aCallback");
+    it('wraps the body in a JavaScript callback with that name', function () {
+      assert.equal(headers["Content-Type"], "application/javascript");
+      assert.equal(body, callbackName + "(" + content + ")");
+    });
+  });
 
-            mock.call(app, "/?callback=customCallback", this.callback);
-          },
-          "should wrap it in a JavaScript callback with the name in that parameter": function (err, status, headers, body) {
-            assert.equal(headers["Content-Type"], "application/javascript");
-            var expect = "customCallback(" + this.body + ")";
-            assert.equal(body, expect);
-          }
-        }
-      }
-    },
-    "with a Stream body": {
-      topic: function () {
-        this.body = JSON.stringify({ message: "Hello world!" });
+  describe('when the request contains a "callback" parameter', function () {
+    var content = JSON.stringify({ message: "Hello world!" });
+    var callbackName = 'aCallback';
+    var app = jsonp(function (env, callback) {
+      callback(200, { "Content-Type": "application/json" }, content);
+    });
 
-        var self = this;
-        var app = jsonp(function (env, callback) {
-          var stream = new BufferedStream(self.body);
-          callback(200, { "Content-Type": "application/json" }, stream);
-        });
+    beforeEach(function (callback) {
+      call(app, '/?callback=' + callbackName, callback);
+    });
 
-        mock.call(app, '/', this.callback);
-      },
-      "should wrap it in a JavaScript callback": function (err, status, headers, body) {
-        assert.equal(headers["Content-Type"], "application/javascript");
-        var expect = "callback(" + this.body + ")";
-        assert.equal(body, expect);
-      }
-    }
-  }
-}).export(module);
+    it('wraps the body in a JavaScript callback with that name', function () {
+      assert.equal(headers["Content-Type"], "application/javascript");
+      assert.equal(body, callbackName + "(" + content + ")");
+    });
+  });
+
+  describe('with a stream body', function () {
+    var content = JSON.stringify({ message: "Hello world!" });
+    var app = jsonp(function (env, callback) {
+      callback(200, { "Content-Type": "application/json" }, new BufferedStream(content));
+    });
+
+    beforeEach(function (callback) {
+      call(app, '/', callback);
+    });
+
+    it('wraps the body in a JavaScript callback', function () {
+      assert.equal(headers["Content-Type"], "application/javascript");
+      assert.equal(body, "callback(" + content + ")");
+    });
+  });
+});

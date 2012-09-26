@@ -1,155 +1,162 @@
-var assert = require("assert");
-var vows = require("vows");
-var strata = require("../lib");
-var mock = strata.mock;
+require('./helper');
 var router = strata.router;
 
-vows.describe("router").addBatch({
-  "A router middleware": {
-    topic: function () {
-      var localRouter = router();
+describe('router', function () {
+  var app = router();
 
-      var app = function (env, callback) {
-        var routeParams = env.route;
+  var innerApp = function (env, callback) {
+    var routeParams = env.route;
+    assert.ok(routeParams);
 
-        assert.ok(routeParams);
+    callback(200, {
+      'Content-Type': 'text/plain',
+      'X-Route': JSON.stringify(routeParams),
+      'X-Id': String(routeParams.id)
+    }, '');
+  };
 
-        callback(200, {
-          "Content-Type": "text/plain",
-          "X-Route": JSON.stringify(routeParams),
-          "X-Id": String(routeParams.id)
-        }, "");
-      };
+  app.route(/\/users\/(\d+)/i, innerApp);
+  app.route('/posts/:id', innerApp, 'GET');
+  app.route('/posts/:id', innerApp, ['POST', 'DELETE']);
 
-      localRouter.route(/\/users\/(\d+)/i, app);
-      localRouter.route("/posts/:id", app, "GET");
-      localRouter.route("/posts/:id", app, ["POST", "DELETE"]);
+  describe('when a match cannot be made', function () {
+    beforeEach(function (callback) {
+      call(app, '/', callback);
+    });
 
-      return localRouter;
-    },
-    "when a match cannot be made": {
-      topic: function (app) {
-        mock.call(app, '/', this.callback);
-      },
-      "should return 404": function (err, status, headers, body) {
+    it('returns 404', function () {
+      assert.equal(status, 404);
+    });
+  });
+
+  describe('GET /users/1', function () {
+    beforeEach(function (callback) {
+      call(app, '/users/1', callback);
+    });
+
+    it('calls the correct app', function () {
+      assert.ok(headers['X-Route']);
+      assert.deepEqual(JSON.parse(headers['X-Route']), ['/users/1', '1']);
+    });
+
+    it('does not set the id route parameter', function () {
+      assert.ok(headers['X-Id']);
+      assert.equal(headers['X-Id'], 'undefined');
+    });
+  });
+
+  describe('GET /posts/1', function () {
+    beforeEach(function (callback) {
+      call(app, '/posts/1', callback);
+    });
+
+    it('calls the correct app', function () {
+      assert.ok(headers['X-Route']);
+      assert.deepEqual(JSON.parse(headers['X-Route']), ['/posts/1', '1']);
+    });
+
+    it('sets the id route parameter', function () {
+      assert.ok(headers['X-Id']);
+      assert.equal(headers['X-Id'], '1');
+    });
+  });
+
+  describe('POST /posts/2', function () {
+    beforeEach(function (callback) {
+      call(app, mock.env({
+        requestMethod: 'POST',
+        pathInfo: '/posts/2'
+      }), callback);
+    });
+
+    it('calls the correct app', function () {
+      assert.ok(headers['X-Route']);
+      assert.deepEqual(JSON.parse(headers['X-Route']), ['/posts/2', '2']);
+    });
+
+    it('sets the id route parameter', function () {
+      assert.ok(headers['X-Id']);
+      assert.equal(headers['X-Id'], '2');
+    });
+  });
+
+  describe('DELETE /posts/3', function () {
+    beforeEach(function (callback) {
+      call(app, mock.env({
+        requestMethod: 'DELETE',
+        pathInfo: '/posts/3'
+      }), callback);
+    });
+
+    it('calls the correct app', function () {
+      assert.ok(headers['X-Route']);
+      assert.deepEqual(JSON.parse(headers['X-Route']), ['/posts/3', '3']);
+    });
+
+    it('sets the id route parameter', function () {
+      assert.ok(headers['X-Id']);
+      assert.equal(headers['X-Id'], '3');
+    });
+  });
+
+  describe('PUT /posts/1', function () {
+    beforeEach(function (callback) {
+      call(app, mock.env({
+        requestMethod: 'PUT',
+        pathInfo: '/posts/1'
+      }), callback);
+    });
+
+    it('returns 404', function () {
+      assert.equal(status, 404);
+    });
+  });
+
+  describe('with a router that returns an "X-Cascade: pass" header', function () {
+    var app = router();
+
+    app.route('/path', pass(idApp('1')));
+    app.route('/path', idApp('2'));
+
+    describe('when that route matches', function () {
+      beforeEach(function (callback) {
+        call(app, '/path', callback);
+      });
+
+      it('cascades to the next route', function () {
+        assert.ok(headers['X-Id']);
+        assert.equal(headers['X-Id'], '2');
+      });
+    });
+
+    describe('when no routes match', function () {
+      beforeEach(function (callback) {
+        call(app, '/', callback);
+      });
+
+      it('returns the result of the default app', function () {
         assert.equal(status, 404);
-      },
-    },
-    "when /users/1 is requested": {
-      topic: function (app) {
-        mock.call(app, "/users/1", this.callback);
-      },
-      "should call the correct app": function (err, status, headers, body) {
-        assert.ok(headers["X-Route"]);
-        assert.deepEqual(JSON.parse(headers["X-Route"]), ["/users/1", "1"]);
-      },
-      "should not set the id route parameter": function (err, status, headers, body) {
-        assert.ok(headers["X-Id"]);
-        assert.equal(headers["X-Id"], "undefined");
-      }
-    },
-    "when /posts/1 is requested": {
-      topic: function (app) {
-        mock.call(app, "/posts/1", this.callback);
-      },
-      "should call the correct app": function (err, status, headers, body) {
-        assert.ok(headers["X-Route"]);
-        assert.deepEqual(JSON.parse(headers["X-Route"]), ["/posts/1", "1"]);
-      },
-      "should set the id route parameter": function (err, status, headers, body) {
-        assert.ok(headers["X-Id"]);
-        assert.equal(headers["X-Id"], "1");
-      }
-    },
-    "when POST /posts/2 is requested": {
-      topic: function (app) {
-        mock.call(app, mock.env({
-          requestMethod: "POST",
-          pathInfo: "/posts/2"
-        }), this.callback);
-      },
-      "should call the correct app": function (err, status, headers, body) {
-        assert.ok(headers["X-Route"]);
-        assert.deepEqual(JSON.parse(headers["X-Route"]), ["/posts/2", "2"]);
-      },
-      "should set the id route parameter": function (err, status, headers, body) {
-        assert.ok(headers["X-Id"]);
-        assert.equal(headers["X-Id"], "2");
-      }
-    },
-    "when DELETE /posts/3 is requested": {
-      topic: function (app) {
-        mock.call(app, mock.env({
-          requestMethod: "DELETE",
-          pathInfo: "/posts/3"
-        }), this.callback);
-      },
-      "should call the correct app": function (err, status, headers, body) {
-        assert.ok(headers["X-Route"]);
-        assert.deepEqual(JSON.parse(headers["X-Route"]), ["/posts/3", "3"]);
-      },
-      "should set the id route parameter": function (err, status, headers, body) {
-        assert.ok(headers["X-Id"]);
-        assert.equal(headers["X-Id"], "3");
-      }
-    },
-    "when PUT /posts/1 is requested": {
-      topic: function (app) {
-        mock.call(app, mock.env({
-          requestMethod: "PUT",
-          pathInfo: "/posts/1"
-        }), this.callback);
-      },
-      "should return 404": function (err, status, headers, body) {
-        assert.equal(status, 404);
-      }
-    },
-    'with a router that returns an "X-Cascade: pass" header': {
-      topic: function () {
-        var localRouter = router();
+      });
+    });
+  });
+});
 
-        localRouter.route("/path", pass(idApp("1")));
-        localRouter.route("/path", idApp("2"));
-
-        return localRouter;
-      },
-      "when that route matches": {
-        topic: function (app) {
-          mock.call(app, "/path", this.callback);
-        },
-        "should cascade to the next route": function (err, status, headers, body) {
-          assert.ok(headers["X-Id"]);
-          assert.equal(headers["X-Id"], "2");
-        }
-      },
-      "when no routes match": {
-        topic: function (app) {
-          mock.call(app, "/", this.callback);
-        },
-        "should return a 404 (default app)": function (err, status, headers, body) {
-          assert.equal(status, 404);
-        }
-      }
-    }
-  }
-}).export(module);
-
-// Inserts the given `id` in an "X-Id" header in the response.
+// Inserts the given id in an "X-Id" header in the response.
 function idApp(id) {
   return function (env, callback) {
     callback(200, {
-      "Content-Type": "text/plain",
-      "X-Id": id
-    }, "");
-  }
+      'Content-Type': 'text/plain',
+      'X-Id': id
+    }, '');
+  };
 }
 
 // Inserts an "X-Cascade: pass" header in the response.
 function pass(app) {
   return function (env, callback) {
     app(env, function (status, headers, body) {
-      headers["X-Cascade"] = "pass";
+      headers['X-Cascade'] = 'pass';
       callback(status, headers, body);
     });
-  }
+  };
 }

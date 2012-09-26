@@ -1,26 +1,20 @@
-var assert = require("assert");
-var vows = require("vows");
-var strata = require("../lib");
-var utils = strata.utils;
-var mock = strata.mock;
+require('./helper');
 var commonLogger = strata.commonLogger;
 
-vows.describe("commonLogger").addBatch({
-  "A commonLogger middleware": {
-    topic: function () {
-      this.output = "";
-
-      var self = this;
-      var app = commonLogger(utils.ok, {
-        write: function (message) {
-          self.output += message;
-        }
-      });
-
-      mock.call(app, '/', this.callback);
-    },
-    "should log the request": function (err, status, headers, body) {
-      assert.match(this.output, /GET \/.+200/);
+describe('commonLogger', function () {
+  var output;
+  var app = commonLogger(utils.ok, {
+    write: function (message) {
+      output += message;
     }
-  }
-}).export(module);
+  });
+
+  beforeEach(function (callback) {
+    output = '';
+    call(app, '/', callback);
+  });
+
+  it('logs the request', function () {
+    assert.ok(output.match(/GET \/.+200/));
+  });
+});

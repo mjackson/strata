@@ -1,44 +1,41 @@
-var assert = require("assert");
-var vows = require("vows");
-var BufferedStream = require("bufferedstream");
-var strata = require("../lib");
-var mock = strata.mock;
+require('./helper');
+var BufferedStream = require('bufferedstream');
 var contentLength = strata.contentLength;
 
-vows.describe("contentLength").addBatch({
-  "A contentLength middleware": {
-    "with a string body": {
-      topic: function () {
-        this.body = "Hello world!";
+describe('contentLength', function () {
+  describe('with a string body', function () {
+    var body = 'Hello world!';
+    var length = String(body.length);
+    var app = contentLength(function (env, callback) {
+      callback(200, { 'Content-Type': 'text/plain' }, body);
+    });
 
-        var self = this;
-        var app = contentLength(function (env, callback) {
-          callback(200, { "Content-Type": "text/plain" }, self.body);
-        });
+    beforeEach(function (callback) {
+      call(app, '/', callback);
+    });
 
-        mock.call(app, '/', this.callback);
-      },
-      "should add a Content-Length header": function (err, status, headers, body) {
-        var length = this.body.length.toString();
-        assert.strictEqual(headers["Content-Length"], length);
-      }
-    },
-    "with a Stream body": {
-      topic: function () {
-        this.body = new BufferedStream("Hello world!");
+    it('adds a Content-Length header', function () {
+      assert.equal(headers['Content-Length'], length);
+    });
+  });
 
-        var self = this;
-        var app = contentLength(function (env, callback) {
-          callback(200, { "Content-Type": "text/plain" }, self.body);
-        });
+  describe('with a stream body', function () {
+    var body;
+    var app = contentLength(function (env, callback) {
+      callback(200, { 'Content-Type': 'text/plain' }, body);
+    });
 
-        mock.call(app, mock.env({
-          error: mock.stream(this)
-        }), this.callback);
-      },
-      "should write to error": function (err) {
-        assert.match(this.data, /body with no length/);
-      }
-    }
-  }
-}).export(module);
+    var stream;
+    beforeEach(function (callback) {
+      body = new BufferedStream('Hello world!');
+      body.pause();
+      stream = {};
+      call(app, mock.env({ error: mock.stream(stream) }), callback);
+      body.resume();
+    });
+
+    it('writes to the error stream', function () {
+      assert.ok(stream.data.match(/body with no length/));
+    });
+  });
+});

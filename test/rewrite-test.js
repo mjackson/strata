@@ -1,50 +1,47 @@
-var assert = require("assert");
-var vows = require("vows");
-var strata = require("../lib");
-var mock = strata.mock;
+require('./helper');
 var rewrite = strata.rewrite;
 
-vows.describe("rewrite").addBatch({
-  "A rewrite middleware": {
-    topic: function () {
-      var app = function (env, callback) {
-        callback(200, {
-          "Content-Type": "text/plain",
-          "X-PathInfo": env.pathInfo
-        }, "");
-      };
+describe('rewrite', function () {
+  var app = function (env, callback) {
+    callback(200, {
+      'Content-Type': 'text/plain',
+      'X-Path-Info': env.pathInfo
+    }, '');
+  };
 
-      app = rewrite(app, "/abc", "/xyz");
-      app = rewrite(app, /\/def/g, "/xyz");
+  app = rewrite(app, '/abc', '/xyz');
+  app = rewrite(app, /\/def/g, '/xyz');
 
-      return app;
-    },
-    "when /abc is requested": {
-      topic: function (app) {
-        mock.call(app, "/abc", this.callback);
-      },
-      "should rewrite properly": function (err, status, headers, body) {
-        assert.ok(headers["X-PathInfo"]);
-        assert.equal(headers["X-PathInfo"], "/xyz");
-      }
-    },
-    "when /def is requested": {
-      topic: function (app) {
-        mock.call(app, "/def", this.callback);
-      },
-      "should rewrite properly": function (err, status, headers, body) {
-        assert.ok(headers["X-PathInfo"]);
-        assert.equal(headers["X-PathInfo"], "/xyz");
-      }
-    },
-    "when /def/path/def is requested": {
-      topic: function (app) {
-        mock.call(app, "/def/path/def", this.callback);
-      },
-      "should rewrite properly": function (err, status, headers, body) {
-        assert.ok(headers["X-PathInfo"]);
-        assert.equal(headers["X-PathInfo"], "/xyz/path/xyz");
-      }
-    }
-  }
-}).export(module);
+  describe('GET /abc', function () {
+    beforeEach(function (callback) {
+      call(app, '/abc', callback);
+    });
+
+    it('rewrites the pathInfo properly', function () {
+      assert.ok(headers['X-Path-Info']);
+      assert.equal(headers['X-Path-Info'], '/xyz');
+    });
+  });
+
+  describe('GET /def', function () {
+    beforeEach(function (callback) {
+      call(app, '/def', callback);
+    });
+
+    it('rewrites the pathInfo properly', function () {
+      assert.ok(headers['X-Path-Info']);
+      assert.equal(headers['X-Path-Info'], '/xyz');
+    });
+  });
+
+  describe('GET /def/path/def', function () {
+    beforeEach(function (callback) {
+      call(app, '/def/path/def', callback);
+    });
+
+    it('rewrites the pathInfo properly', function () {
+      assert.ok(headers['X-Path-Info']);
+      assert.equal(headers['X-Path-Info'], '/xyz/path/xyz');
+    });
+  });
+});

@@ -1,22 +1,17 @@
-var assert = require("assert");
-var vows = require("vows");
-var strata = require("../lib");
-var mock = strata.mock;
+require('./helper');
 var contentType = strata.contentType;
 
-vows.describe("contentType").addBatch({
-  "A contentType middleware": {
-    topic: function () {
-      this.type = "text/plain";
+describe('contentType', function () {
+  var type = "text/plain";
+  var app = contentType(function (env, callback) {
+    callback(200, {}, "");
+  }, type);
 
-      var app = contentType(function (env, callback) {
-        callback(200, {}, "");
-      }, this.type);
+  beforeEach(function (callback) {
+    call(app, '/', callback);
+  });
 
-      mock.call(app, '/', this.callback);
-    },
-    "should add a Content-Type header": function (err, status, headers, body) {
-      assert.strictEqual(headers["Content-Type"], this.type);
-    }
-  }
-}).export(module);
+  it('adds a Content-Type header', function () {
+    assert.strictEqual(headers["Content-Type"], type);
+  });
+});

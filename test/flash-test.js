@@ -1,33 +1,25 @@
-var assert = require("assert");
-var vows = require("vows");
-var strata = require("../lib");
-var mock = strata.mock;
+require('./helper');
 var flash = strata.flash;
 
-vows.describe("flash").addBatch({
-  "A flash middleware": {
-    topic: function () {
-      var app = flash(function (env, callback) {
-        callback(200, {
-          "Content-Type": "text/plain",
-          "Content-Length": "0",
-          "X-Env-Flash": String(env.flash)
-        }, "");
-      });
+describe('flash', function () {
+  var app = flash(function (env, callback) {
+    callback(200, {
+      'Content-Type': 'text/plain',
+      'Content-Length': '0',
+      'X-Flash': String(env.flash)
+    }, '');
+  });
 
-      return app;
-    },
-    "when called with a valid environment": {
-      topic: function (app) {
-        var env = mock.env("/");
-        this.flash = "Hello world.";
-        flash.set(env, this.flash);
-        mock.call(app, env, this.callback);
-      },
-      "should set the flash environment variable": function (err, status, headers, body) {
-        assert.ok(headers["X-Env-Flash"]);
-        assert.equal(headers["X-Env-Flash"], this.flash);
-      }
-    }
-  }
-}).export(module);
+  describe('when a flash message already exists in the environment', function () {
+    var flashMessage = 'Hello world.';
+    beforeEach(function (callback) {
+      var env = mock.env();
+      flash.set(env, flashMessage);
+      call(app, env, callback);
+    });
+
+    it('sets the flash environment variable', function () {
+      assert.equal(headers['X-Flash'], flashMessage);
+    });
+  });
+});

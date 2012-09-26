@@ -1,169 +1,144 @@
-var EventEmitter = require("events").EventEmitter;
-var assert = require("assert");
-var vows = require("vows");
-var BufferedStream = require("bufferedstream");
-var strata = require("../lib");
-var utils = strata.utils;
-var mock = strata.mock;
+require('./helper');
+var Stream = require('stream').Stream;
+var BufferedStream = require('bufferedstream');
 
-vows.describe("index").addBatch({
-  "env": {
-    topic: function () {
-      this.protocol = "https:";
-      this.protocolVersion = "1.1";
-      this.requestMethod = "POST";
-      this.requestTime = new Date;
-      this.remoteAddr = "127.0.0.1";
-      this.remotePort = "8888";
-      this.serverName = "example.org";
-      this.serverPort = "443";
-      this.pathInfo = "/some/path";
-      this.queryString = "a=1&b=2";
-      this.userAgent = "test suite";
-      this.content = "hello world!";
-      this.contentLength = String(Buffer.byteLength(this.content));
+describe('strata', function () {
+  describe('env', function () {
+    var protocol = 'https:';
+    var protocolVersion = '1.1';
+    var requestMethod = 'POST';
+    var requestTime = new Date;
+    var remoteAddr = '127.0.0.1';
+    var remotePort = '8888';
+    var serverName = 'example.org';
+    var serverPort = '443';
+    var pathInfo = '/some/path';
+    var queryString = 'a=1&b=2';
+    var userAgent = 'test suite';
+    var content = 'Hello world!';
+    var contentLength = String(Buffer.byteLength(content));
 
-      return strata.env({
-        protocol: this.protocol,
-        protocolVersion: this.protocolVersion,
-        requestMethod: this.requestMethod,
-        requestTime: this.requestTime,
-        remoteAddr: this.remoteAddr,
-        remotePort: this.remotePort,
-        serverName: this.serverName,
-        serverPort: this.serverPort,
-        pathInfo: this.pathInfo,
-        queryString: this.queryString,
+    var input, env;
+    beforeEach(function () {
+      input = new BufferedStream(content);
+      input.pause();
+
+      env = strata.env({
+        protocol: protocol,
+        protocolVersion: protocolVersion,
+        requestMethod: requestMethod,
+        requestTime: requestTime,
+        remoteAddr: remoteAddr,
+        remotePort: remotePort,
+        serverName: serverName,
+        serverPort: serverPort,
+        pathInfo: pathInfo,
+        queryString: queryString,
         headers: {
-          "Host": this.serverName,
-          "User-Agent": this.userAgent,
-          "Content-Length": this.contentLength
+          'Host': serverName,
+          'User-Agent': userAgent,
+          'Content-Length': contentLength
         },
-        input: new BufferedStream(this.content)
+        input: input
       });
-    },
-    "should have the correct protocol": function (env) {
-      assert.equal(env.protocol, this.protocol);
-    },
-    "should have the correct protocolVersion": function (env) {
-      assert.equal(env.protocolVersion, this.protocolVersion);
-    },
-    "should have the correct requestMethod": function (env) {
-      assert.equal(env.requestMethod, this.requestMethod);
-    },
-    "should have the correct requestTime": function (env) {
-      assert.equal(env.requestTime, this.requestTime);
-    },
-    "should have the correct remoteAddr": function (env) {
-      assert.equal(env.remoteAddr, this.remoteAddr);
-    },
-    "should have the correct remotePort": function (env) {
-      assert.equal(env.remotePort, this.remotePort);
-    },
-    "should have the correct serverName": function (env) {
-      assert.equal(env.serverName, this.serverName);
-    },
-    "should have the correct serverPort": function (env) {
-      assert.equal(env.serverPort, this.serverPort);
-    },
-    "should have an empty scriptName": function (env) {
-      assert.equal(env.scriptName, "");
-    },
-    "should have the correct pathInfo": function (env) {
-      assert.equal(env.pathInfo, this.pathInfo);
-    },
-    "should have the correct queryString": function (env) {
-      assert.equal(env.queryString, this.queryString);
-    },
-    "should have the correct headers": function (env) {
-      assert.equal(env.headers['host'], this.serverName);
-      assert.equal(env.headers['user-agent'], this.userAgent);
-      assert.equal(env.headers['content-length'], this.contentLength);
-    },
-    "version": {
-      topic: function (env) {
-        this.callback(null, env.strataVersion);
-      },
-      "should be the current version of Strata": function (version) {
-        assert.deepEqual(version, strata.version);
-      }
-    },
-    "input": {
-      topic: function (env) {
-        var input = env.input,
-          content = "",
-          self = this;
+    });
 
-        assert.ok(input);
+    function check(name, value) {
+      it('has the correct ' + name, function () {
+        assert.deepEqual(env[name], value);
+      });
+    }
 
+    check('protocol', protocol);
+    check('protocolVersion', protocolVersion);
+    check('requestMethod', requestMethod);
+    check('requestTime', requestTime);
+    check('remoteAddr', remoteAddr);
+    check('remotePort', remotePort);
+    check('serverName', serverName);
+    check('serverPort', serverPort);
+    check('scriptName', '');
+    check('pathInfo', pathInfo);
+    check('queryString', queryString);
+    check('strataVersion', strata.version);
+
+    it('has the correct headers', function () {
+      assert.equal(env.headers['host'], serverName);
+      assert.equal(env.headers['user-agent'], userAgent);
+      assert.equal(env.headers['content-length'], contentLength);
+    });
+
+    describe('input', function () {
+      var body;
+      beforeEach(function (callback) {
+        body = '';
         input.resume();
 
-        input.on("data", function (buffer) {
-          content += buffer.toString("utf8");
+        input.on('data', function (chunk) {
+          body += chunk.toString();
         });
 
-        input.on("end", function () {
-          self.callback(null, content);
+        input.on('end', function () {
+          callback(null);
         });
-      },
-      "should contain the entire content string": function (content) {
-        assert.equal(content, this.content);
-      }
-    },
-    "error": {
-      topic: function (env) {
-        this.callback(null, env.error);
-      },
-      "should be a writable Stream": function (error) {
-        assert.ok(error);
-        assert.instanceOf(error, EventEmitter);
-        assert.ok(error.writable);
-      }
-    }
-  },
-  "handleError": {
-    topic: function () {
-      var returnValue;
+      });
 
-      var env = {
-        error: mock.stream(this)
-      };
+      it('is a Stream', function () {
+        assert.ok(input instanceof Stream);
+      });
 
-      var innerApp = function (env, callback) {
-        var err = new strata.Error("Bang!");
-        returnValue = strata.handleError(err, env, callback);
-      };
+      it('contains the entire input stream', function () {
+        assert.equal(body, content);
+      });
+    });
 
-      var app = function (env, callback) {
-        innerApp(env, function (status, headers, body) {
-          process.nextTick(function () {
-            headers["X-Return-Type"] = typeof returnValue;
-            callback(status, headers, body);
-          });
-        });
-      };
+    describe('error', function () {
+      it('is a Stream', function () {
+        assert.ok(env.error instanceof Stream);
+      });
 
-      mock.call(app, env, this.callback);
-    },
-    "should return a boolean": function (err, status, headers, body) {
-      assert.ok(headers["X-Return-Type"]);
-      assert.equal(headers["X-Return-Type"], "boolean");
-    },
-    "should set a 500 status": function (err, status, headers, body) {
+      it('is writable', function () {
+        assert.ok(env.error);
+        assert.ok(env.error.writable);
+      });
+    });
+  });
+
+  describe('handleError', function () {
+    var returnValue;
+    var app = function (env, callback) {
+      var err = new strata.Error('Bang!');
+      returnValue = strata.handleError(err, env, callback);
+    };
+
+    var stream, env;
+    beforeEach(function (callback) {
+      stream = {};
+      env = mock.env({ error: mock.stream(stream) });
+      call(app, env, callback);
+    });
+
+    it('returns 500', function () {
       assert.equal(status, 500);
-    },
-    "should write to env.error": function () {
-      assert.ok(this.data);
-      assert.match(this.data, /unhandled error/i);
-    }
-  },
-  "A strata.Error": {
-    topic: new strata.Error("Bang!"),
-    "may be instantiated without using new": function () {
-      assert.instanceOf(strata.Error(), strata.Error);
-    },
-    "is an instance of Error": function (err) {
-      assert.instanceOf(err, Error);
-    }
-  }
-}).export(module);
+    });
+
+    it('returns a boolean', function () {
+      assert.equal(typeof returnValue, 'boolean');
+    });
+
+    it('writes to the error stream', function () {
+      assert.ok(stream.data);
+      assert.ok(stream.data.match(/unhandled error/i));
+    });
+  });
+
+  describe('Error', function () {
+    it('may be instantiated without using new', function () {
+      assert.ok(strata.Error() instanceof strata.Error);
+    });
+
+    it('is an instance of Error', function () {
+      assert.ok(new strata.Error instanceof Error);
+    });
+  });
+});

@@ -3,7 +3,7 @@
   "version": "0.17.0",
   "author": "Michael Jackson <mjijackson@gmail.com>",
   "description": "A modular, streaming HTTP server",
-  "keywords": ["web", "server", "framework", "middleware", "rack", "jsgi", "wsgi"],
+  "keywords": ["web", "http", "server", "framework", "middleware", "rack", "jsgi", "wsgi"],
   "homepage": "http://stratajs.org",
   "engines": {
     "node": ">= 0.8.0"
@@ -20,7 +20,7 @@
     "markdown": "~0.3.1"
   },
   "devDependencies": {
-    "vows": "0.6.0",
+    "mocha": "1.5.0",
     "mustache": "0.3.1-dev"
   },
   "main": "./lib",
@@ -28,6 +28,6 @@
     "strata": "./bin/strata"
   },
   "scripts": {
-    "test": "vows test/*_test.js"
+    "test": "mocha test/*-test.js"
   }
 }
