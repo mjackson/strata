@@ -179,28 +179,28 @@ vows.describe("urlMap").addBatch({
             callback(200, {
               "Content-Type": "text/plain",
               "X-Position": "example.com",
-              "X-Host": env.httpHost || env.serverName
+              "X-Host": env.headers['host'] || env.serverName
             }, "");
           },
           "http://example.org/": function (env, callback) {
             callback(200, {
               "Content-Type": "text/plain",
               "X-Position": "example.org",
-              "X-Host": env.httpHost || env.serverName
+              "X-Host": env.headers['host'] || env.serverName
             }, "");
           },
           "http://subdomain.example.org/": function (env, callback) {
             callback(200, {
               "Content-Type": "text/plain",
               "X-Position": "subdomain.example.org",
-              "X-Host": env.httpHost || env.serverName
+              "X-Host": env.headers['host'] || env.serverName
             }, "");
           },
           "http://example.net/": function (env, callback) {
             callback(200, {
               "Content-Type": "text/plain",
               "X-Position": "example.net",
-              "X-Host": env.httpHost || env.serverName
+              "X-Host": env.headers['host'] || env.serverName
             }, "");
           }
         });

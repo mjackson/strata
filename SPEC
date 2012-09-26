@@ -13,7 +13,7 @@ A Strata application is a function that takes exactly two arguments: the
 The environment is an object that contains CGI-like properties. It MUST include
 the following:
 
-  - protocol          The request protocol (i.e. "http:" or "https:")
+  - protocol          The request protocol. Must be "http:" or "https:"
   - protocolVersion   The version of the protocol used in the request
   - requestMethod     The request method (e.g. "GET" or "POST")
   - requestTime       A Date that indicates the time the request was received
@@ -37,24 +37,15 @@ the following:
                       when originating from a URL.
   - queryString       The portion of the request URL that follows the "?", if
                       any. May be an empty string.
-  - http*             Variables corresponding to the client-supplied HTTP
-                      request headers (i.e. variables whose names begin with
-                      "http"). The presence or absence of these variables should
-                      correspond with the presence or absence of the
-                      appropriate HTTP header in the request. The remainder of
-                      the property name will be the camel-cased version of the
-                      original header name (e.g. "httpAccept" and
-                      "httpUserAgent"). The environment MUST NOT contain the
-                      properties httpContentType or httpContentLength (use
-                      contentType and contentLength instead).
+  - headers           An object of client-supplied HTTP headers and their values.
+                      All header names must be lower-cased.
   - input             A readable Stream of data contained in the request body
   - error             A writable Stream for error output
-  - strataVersion     The current version of Strata as [major, minor, patch]
+  - strataVersion     An array of integers that indicate the current version of
+                      Strata as [major, minor, patch]
 
 In addition to these, the environment MAY include the following properties:
 
-  - contentLength     The HTTP Content-Length of the request body
-  - contentType       The HTTP Content-Type of the data in the request body
   - flash             A string containing the flash message, if any. This is a
                       message that was set using the flash module and is
                       available to all applications downstream from a
@@ -78,16 +69,11 @@ that if httpHost is present it should be used in preference to serverName.
 
 There are the following additional restrictions:
 
-  - protocol must be either "http:" or "https:"
   - requestMethod must be a valid HTTP verb as an uppercase String
-  - requestTime must be a Date
   - scriptName and pathInfo, if not empty, should start with a "/"
   - scriptName should never be "/" but instead be empty
   - pathInfo should be "/" if scriptName is empty
-  - contentLength, if given, must consist of digits only
-  - input must be a readable Stream
-  - error must be a writable Stream
-  - strataVersion must be an array of integers
+  - headers['content-length'], if given, must consist of only digits
 
 The application is free to modify the environment. Property names must be
 prefixed uniquely. The prefix "strata" is reserved for use within the Strata
