@@ -76,14 +76,9 @@ vows.describe("index").addBatch({
       assert.equal(env.queryString, this.queryString);
     },
     "should have the correct headers": function (env) {
-      assert.equal(env.httpHost, this.serverName);
-      assert.equal(env.httpUserAgent, this.userAgent);
-    },
-    "should not have an httpContentLength property": function (env) {
-      assert.isUndefined(env.httpContentLength);
-    },
-    "should have the correct contentLength": function (env) {
-      assert.equal(env.contentLength, this.contentLength);
+      assert.equal(env.headers['host'], this.serverName);
+      assert.equal(env.headers['user-agent'], this.userAgent);
+      assert.equal(env.headers['content-length'], this.contentLength);
     },
     "version": {
       topic: function (env) {
