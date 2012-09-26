@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
-var fs = require("fs");
-var path = require("path");
-var spawn = require("child_process").spawn;
-var strata = require("../lib");
+var fs = require('fs');
+var path = require('path');
+var spawn = require('child_process').spawn;
+var strata = require('../lib');
 var utils = strata.utils;
 
-var options = { appFile: path.resolve("./app.js") };
+var options = { appFile: path.resolve('./app.js') };
 
 var arg;
 for (var i = 2; i < process.argv.length; ++i) {
@@ -24,37 +24,37 @@ for (var i = 2; i < process.argv.length; ++i) {
   }
 
   switch (arg) {
-  case "-a":
+  case '-a':
     options.host = nextArg();
     break;
-  case "-c":
+  case '-c':
     options.certFile = nextArg();
     break;
-  case "-d":
-    options.dir = nextArg(".");
+  case '-d':
+    options.dir = nextArg('.');
     break;
-  case "-h":
-  case "--help":
+  case '-h':
+  case '--help':
     printUsage();
     process.exit();
     break;
-  case "-k":
+  case '-k':
     options.keyFile = nextArg();
     break;
-  case "-p":
+  case '-p':
     options.port = nextArg();
     break;
-  case "-q":
+  case '-q':
     options.quiet = true;
     break;
-  case "-r":
+  case '-r':
     options.reload = Math.round(parseFloat(nextArg(1)) * 1000);
     break;
-  case "-s":
+  case '-s':
     options.socket = nextArg();
     break;
-  case "-v":
-  case "--version":
+  case '-v':
+  case '--version':
     printVersion();
     process.exit();
     break;
@@ -79,23 +79,23 @@ if (options.reload) {
 
     if (child) {
       // All children after the first should boot quietly.
-      argv.push("-q");
+      argv.push('-q');
     }
 
-    child = spawn("strata", argv, {
+    child = spawn('strata', argv, {
       cwd: process.cwd(),
       env: process.env
     });
 
-    child.stdout.on("data", function (chunk) {
+    child.stdout.on('data', function (chunk) {
       process.stdout.write(chunk);
     });
 
-    child.stderr.on("data", function (chunk) {
+    child.stderr.on('data', function (chunk) {
       process.stderr.write(chunk);
     });
 
-    child.on("exit", function () {
+    child.on('exit', function () {
       spawnChild(options);
     });
 
@@ -108,7 +108,7 @@ if (options.reload) {
   spawnChild(options);
 
   // Clean up the child process when the parent exits.
-  process.on("exit", function () {
+  process.on('exit', function () {
     child.exit();
   });
 } else {
@@ -128,7 +128,7 @@ if (options.reload) {
  * Prints the current version of Strata to the console.
  */
 function printVersion() {
-  console.log(strata.version.join("."));
+  console.log(strata.version.join('.'));
 }
 
 /**
@@ -136,28 +136,28 @@ function printVersion() {
  */
 function printUsage() {
   var usage = [
-    "strata v. " + strata.version.join("."),
-    "Usage: strata [options] [appFile]",
-    "",
-    "  Starts the Strata application contained in the given appFile.",
-    "  If none is given, uses ./app.js.",
-    "",
-    "Options:",
-    "  -a ADDR        The address to bind to (defaults to 0.0.0.0)",
-    "  -c PATH        The name of the public key certificate file",
-    "                 (HTTPS only)",
-    "  -d PATH        The path to a directory to serve (defaults to .).",
-    "                 If this is given the appFile is ignored",
-    "  -h, --help     Show this help message and exit",
-    "  -k PATH        The name of the private key file (HTTPS only)",
-    "  -p PORT        The port number to listen on (defaults to " + strata.defaultPort + ")",
+    'strata v. ' + strata.version.join('.'),
+    'Usage: strata [options] [appFile]',
+    '',
+    '  Starts the Strata application contained in the given appFile.',
+    '  If none is given, uses ./app.js.',
+    '',
+    'Options:',
+    '  -a ADDR        The address to bind to (defaults to 0.0.0.0)',
+    '  -c PATH        The name of the public key certificate file',
+    '                 (HTTPS only)',
+    '  -d PATH        The path to a directory to serve (defaults to .).',
+    '                 If this is given the appFile is ignored',
+    '  -h, --help     Show this help message and exit',
+    '  -k PATH        The name of the private key file (HTTPS only)',
+    '  -p PORT        The port number to listen on (defaults to ' + strata.defaultPort + ')',
     "  -q             Don't print a startup message to the console",
-    "  -r N           Reload all application code every N seconds",
-    "                 (defaults to 1). Good for development",
-    "  -s PATH        The unix socket to listen to. If this is given",
-    "                 the -a and -p options are ignored",
-    "  -v, --version  Show the current version of Strata and exit"
-  ].join("\n");
+    '  -r N           Reload all application code every N seconds',
+    '                 (defaults to 1). Good for development',
+    '  -s PATH        The unix socket to listen to. If this is given',
+    '                 the -a and -p options are ignored',
+    '  -v, --version  Show the current version of Strata and exit'
+  ].join('\n');
 
   console.log(usage);
 }
@@ -169,12 +169,12 @@ function printUsage() {
 function childArgv(options) {
   var argv = [];
 
-  if (options.host)     argv.push("-a", options.host);
-  if (options.certFile) argv.push("-c", options.certFile);
-  if (options.dir)      argv.push("-d", options.dir);
-  if (options.keyFile)  argv.push("-k", options.keyFile);
-  if (options.port)     argv.push("-p", options.port);
-  if (options.socket)   argv.push("-s", options.socket);
+  if (options.host)     argv.push('-a', options.host);
+  if (options.certFile) argv.push('-c', options.certFile);
+  if (options.dir)      argv.push('-d', options.dir);
+  if (options.keyFile)  argv.push('-k', options.keyFile);
+  if (options.port)     argv.push('-p', options.port);
+  if (options.socket)   argv.push('-s', options.socket);
   if (options.appFile)  argv.push(options.appFile);
 
   return argv;
