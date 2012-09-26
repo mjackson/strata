@@ -163,7 +163,7 @@ function printUsage() {
 }
 
 /**
- * Reconstructs an argv array from the given `options` object suitable for
+ * Reconstructs an argv array from the given options object suitable for
  * running a server in a child process.
  */
 function childArgv(options) {
