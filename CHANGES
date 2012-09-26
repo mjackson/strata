@@ -1,6 +1,8 @@
 = HEAD
 
   * strata.authenticityToken always generates a token, even on GET requests.
+  * Added the ability to pass a params object to mock.env.
+  * Removed the querystring module.
 
 = 0.17.0 / 2012-09-03
 
