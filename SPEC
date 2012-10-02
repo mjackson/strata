@@ -74,6 +74,7 @@ There are the following additional restrictions:
   - scriptName should never be "/" but instead be empty
   - pathInfo should be "/" if scriptName is empty
   - headers['content-length'], if given, must consist of only digits
+  - input must be paused
 
 The application is free to modify the environment. Property names must be
 prefixed uniquely. The prefix "strata" is reserved for use within the Strata

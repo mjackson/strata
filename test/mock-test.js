@@ -58,13 +58,15 @@ describe('mock', function () {
     });
 
     describe('when given a params object in a POST request', function () {
-      var content;
+      var env, input;
       beforeEach(function (callback) {
-        content = '';
-        var env = mock.env({ requestMethod: 'POST', params: { a: 'a', b: 'b' } });
+        env = mock.env({ requestMethod: 'POST', params: { a: 'a', b: 'b' } });
+        input = '';
+
+        env.input.resume();
 
         env.input.on('data', function (chunk) {
-          content += chunk.toString('utf8');
+          input += chunk.toString('utf8');
         });
 
         env.input.on('end', function () {
@@ -73,7 +75,7 @@ describe('mock', function () {
       });
 
       it('encodes it in the body', function () {
-        var data = qs.parse(content);
+        var data = qs.parse(input);
         assert.equal(data.a, 'a');
         assert.equal(data.b, 'b');
       });

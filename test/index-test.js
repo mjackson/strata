@@ -18,11 +18,8 @@ describe('strata', function () {
     var content = 'Hello world!';
     var contentLength = String(Buffer.byteLength(content));
 
-    var input, env;
+    var env;
     beforeEach(function () {
-      input = new BufferedStream(content);
-      input.pause();
-
       env = strata.env({
         protocol: protocol,
         protocolVersion: protocolVersion,
@@ -39,7 +36,7 @@ describe('strata', function () {
           'User-Agent': userAgent,
           'Content-Length': contentLength
         },
-        input: input
+        input: content
       });
     });
 
@@ -69,26 +66,27 @@ describe('strata', function () {
     });
 
     describe('input', function () {
-      var body;
+      var input;
       beforeEach(function (callback) {
-        body = '';
-        input.resume();
+        input = '';
 
-        input.on('data', function (chunk) {
-          body += chunk.toString();
+        env.input.resume();
+
+        env.input.on('data', function (chunk) {
+          input += chunk.toString();
         });
 
-        input.on('end', function () {
+        env.input.on('end', function () {
           callback(null);
         });
       });
 
       it('is a Stream', function () {
-        assert.ok(input instanceof Stream);
+        assert.ok(env.input instanceof Stream);
       });
 
       it('contains the entire input stream', function () {
-        assert.equal(body, content);
+        assert.equal(input, content);
       });
     });
 
