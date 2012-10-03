@@ -6,6 +6,7 @@
   * Removed the querystring module.
   * Added headers object to the environment instead of http* properties.
   * Use mocha instead of vows for testing.
+  * Removed utils.isRegExp in favor of node's util.isRegExp.
 
 = 0.17.0 / 2012-09-03
 
