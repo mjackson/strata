@@ -29,9 +29,7 @@ describe('lint', function () {
       'protocolVersion',
       'requestMethod',
       'remoteAddr',
-      'remotePort',
       'serverName',
-      'serverPort',
       'scriptName',
       'pathInfo',
       'queryString'
@@ -41,6 +39,8 @@ describe('lint', function () {
     });
 
     [ 'requestTime',
+      'remotePort',
+      'serverPort',
       'headers',
       'input',
       'error',
