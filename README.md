@@ -94,13 +94,13 @@ environment.
 ## Tests
 
 The test directory contains a comprehensive suite of unit tests for all of
-Strata's core modules. Use [vows](http://vowsjs.org) to run all tests:
+Strata's core modules. Use [mocha](http://visionmedia.github.com/mocha/) to run all tests:
 
-    $ vows test/*_test.js
+    $ mocha test/*-test.js
 
 Run the tests for a specific module with:
 
-    $ vows test/utils_test.js
+    $ mocha test/utils-test.js
 
 ## License
 
