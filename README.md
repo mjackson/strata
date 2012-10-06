@@ -1,3 +1,5 @@
+[![build status](https://secure.travis-ci.org/mjijackson/strata.png)](http://travis-ci.org/mjijackson/strata)
+
 Strata is a streaming HTTP server for node.js that is patterned after
 time-honored web server design principles pioneered in the Python and Ruby
 communities, namely [WSGI](http://www.wsgi.org/) and
