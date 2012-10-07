@@ -4,10 +4,11 @@
   * Don't wrap the input stream in a BufferedStream.
   * strata.authenticityToken always generates a token, even on GET requests.
   * Added the ability to pass a params object to mock.env.
-  * Removed the querystring module.
   * Added headers object to the environment instead of http* properties.
-  * Use mocha instead of vows for testing.
+  * Renamed utils.emptyBody to utils.isEmptyBodyStatus.
+  * Removed the querystring module.
   * Removed utils.isRegExp in favor of node's util.isRegExp.
+  * Use mocha instead of vows for testing.
 
 = 0.17.0 / 2012-09-03
 

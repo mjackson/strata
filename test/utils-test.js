@@ -84,15 +84,15 @@ describe('utils', function () {
     });
   });
 
-  describe('emptyBody', function () {
+  describe('isEmptyBodyStatus', function () {
     it('returns true for all status codes that indicates an empty body', function () {
-      [100, 101, 204, 304].forEach(function (statusCode) {
-        assert(utils.emptyBody(statusCode));
+      [100, 101, 204, 304].forEach(function (status) {
+        assert(utils.isEmptyBodyStatus(status));
       });
     });
 
     it('returns false for a status code that does not indicate an empty body', function () {
-      assert(!utils.emptyBody(200));
+      assert(!utils.isEmptyBodyStatus(200));
     });
   });
 
