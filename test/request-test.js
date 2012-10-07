@@ -11,7 +11,7 @@ describe('Request', function () {
   var protocolVersion = '1.1';
   var requestMethod = 'POST';
   var serverName = 'example.org';
-  var serverPort = '1234';
+  var serverPort = 1234;
   var pathInfo = '/some/path';
   var queryString = 'a=1&b=hello%20world';
   var contentType = 'application/json; charset="utf-8"';
@@ -156,7 +156,7 @@ describe('Request', function () {
     });
 
     it('knows its port', function () {
-      assert.equal(req.port, serverPort);
+      assert.strictEqual(req.port, serverPort);
     });
 
     it('knows its base URL', function () {

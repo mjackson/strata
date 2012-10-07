@@ -5,6 +5,7 @@
   * strata.authenticityToken always generates a token, even on GET requests.
   * Added the ability to pass a params object to mock.env.
   * Added headers object to the environment instead of http* properties.
+  * remotePort/serverPort environment variables are numbers.
   * Renamed utils.emptyBody to utils.isEmptyBodyStatus.
   * Removed the querystring module.
   * Removed utils.isRegExp in favor of node's util.isRegExp.

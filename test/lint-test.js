@@ -59,6 +59,18 @@ describe('lint', function () {
 
     assert.throws(function () {
       var env = mock.env();
+      env.remotePort = '123';
+      app(env, noop);
+    }, /remotePort must be/);
+
+    assert.throws(function () {
+      var env = mock.env();
+      env.serverPort = '123';
+      app(env, noop);
+    }, /serverPort must be/);
+
+    assert.throws(function () {
+      var env = mock.env();
       env.headers = '';
       app(env, noop);
     }, /headers must be/);
