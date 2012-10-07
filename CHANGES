@@ -1,4 +1,4 @@
-= HEAD
+= 0.18.0 / 2012-10-07
 
   * The input stream is paused by default.
   * Don't wrap the input stream in a BufferedStream.
