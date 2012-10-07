@@ -1,6 +1,5 @@
 require('./helper');
 var qs = require('querystring');
-var BufferedStream = require('bufferedstream');
 var Request = strata.Request;
 
 describe('Request', function () {
@@ -222,7 +221,7 @@ describe('Request', function () {
       }), noop);
     });
 
-    it('should parse them correctly', function () {
+    it('parses them correctly', function () {
       assert.equal(cookies.a, '1');
       assert.equal(cookies.b, '3');
     });
@@ -244,7 +243,7 @@ describe('Request', function () {
       call(app, '/?' + queryString, noop);
     });
 
-    it('should parse it correctly', function () {
+    it('parses it correctly', function () {
       assert.deepEqual(query, qs.parse(queryString));
     });
   });
@@ -255,8 +254,7 @@ describe('Request', function () {
     var body;
     beforeEach(function (callback) {
       var app = function (env, cb) {
-        var req = new Request(env);
-        req.body(function (err, b) {
+        new Request(env).body(function (err, b) {
           body = b;
           callback(err);
         });
@@ -267,17 +265,17 @@ describe('Request', function () {
           'Content-Type': 'text/plain',
           'Content-Length': String(Buffer.byteLength(content))
         },
-        input: new BufferedStream(content)
+        input: content
       }), noop);
     });
 
-    it('should pass through unparsed', function () {
+    it('passes through unparsed', function () {
       assert.equal(body, content);
     });
   });
 
   describe('with an application/json body', function () {
-    var content = '{ "a": 1, "b": 2 }';
+    var content = '{"a":1,"b":2}';
 
     var body;
     beforeEach(function (callback) {
@@ -294,11 +292,11 @@ describe('Request', function () {
           'Content-Type': 'application/json',
           'Content-Length': String(Buffer.byteLength(content))
         },
-        input: new BufferedStream(content)
+        input: content
       }), noop);
     });
 
-    it('should parse it correctly', function () {
+    it('parses it correctly', function () {
       assert.deepEqual(body, JSON.parse(content));
     });
   });
@@ -321,11 +319,11 @@ describe('Request', function () {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Content-Length': String(Buffer.byteLength(content))
         },
-        input: new BufferedStream(content)
+        input: content
       }), noop);
     });
 
-    it('should parse it correctly', function () {
+    it('parses it correctly', function () {
       assert.deepEqual(body, qs.parse(content));
     });
   });
@@ -352,11 +350,11 @@ Hello world!\r\n\
           'Content-Type': 'multipart/form-data; boundary="AaB03x"',
           'Content-Length': String(Buffer.byteLength(content))
         },
-        input: new BufferedStream(content)
+        input: content
       }), noop);
     });
 
-    it('should parse it correctly', function () {
+    it('parses it correctly', function () {
       assert.equal(body.a, 'Hello world!');
     });
   });
@@ -385,11 +383,11 @@ Hello world!\r\n\
           'Content-Type': 'multipart/form-data; boundary="AaB03x"',
           'Content-Length': String(Buffer.byteLength(content))
         },
-        input: new BufferedStream(content)
+        input: content
       }), noop);
     });
 
-    it('should parse all params correctly', function () {
+    it('parses all params correctly', function () {
       // The "a" parameter in the body should overwrite the value
       // of the parameter with the same name in the query string.
       assert.equal(params.a, 'Hello world!');

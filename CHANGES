@@ -1,6 +1,7 @@
 = HEAD
 
   * The input stream is paused by default.
+  * Don't wrap the input stream in a BufferedStream.
   * strata.authenticityToken always generates a token, even on GET requests.
   * Added the ability to pass a params object to mock.env.
   * Removed the querystring module.

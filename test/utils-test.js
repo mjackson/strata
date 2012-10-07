@@ -114,7 +114,7 @@ describe('utils', function () {
   });
 
   describe('compileRoute', function () {
-    it('should properly recognize valid identifiers', function () {
+    it('recognizes valid identifiers', function () {
       var keys, pattern;
 
       keys = [];

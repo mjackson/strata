@@ -36,7 +36,7 @@ describe('strata', function () {
           'User-Agent': userAgent,
           'Content-Length': contentLength
         },
-        input: content
+        input: new BufferedStream(content)
       });
     });
 

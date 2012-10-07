@@ -74,24 +74,24 @@ describe('multipart', function () {
     describe('for a text file upload', function () {
       parseFixture('text');
 
-      it('should correctly parse the text parameters', function () {
+      it('correctly parses the text parameters', function () {
         assert.equal(params['submit-name'], 'Larry');
         assert.equal(params['submit-name-with-content'], 'Berry');
       });
 
-      it('should correctly parse the file name', function () {
+      it('correctly parses the file name', function () {
         var file = params.files;
         assert.ok(file);
         assert.equal(file.name, 'file1.txt');
       });
 
-      it('should correctly parse the file content type', function () {
+      it('correctly parses the file content type', function () {
         var file = params.files;
         assert.ok(file);
         assert.equal(file.type, 'text/plain');
       });
 
-      it("should correctly parse the file's contents", function () {
+      it("correctly parses the file's contents", function () {
         var file = params.files;
         assert.ok(file);
         assert.equal(fs.readFileSync(file.path, 'utf8'), 'contents');
@@ -101,23 +101,23 @@ describe('multipart', function () {
     describe('for a binary file upload', function () {
       parseFixture('binary');
 
-      it('should correctly parse the text parameters', function () {
+      it('correctly parses the text parameters', function () {
         assert.equal('Larry', params['submit-name']);
       });
 
-      it('should correctly parse the file name', function () {
+      it('correctly parses the file name', function () {
         var file = params.files;
         assert.ok(file);
         assert.equal('rack-logo.png', file.name);
       });
 
-      it('should correctly parse the file content type', function () {
+      it('correctly parses the file content type', function () {
         var file = params.files;
         assert.ok(file);
         assert.equal(file.type, 'image/png');
       });
 
-      it("should correctly parse the file's contents", function () {
+      it("correctly parses the file's contents", function () {
         var file = params.files;
         assert.ok(file);
         assert.equal(fs.readFileSync(file.path).length, 26473);
@@ -127,19 +127,19 @@ describe('multipart', function () {
     describe('for a text file upload using IE-style filename', function () {
       parseFixture('text_ie');
 
-      it('should correctly parse and clean up the file name', function () {
+      it('correctly parses and clean up the file name', function () {
         var file = params.files;
         assert.ok(file);
         assert.equal(file.name, 'file1.txt');
       });
 
-      it('should correctly parse the file content type', function () {
+      it('correctly parses the file content type', function () {
         var file = params.files;
         assert.ok(file);
         assert.equal(file.type, 'text/plain');
       });
 
-      it("should correctly parse the file's contents", function () {
+      it("correctly parses the file's contents", function () {
         var file = params.files;
         assert.ok(file);
         assert.equal(fs.readFileSync(file.path, 'utf8'), 'contents');
@@ -149,11 +149,11 @@ describe('multipart', function () {
     describe('for a multipart/mixed message', function () {
       parseFixture('mixed_files');
 
-      it('should correctly part a text field', function () {
+      it('correctly parses a text field', function () {
         assert.equal(params.foo, 'bar');
       });
 
-      it('should correctly parse a nested multipart message', function () {
+      it('correctly parses a nested multipart message', function () {
         var file = params.files;
         assert.ok(file);
         assert.equal(252, file.length);
@@ -163,7 +163,7 @@ describe('multipart', function () {
     describe('for a message with no file selected', function () {
       parseFixture('none');
 
-      it('should return the field as an empty string', function () {
+      it('returns the field as an empty string', function () {
         var file = params.files;
         assert.ok(typeof file !== 'undefined');
         assert.equal(file, '');
@@ -173,21 +173,21 @@ describe('multipart', function () {
     describe('for a message with a filename with escaped quotes', function () {
       parseFixture('filename_with_escaped_quotes');
 
-      it('should correctly parse the file name', function () {
+      it('correctly parses the file name', function () {
         var file = params.files;
         assert.ok(file);
         assert.ok(file.name);
         assert.equal(file.name, 'escape "quotes');
       });
 
-      it('should correctly parse the file content type', function () {
+      it('correctly parses the file content type', function () {
         var file = params.files;
         assert.ok(file);
         assert.ok(file.type);
         assert.equal(file.type, 'application/octet-stream');
       });
 
-      it("should correctly parse the file's contents", function () {
+      it("correctly parses the file's contents", function () {
         var file = params.files;
         assert.ok(file);
         assert.ok(file.path);
@@ -198,21 +198,21 @@ describe('multipart', function () {
     describe('for a message with a filename with unescaped quotes', function () {
       parseFixture('filename_with_unescaped_quotes');
 
-      it('should correctly parse the file name', function () {
+      it('correctly parses the file name', function () {
         var file = params.files;
         assert.ok(file);
         assert.ok(file.name);
         assert.equal(file.name, 'escape "quotes');
       });
 
-      it('should correctly parse the file content type', function () {
+      it('correctly parses the file content type', function () {
         var file = params.files;
         assert.ok(file);
         assert.ok(file.type);
         assert.equal(file.type, 'application/octet-stream');
       });
 
-      it("should correctly parse the file's contents", function () {
+      it("correctly parses the file's contents", function () {
         var file = params.files;
         assert.ok(file);
         assert.ok(file.path);
@@ -223,21 +223,21 @@ describe('multipart', function () {
     describe('for a message with a filename with percent escaped quotes', function () {
       parseFixture('filename_with_percent_escaped_quotes');
 
-      it('should correctly parse the file name', function () {
+      it('correctly parses the file name', function () {
         var file = params.files;
         assert.ok(file);
         assert.ok(file.name);
         assert.equal(file.name, 'escape "quotes');
       });
 
-      it('should correctly parse the file content type', function () {
+      it('correctly parses the file content type', function () {
         var file = params.files;
         assert.ok(file);
         assert.ok(file.type);
         assert.equal(file.type, 'application/octet-stream');
       });
 
-      it("should correctly parse the file's contents", function () {
+      it("correctly parses the file's contents", function () {
         var file = params.files;
         assert.ok(file);
         assert.ok(file.path);
@@ -248,21 +248,21 @@ describe('multipart', function () {
     describe('for a message with a filename and modification-date param', function () {
       parseFixture('filename_and_modification_param');
 
-      it('should correctly parse the file name', function () {
+      it('correctly parses the file name', function () {
         var file = params.files;
         assert.ok(file);
         assert.ok(file.name);
         assert.equal(file.name, 'genome.jpeg');
       });
 
-      it('should correctly parse the file content type', function () {
+      it('correctly parses the file content type', function () {
         var file = params.files;
         assert.ok(file);
         assert.ok(file.type);
         assert.equal(file.type, 'image/jpeg');
       });
 
-      it("should correctly parse the file's contents", function () {
+      it("correctly parses the file's contents", function () {
         var file = params.files;
         assert.ok(file);
         assert.ok(file.path);
@@ -273,21 +273,21 @@ describe('multipart', function () {
     describe('for a message with a filename with unescaped quotes and modification-date param', function () {
       parseFixture('filename_with_unescaped_quotes_and_modification_param');
 
-      it('should correctly parse the file name', function () {
+      it('correctly parses the file name', function () {
         var file = params.files;
         assert.ok(file);
         assert.ok(file.name);
         assert.equal(file.name, '"human" genome.jpeg');
       });
 
-      it('should correctly parse the file content type', function () {
+      it('correctly parses the file content type', function () {
         var file = params.files;
         assert.ok(file);
         assert.ok(file.type);
         assert.equal(file.type, 'image/jpeg');
       });
 
-      it("should correctly parse the file's contents", function () {
+      it("correctly parses the file's contents", function () {
         var file = params.files;
         assert.ok(file);
         assert.ok(file.path);
