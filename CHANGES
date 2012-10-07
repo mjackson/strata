@@ -77,7 +77,6 @@
 
   * Ignore broken symlinks when displaying a directory listing using
     strata.directory.
-
   * Fix memory leak when using the default app in strata.run.
 
 = 0.12.2 / 2012-03-06
@@ -93,11 +92,9 @@
 
   * Removed the Builder, Mapper, and Router constructors in favor of similar
     (but not identical) build, map, and route middlewares.
-
   * Added the ability for users to call any of the build/map/route methods
     directly on the strata module itself. Doing so generates a "default" app
     that may be run by calling `strata.run` with no other arguments.
-
   * Added all routing methods to the build middleware to enable easier app
     creation. The caveat is that calls to the routing methods are not
     interleaved with calls to use & map. Instead, they are simply forwarded to
@@ -121,24 +118,18 @@
 = 0.9.1 / 2011-12-21
 
   * Renamed strata.static to strata.file.
-
   * Use Vary header when using gzip encoding.
 
 = 0.9.0 / 2011-12-07
 
   * Remove routing capabilities from Builder.
-
   * Added ability for Builder, Mapper, and Router to receive an app that
     responds to `toApp`. See strata.app.
-
   * Added Response.headers and Request.headers, and all corresponding properties
     to their respective prototypes.
-
   * Renamed Request#accept* family of methods to accepts* to prevent collision
     with accessors of raw header values.
-
   * Only use static middleware on GET requests.
-
   * Static middleware returns 403 Forbidden when paths contain "..".
 
 = 0.8.2 / 2011-11-21
@@ -146,15 +137,10 @@
   * Added strata.call to catch errors that are thrown synchronously by strata
     apps. In these cases, an error response can be gracefully returned to the
     client without bringing the whole server down.
-
   * Added flash module.
-
   * Extracted mock.call from mock.request.
-
   * Fixed retrieval of the remote client address under node 0.6.
-
   * Fixed commonLogger middleware to report the remote client address properly.
-
   * Removed utils.reverseHttpPropertyName
 
 = 0.8.1 / 2011-11-16
@@ -164,32 +150,21 @@
 = 0.8.0 / 2011-11-16
 
   * Support for node 0.6.
-
   * Removed dependency on gzbz2 in favor of native zlib support in node.
-
   * Removed utils.strftime in favor of strftime package.
-
   * Removed utils.isRe in favor of util.isRegExp.
-
   * Refactored BufferedStream into its own module.
-
   * Added remoteUser environment variable when using basic auth.
 
 = 0.7.0 / 2011-10-30
 
   * Provide as much information as possible in the default error handler for
     errors that do not have a proper stack trace.
-
   * Added remoteAddr and remotePort environment variables.
-
   * Reversed order of arguments to Response constructor.
-
   * Values in Response#headers are always strings.
-
   * Don't send the old cookie value when removing cookies.
-
   * Extracted base error class into its own package.
-
   * Removed view module.
 
 = 0.6.1 / 2011-10-08
@@ -200,23 +175,16 @@
 = 0.6.0 / 2011-10-05
 
   * Added view module (supports erb-style templating).
-
   * Permit a function to be used as the second argument to strata.run.
-
   * Added option to prevent server from writing to console on startup.
-
   * Clarified the use of the serverName and serverPort environment variables.
-
   * Eliminated use of the SERVER_PORT and HTTPS process environment variables.
-
   * Added rationale to README.
 
 = 0.5.14 / 2011-10-03
 
   * Added startup message to strata.run.
-
   * Fixed a regression in strata.handleError.
-
   * Reworked manual code examples to use strata.run.
 
 = 0.5.13 / 2011-09-30
@@ -230,13 +198,9 @@
 = 0.5.11 / 2011-09-27
 
   * Set Content-Type/Length in error responses from basic auth middleware.
-
   * Added cascade middleware.
-
   * Explicitly set "Transfer-Encoding: chunked" for stream response bodies.
-
   * Removed X-Cascade from utils.notFound.
-
   * Added "X-Cascade: pass" support to strata.Router. A response containing this
     header will be ignored and subsequent routes will be tried.
 
@@ -251,16 +215,13 @@
 = 0.5.8 / 2011-09-26
 
   * Refactored mock.Stream into BufferedStream.
-
   * Added mock.stream for collecting stream data.
-
   * Ensured all tests pass lint.
 
 = 0.5.7 / 2011-09-22
 
   * Refactored stream-like constructors to inherit from Stream so they can
     take advantage of Stream#pipe.
-
   * Removed all synchronous fs calls from static middleware.
 
 = 0.5.6 / 2011-09-20
@@ -270,28 +231,23 @@
 = 0.5.5 / 2011-09-20
 
   * Added manual chapter about content negotiation.
-
   * Some minor documentation tweaks.
 
 = 0.5.4 / 2011-09-20
 
   * Added requestTime environment variable.
-
   * Added manual chapters on serving static files, rewriting URL's, and gzip
     compression.
 
 = 0.5.3 / 2011-09-20
 
   * Removed multipart.File#unlink
-
   * The manual module now exports an array of all chapters in order.
-
   * More docs.
 
 = 0.5.2 / 2011-09-19
 
   * Added dependency on markdown package for manual HTML formatting
-
   * Removed mime module (using npm's mime package instead)
 
 = 0.5.1 / 2011-09-14
@@ -308,7 +264,6 @@
 = 0.4.5 / 2011-09-13
 
   * Switched to gzbz2 for gzip compression.
-
   * Fixed gzip encoding bug.
 
 = 0.4.4 / 2011-09-12
@@ -318,57 +273,42 @@
 = 0.4.3 / 2011-09-12
 
   * Added redirect module.
-
   * Added Mapper.run and Router.run to mimic Builder.run.
 
 = 0.4.2 / 2011-09-10
 
   * Added get/post/put/del/head/options convenience functions to Router/Builder.
-
   * Added access to miscellaneous internal modules (e.g. mime, mock).
-
   * Request.parseableData returns true when Request.formData is true.
-
   * Better examples.
 
 = 0.4.1 / 2011-09-09
 
   * Added jsonp support.
-
   * Refactored mock.request and entire test suite.
-
   * Set proper Content-Encoding in gzip middleware.
 
 = 0.4.0 / 2011-09-09
 
   * Renamed project from link to strata.
-
   * Added support for Accept* family of HTTP headers.
-
   * Added gzip support (requires node-compress).
 
 = 0.3.3 / 2011-09-02
 
   * Added link.run.
-
   * Builder defaults to returning a 404.
-
   * Fixed a bug that didn't allow authBasic to be required automatically.
-
   * Added CHANGES document.
 
 = 0.3.2 / 2011-08-17
 
   * Reorganized package structure.
-
   * Fixed sessionCookie bug that did not call the downstream app in some cases.
-
   * Changed minimum node requirement to 0.4.7.
 
 = 0.3.0 / 2011-08-16
 
   * Added Router middleware.
-
   * Replaced urlMap middleware with Mapper.
-
   * Changed minimum node requirement to 0.4.10.
