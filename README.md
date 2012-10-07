@@ -93,12 +93,11 @@ environment.
 
 ## Tests
 
-The test directory contains a comprehensive suite of unit tests for all of
-Strata's core modules. Use [mocha](http://visionmedia.github.com/mocha/) to run all tests:
+The test directory contains a comprehensive suite of unit tests for Strata. Use [mocha](http://visionmedia.github.com/mocha/) to run them all:
 
     $ mocha test/*-test.js
 
-Run the tests for a specific module with:
+Or run the tests for a specific module:
 
     $ mocha test/utils-test.js
 
