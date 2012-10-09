@@ -10,7 +10,7 @@ describe('Response', function () {
     var code = 200;
     var content = 'Hello world!';
     var contentType = 'text/plain';
-    var contentLength = String(Buffer.byteLength(content));
+    var contentLength = Buffer.byteLength(content);
     var headersMap = {
       'Content-Type': contentType,
       'Content-Length': contentLength

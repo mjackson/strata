@@ -263,7 +263,7 @@ describe('Request', function () {
       call(app, mock.env({
         headers: {
           'Content-Type': 'text/plain',
-          'Content-Length': String(Buffer.byteLength(content))
+          'Content-Length': Buffer.byteLength(content)
         },
         input: content
       }), noop);
@@ -290,7 +290,7 @@ describe('Request', function () {
       call(app, mock.env({
         headers: {
           'Content-Type': 'application/json',
-          'Content-Length': String(Buffer.byteLength(content))
+          'Content-Length': Buffer.byteLength(content)
         },
         input: content
       }), noop);
@@ -317,7 +317,7 @@ describe('Request', function () {
       call(app, mock.env({
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Content-Length': String(Buffer.byteLength(content))
+          'Content-Length': Buffer.byteLength(content)
         },
         input: content
       }), noop);
@@ -348,7 +348,7 @@ Hello world!\r\n\
       call(app, mock.env({
         headers: {
           'Content-Type': 'multipart/form-data; boundary="AaB03x"',
-          'Content-Length': String(Buffer.byteLength(content))
+          'Content-Length': Buffer.byteLength(content)
         },
         input: content
       }), noop);
@@ -381,7 +381,7 @@ Hello world!\r\n\
         queryString: queryString,
         headers: {
           'Content-Type': 'multipart/form-data; boundary="AaB03x"',
-          'Content-Length': String(Buffer.byteLength(content))
+          'Content-Length': Buffer.byteLength(content)
         },
         input: content
       }), noop);

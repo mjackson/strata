@@ -160,12 +160,12 @@ describe('lint', function () {
     }, /must be an object/);
 
     app = lint(function (env, callback) {
-      callback(200, { 'Content-Type': 123 }, '');
+      callback(200, { 'Header': {} }, '');
     });
 
     assert.throws(function () {
       app(mock.env(), noop);
-    }, /must be a string/);
+    }, /value must be a/);
 
     app = lint(function (env, callback) {
       callback(200, { '1Header': '' }, '');

@@ -87,7 +87,7 @@ function stringify(env, callback) {
 
   callback(200, {
     'Content-Type': 'text/plain',
-    'Content-Length': String(Buffer.byteLength(content))
+    'Content-Length': Buffer.byteLength(content)
   }, content);
 }
 

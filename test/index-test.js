@@ -16,7 +16,7 @@ describe('strata', function () {
     var queryString = 'a=1&b=2';
     var userAgent = 'test suite';
     var content = 'Hello world!';
-    var contentLength = String(Buffer.byteLength(content));
+    var contentLength = Buffer.byteLength(content);
 
     var env;
     beforeEach(function () {

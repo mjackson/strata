@@ -96,7 +96,8 @@ The headers must be an object whose properties are the names of HTTP headers in
 their canonical form (i.e. "Content-Type" instead of "content-type"). Header
 names may contain only letters, digits, "-", and "_" and must start with a
 letter and must not end with a "-" or "_". If more than one value for a header
-is required, the value for that property must be an array.
+is required, the value for that property must be an array. Otherwise it may be
+a string or a number.
 
 There must be a Content-Type header, except for when the status is 1xx, 204, or
 304, in which case there must be none given.
