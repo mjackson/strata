@@ -6,7 +6,14 @@ var spawn = require('child_process').spawn;
 var strata = require('../lib');
 var utils = strata.utils;
 
-var options = { appFile: path.resolve('./app.js') };
+var options = {};
+
+var appFile = path.resolve('./app.js');
+if (fs.existsSync(appFile)) {
+  options.appFile = appFile;
+} else {
+  options.dir = path.resolve('.');
+}
 
 var arg;
 for (var i = 2; i < process.argv.length; ++i) {
@@ -14,13 +21,9 @@ for (var i = 2; i < process.argv.length; ++i) {
 
   function nextArg(defaultValue) {
     var next = process.argv[++i] || defaultValue;
-
-    if (!next) {
-      printUsage();
-      process.exit();
-    }
-
-    return next;
+    if (next) return next;
+    printUsage();
+    process.exit();
   }
 
   switch (arg) {
@@ -31,7 +34,7 @@ for (var i = 2; i < process.argv.length; ++i) {
     options.certFile = nextArg();
     break;
   case '-d':
-    options.dir = nextArg('.');
+    options.dir = nextArg(path.resolve('.'));
     break;
   case '-h':
   case '--help':
@@ -48,7 +51,7 @@ for (var i = 2; i < process.argv.length; ++i) {
     options.quiet = true;
     break;
   case '-r':
-    options.reload = Math.round(parseFloat(nextArg(1)) * 1000);
+    options.reload = Math.round(parseFloat(nextArg(1), 10) * 1000);
     break;
   case '-s':
     options.socket = nextArg();
@@ -112,28 +115,31 @@ if (options.reload) {
     child.exit();
   });
 } else {
-  var app;
-  if (options.dir) {
-    app = strata.file(utils.notFound, options.dir);
+  if (options.appFile) {
+    try {
+      strata.run(require(options.appFile), options);
+    } catch (e) {
+      console.log('Error: ' + e.message);
+    }
+  } else if (options.dir) {
+    var app = strata.file(utils.notFound, options.dir);
     app = strata.directory(app, options.dir);
     app = strata.commonLogger(app);
-  } else {
-    app = require(options.appFile);
-  }
 
-  strata.run(app, options);
+    strata.run(app, options, function () {
+      if (!options.quiet) {
+        console.log('>> Serving directory ' + options.dir);
+      }
+    });
+  } else {
+    printUsage();
+  }
 }
 
-/**
- * Prints the current version of Strata to the console.
- */
 function printVersion() {
   console.log(strata.version.join('.'));
 }
 
-/**
- * Prints a usage message to the console.
- */
 function printUsage() {
   var usage = [
     'strata v. ' + strata.version.join('.'),
@@ -143,6 +149,7 @@ function printUsage() {
     '  If none is given, uses ./app.js.',
     '',
     'Options:',
+    '',
     '  -a ADDR        The address to bind to (defaults to 0.0.0.0)',
     '  -c PATH        The name of the public key certificate file',
     '                 (HTTPS only)',
