@@ -1,4 +1,4 @@
-= HEAD
+= 0.18.1 / 2012-10-08
 
   * Do not enforce header value type in the lint middleware.
 
