@@ -60,18 +60,18 @@ describe('utils', function () {
     '511': 'Network Authentication Required'
   };
 
-  describe('HTTP_STATUS_CODES', function () {
+  describe('STATUS_CODES', function () {
     it('contains the correct message for all status codes', function () {
-      for (var statusCode in statusCodes) {
-        assert.equal(utils.HTTP_STATUS_CODES[statusCode], statusCodes[statusCode]);
+      for (var status in statusCodes) {
+        assert.equal(utils.STATUS_CODES[status], statusCodes[status]);
       }
     });
   });
 
-  describe('HTTP_STATUS_MESSAGES', function () {
+  describe('STATUS_MESSAGES', function () {
     it('contains the correct code for all messages', function () {
-      for (var statusCode in statusCodes) {
-        assert.equal(utils.HTTP_STATUS_MESSAGES[statusCodes[statusCode]], statusCode);
+      for (var status in statusCodes) {
+        assert.equal(utils.STATUS_MESSAGES[statusCodes[status]], status);
       }
     });
   });
