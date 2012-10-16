@@ -36,7 +36,7 @@ describe('strata', function () {
           'User-Agent': userAgent,
           'Content-Length': contentLength
         },
-        input: new BufferedStream(content)
+        input: content
       });
     });
 
@@ -66,27 +66,37 @@ describe('strata', function () {
     });
 
     describe('input', function () {
-      var input;
-      beforeEach(function (callback) {
-        input = '';
-
-        env.input.resume();
-
-        env.input.on('data', function (chunk) {
-          input += chunk.toString();
-        });
-
-        env.input.on('end', function () {
-          callback(null);
-        });
-      });
-
       it('is a Stream', function () {
         assert.ok(env.input instanceof Stream);
       });
 
-      it('contains the entire input stream', function () {
-        assert.equal(input, content);
+      it('is readable', function () {
+        assert.ok(env.input.readable);
+      });
+
+      it('is paused', function () {
+        assert.ok(env.input.paused);
+      });
+
+      describe('when read', function () {
+        var input;
+        beforeEach(function (callback) {
+          input = '';
+
+          env.input.resume();
+
+          env.input.on('data', function (chunk) {
+            input += chunk.toString();
+          });
+
+          env.input.on('end', function () {
+            callback(null);
+          });
+        });
+
+        it('contains the entire input stream', function () {
+          assert.equal(input, content);
+        });
       });
     });
 
@@ -96,7 +106,6 @@ describe('strata', function () {
       });
 
       it('is writable', function () {
-        assert.ok(env.error);
         assert.ok(env.error.writable);
       });
     });

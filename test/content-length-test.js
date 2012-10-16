@@ -20,22 +20,20 @@ describe('contentLength', function () {
   });
 
   describe('with a stream body', function () {
-    var body;
-    var app = contentLength(function (env, callback) {
-      callback(200, { 'Content-Type': 'text/plain' }, body);
-    });
-
-    var stream;
+    var error;
     beforeEach(function (callback) {
-      body = new BufferedStream('Hello world!');
-      body.pause();
-      stream = {};
-      call(app, mock.env({ error: mock.stream(stream) }), callback);
-      body.resume();
+      error = {};
+
+      var body = new BufferedStream('Hello world!');
+      var app = contentLength(function (env, callback) {
+        callback(200, { 'Content-Type': 'text/plain' }, body);
+      });
+
+      call(app, mock.env({ error: mock.stream(error) }), callback);
     });
 
     it('writes to the error stream', function () {
-      assert.ok(stream.data.match(/body with no length/));
+      assert.ok(error.data.match(/body with no length/));
     });
   });
 });
