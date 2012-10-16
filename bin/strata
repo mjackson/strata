@@ -115,15 +115,9 @@ if (options.reload) {
     child.exit();
   });
 } else {
-  if (options.appFile) {
-    try {
-      strata.run(require(options.appFile), options);
-    } catch (e) {
-      console.log('Error: ' + e.message);
-    }
-  } else if (options.dir) {
-    var app = strata.file(utils.notFound, options.dir);
-    app = strata.directory(app, options.dir);
+  if (options.dir) {
+    var app = strata.directory(app, options.dir);
+    app = strata.file(utils.notFound, options.dir, 'index.html');
     app = strata.commonLogger(app);
 
     strata.run(app, options, function () {
@@ -131,6 +125,12 @@ if (options.reload) {
         console.log('>> Serving directory ' + options.dir);
       }
     });
+  } else if (options.appFile) {
+    try {
+      strata.run(require(options.appFile), options);
+    } catch (e) {
+      console.log('Error: ' + e.message);
+    }
   } else {
     printUsage();
   }
