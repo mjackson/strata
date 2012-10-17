@@ -1,7 +1,13 @@
 = HEAD
 
+  * strata.maxBufferSize can be used to set the maximum input buffer size for
+    new incoming requests.
   * bin/strata now serves the current directory by default when an app.js file
     cannot be found (thanks @iammerrick).
+  * bin/strata will try to serve index.html when serving a directory.
+  * Renamed utils.isSafe to utils.isSafeRequestMethod.
+  * Renamed utils.HTTP_STATUS_CODES to utils.STATUS_CODES.
+  * Renamed utils.HTTP_STATUS_MESSAGES to utils.STATUS_MESSAGES.
 
 = 0.18.1 / 2012-10-08
 
