@@ -33,11 +33,8 @@ describe('mock', function () {
       }), callback);
     });
 
-    // http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.13
-    // HEAD should return the content-length that an equivalent GET request would return
-    // even though the HEAD body will be empty
-    it('returns a Content-Length of 0', function () {
-      assert.equal(headers['Content-Length'], '2'); // return length of a GET ('OK')
+    it('returns a Content-Length of 2', function () {
+      assert.equal(headers['Content-Length'], '2');
     });
 
     it('returns an empty body', function () {
