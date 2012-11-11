@@ -1,4 +1,4 @@
-= HEAD
+= 0.19.1 / 2012-11-10
 
   * HEAD requests now preserve the value of the Content-Length header (thanks
     @jeffbski)
