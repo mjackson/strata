@@ -1,3 +1,8 @@
+= HEAD
+
+  * HEAD requests now preserve the value of the Content-Length header (thanks
+    @jeffbski)
+
 = 0.19.0 / 2012-10-19
 
   * strata.maxBufferSize can be used to set the maximum input buffer size for
