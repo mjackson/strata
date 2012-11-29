@@ -1,4 +1,4 @@
-= HEAD
+= 0.19.2 / 2012-11-29
 
   * Fixed a bug that prevented the build middleware from accepting a "default"
     app to use instead of utils.notFound (thanks @jeffbski)
