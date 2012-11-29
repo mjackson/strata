@@ -1,6 +1,5 @@
 require('./helper');
 var qs = require('querystring');
-var BufferedStream = require('bufferedstream');
 
 describe('mock', function () {
   describe('a request to utils.ok', function () {
@@ -41,54 +40,6 @@ describe('mock', function () {
     it('returns an empty body', function () {
       assert.equal(body, '');
     });
-  });
-
-  describe('a HEAD request to stream OK response with length', function () {
-    var app = function (env, callback) {
-      assert.equal(env.requestMethod, 'HEAD');
-      var stream = new BufferedStream();
-      stream.end('OK'); // we can do this since it is buffered until next tick
-      callback(200, { "Content-Length": 2 }, stream);
-    };
-
-    beforeEach(function (callback) {
-      call(app, mock.env({
-        requestMethod: 'HEAD'
-      }), callback);
-    });
-
-    it('returns a Content-Length of 2', function () {
-      assert.equal(headers['Content-Length'], '2');
-    });
-
-    it('returns an empty body', function () {
-      assert.equal(body, '');
-    });
-
-  });
-
-  describe('a HEAD request to stream OK response w/o length', function () {
-    var app = function (env, callback) {
-      assert.equal(env.requestMethod, 'HEAD');
-      var stream = new BufferedStream();
-      stream.end('OK'); // we can do this since it is buffered until next tick
-      callback(200, {}, stream);
-    };
-
-    beforeEach(function (callback) {
-      call(app, mock.env({
-        requestMethod: 'HEAD'
-      }), callback);
-    });
-
-    it('returns a Transfer-Encoding of chunked', function () {
-      assert.equal(headers['Transfer-Encoding'], 'chunked');
-    });
-
-    it('returns an empty body', function () {
-      assert.equal(body, '');
-    });
-
   });
 
   describe('env', function () {
