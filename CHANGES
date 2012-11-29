@@ -1,5 +1,7 @@
 = HEAD
 
+  * HEAD requests always have the Transfer-Encoding header set the same as the
+    equivalent GET (thanks @jeffbski)
   * Upgrade to BufferedStream 1.4.1
 
 = 0.19.1 / 2012-11-10
