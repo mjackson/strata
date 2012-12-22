@@ -81,16 +81,11 @@ describe('strata', function () {
       describe('when read', function () {
         var input;
         beforeEach(function (callback) {
-          input = '';
-
           env.input.resume();
 
-          env.input.on('data', function (chunk) {
-            input += chunk.toString();
-          });
-
-          env.input.on('end', function () {
-            callback(null);
+          utils.bufferStream(env.input, function (err, buffer) {
+            input = buffer.toString();
+            callback(err);
           });
         });
 

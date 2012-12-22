@@ -87,19 +87,14 @@ describe('mock', function () {
     });
 
     describe('when given a params object in a POST request', function () {
-      var env, input;
+      var input;
       beforeEach(function (callback) {
-        env = mock.env({ requestMethod: 'POST', params: { a: 'a', b: 'b' } });
-        input = '';
-
+        var env = mock.env({ requestMethod: 'POST', params: { a: 'a', b: 'b' } });
         env.input.resume();
 
-        env.input.on('data', function (chunk) {
-          input += chunk.toString('utf8');
-        });
-
-        env.input.on('end', function () {
-          callback(null);
+        utils.bufferStream(env.input, function (err, buffer) {
+          input = buffer.toString();
+          callback(err);
         });
       });
 
