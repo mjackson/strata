@@ -39,9 +39,7 @@ describe('mock', function () {
     };
 
     beforeEach(function (callback) {
-      var env = mock.env({ });
-      env.mockReturnsBuffer = true;
-      call(app, env, callback);
+      call(app, '/', callback, true);
     });
 
     it('returns a Buffer whose digest matches that passed in', function (done) {

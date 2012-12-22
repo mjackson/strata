@@ -8,11 +8,11 @@ status = null;
 headers = null;
 body = null;
 
-call = function (app, env, callback) {
+call = function (app, env, callback, returnBuffer) {
   mock.call(app, env, function (err, s, h, b) {
     status = s, headers = h, body = b;
     callback(err);
-  });
+  }, returnBuffer);
 };
 
 checkStatus = function (code) {
