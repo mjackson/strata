@@ -80,6 +80,33 @@ describe('sessionCookie', function () {
       assert.ok(stream.data.match(/content dropped/i));
     });
   });
+
+  describe('when the cookie contains a -- it properly deserializes', function () {
+    var app = sessionCookie(includeDelimiter);
+    it('doesn\'t wrongly overwrite the session.', function () {
+      var sync = false;
+      call(app, '/', function (err) {
+        assert.ok(!err);
+        assert.ok(headers['Set-Cookie']);
+        var match = headers['Set-Cookie'].match(/(strata\.session=[^;]+)/);
+        assert.ok(match);
+        assert.equal(JSON.parse(body).counter, 1);
+
+        call(app, mock.env({
+          headers: {
+            'Cookie': match[1]
+          }
+        }), function (err) {
+          sync = true;
+          assert.ok(!err);
+          assert.ok(headers['Set-Cookie']);
+          assert.equal(JSON.parse(body).counter, 2);
+        });
+      });
+
+      assert.ok(sync);
+    });
+  });
 });
 
 function stringify(env, callback) {
@@ -113,6 +140,19 @@ function toobig(env, callback) {
   }
 
   env.session.value = value;
+
+  stringify(env, callback);
+}
+
+function includeDelimiter(env, callback) {
+  assert.ok(env.session);
+
+  if (!('counter' in env.session)) {
+    env.session.counter = 0;
+  }
+
+  env.session.counter += 1;
+  env.session.quote = 'The double hyphen "--" is often used in the *real* world.';
 
   stringify(env, callback);
 }
