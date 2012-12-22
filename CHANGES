@@ -1,3 +1,9 @@
+= HEAD
+
+  * Fixed a bug with decoding session cookies when they contained a double
+    hyphen (thanks @CrypticSwarm)
+  * Added the ability to get a Buffer from mock.call (thanks @jeffbski)
+
 = 0.19.2 / 2012-11-29
 
   * Fixed a bug that prevented the build middleware from accepting a "default"
