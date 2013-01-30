@@ -2,6 +2,8 @@
 
   * Added utils.bufferStream which safely concatenate the contents of streams
     that may contain multi-byte characters.
+  * Fix deprecation warning from using util.pump.
+  * Removed strata.Error to simplify error handling.
 
 = 0.19.3 / 2012-12-21
 

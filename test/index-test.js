@@ -151,8 +151,7 @@ describe('strata', function () {
   describe('handleError', function () {
     var returnValue;
     var app = function (env, callback) {
-      var err = new strata.Error('Bang!');
-      returnValue = strata.handleError(err, env, callback);
+      returnValue = strata.handleError(new Error('Boom!'), env, callback);
     };
 
     var stream, env;
@@ -173,16 +172,6 @@ describe('strata', function () {
     it('writes to the error stream', function () {
       assert.ok(stream.data);
       assert.ok(stream.data.match(/unhandled error/i));
-    });
-  });
-
-  describe('Error', function () {
-    it('may be instantiated without using new', function () {
-      assert.ok(strata.Error() instanceof strata.Error);
-    });
-
-    it('is an instance of Error', function () {
-      assert.ok(new strata.Error instanceof Error);
     });
   });
 });
