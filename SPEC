@@ -41,8 +41,7 @@ the following:
                       All header names must be lower-cased
   - input             A readable Stream of data contained in the request body
   - error             A writable Stream for error output
-  - strataVersion     An array of integers that indicate the current version of
-                      Strata as [major, minor, patch]
+  - strataVersion     A string that indicates the current version of strata
 
 In addition to these, the environment MAY include the following properties:
 

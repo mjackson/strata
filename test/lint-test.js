@@ -95,9 +95,9 @@ describe('lint', function () {
 
     assert.throws(function () {
       var env = mock.env();
-      env.strataVersion = '1.0';
+      env.strataVersion = {};
       app(env, noop);
-    }, /strataVersion must be an array/, 'strataVersion must be an array');
+    }, /strataVersion must be a string/, 'strataVersion must be a string');
 
     assert.throws(function () {
       app(mock.env({ requestMethod: '123' }), noop);
