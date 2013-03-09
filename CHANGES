@@ -5,6 +5,8 @@
   * Fix deprecation warning from using util.pump.
   * Removed strata.Error to simplify error handling.
   * strata.version is a string according to semver.
+  * Made all tests pass on node 0.9.12.
+  * Upgraded to BufferedStream 1.5.1.
 
 = 0.19.3 / 2012-12-21
 
