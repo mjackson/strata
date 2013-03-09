@@ -1,4 +1,4 @@
-= HEAD
+= 0.20.0 / 2013-03-09
 
   * Added utils.bufferStream which safely concatenate the contents of streams
     that may contain multi-byte characters.

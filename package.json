@@ -1,6 +1,6 @@
 {
   "name": "strata",
-  "version": "0.19.3",
+  "version": "0.20.0",
   "author": "Michael Jackson <mjijackson@gmail.com>",
   "description": "A modular, streaming HTTP server",
   "keywords": ["web", "http", "server", "framework", "middleware", "rack", "jsgi", "wsgi"],
