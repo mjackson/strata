@@ -124,6 +124,34 @@ describe('multipart', function () {
       });
     });
 
+    describe('for an empty text file upload', function () {
+      parseFixture('empty');
+
+      it('correctly parses the file name', function () {
+        var file = params.files;
+        assert.ok(file);
+        assert.equal(file.name, 'empty.txt');
+      });
+
+      it('correctly parses the file content type', function () {
+        var file = params.files;
+        assert.ok(file);
+        assert.equal(file.type, 'text/plain');
+      });
+
+      it('correctly determines the file size', function () {
+        var file = params.files;
+        assert.ok(file);
+        assert.strictEqual(file.size, 0);
+      });
+
+      it("correctly parses the file's contents", function () {
+        var file = params.files;
+        assert.ok(file);
+        assert.equal(fs.readFileSync(file.path, 'utf8'), '');
+      });
+    });
+
     describe('for a text file upload using IE-style filename', function () {
       parseFixture('text_ie');
 
