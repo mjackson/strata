@@ -1,4 +1,4 @@
-= HEAD
+= 0.20.1 / 2013-03-28
 
   * Allow multipart upload of empty files (thanks @jeffbski).
   * Upgrade to BufferedStream 1.6.x.
