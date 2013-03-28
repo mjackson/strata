@@ -13,7 +13,7 @@
     "url": "git://github.com/mjijackson/strata.git"
   },
   "dependencies": {
-    "bufferedstream": "1.6.0",
+    "bufferedstream": "1.6.x",
     "mime": "1.2.3",
     "strftime": "0.4.6",
     "markdown": "~0.3.1"
