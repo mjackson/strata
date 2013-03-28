@@ -118,12 +118,6 @@ describe('lint', function () {
     assert.throws(function () {
       app(mock.env({ headers: { 'content-length': 'abc' } }), noop);
     }, /must consist of only digits/, 'content-length must consist of only digits');
-
-    assert.throws(function () {
-      var env = mock.env({ input: 'the content' });
-      env.input.resume();
-      app(env, noop);
-    }, /must be paused/);
   });
 
   it('detects an invalid callback', function () {

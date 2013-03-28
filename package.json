@@ -6,14 +6,13 @@
   "keywords": ["web", "http", "server", "framework", "middleware", "rack", "jsgi", "wsgi"],
   "homepage": "http://stratajs.org",
   "engines": {
-    "node": ">= 0.8.0"
+    "node": "0.10.x"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/mjijackson/strata.git"
   },
   "dependencies": {
-    "bufferedstream": "1.6.x",
     "mime": "1.2.3",
     "strftime": "0.4.6",
     "markdown": "~0.3.1"

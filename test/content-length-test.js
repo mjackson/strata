@@ -1,5 +1,4 @@
 require('./helper');
-var BufferedStream = require('bufferedstream');
 var contentLength = strata.contentLength;
 
 describe('contentLength', function () {
@@ -24,7 +23,7 @@ describe('contentLength', function () {
     beforeEach(function (callback) {
       error = {};
 
-      var body = new BufferedStream('Hello world!');
+      var body = mock.stream('Hello world!');
       var app = contentLength(function (env, callback) {
         callback(200, { 'Content-Type': 'text/plain' }, body);
       });

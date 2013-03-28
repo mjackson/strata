@@ -1,7 +1,6 @@
 require('./helper');
 var path = require('path');
 var fs = require('fs');
-var BufferedStream = require('bufferedstream');
 var gzip = strata.gzip;
 var file = strata.file;
 
@@ -31,7 +30,7 @@ describe('gzip', function () {
 
   describe('with a stream body', function () {
     var app = gzip(function (env, callback) {
-      callback(200, { 'Content-Type': 'text/plain' }, new BufferedStream(contents));
+      callback(200, { 'Content-Type': 'text/plain' }, mock.stream(contents));
     });
 
     beforeEach(function (callback) {

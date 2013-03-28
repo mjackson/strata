@@ -1,12 +1,11 @@
 require('./helper');
 var Stream = require('stream').Stream;
-var BufferedStream = require('bufferedstream');
 
 describe('strata', function () {
   describe('a HEAD request to stream OK response with length', function () {
     var app = function (env, callback) {
       assert.equal(env.requestMethod, 'HEAD');
-      callback(200, { 'Content-Length': 2 }, BufferedStream('OK'));
+      callback(200, { 'Content-Length': 2 }, mock.stream('OK'));
     };
 
     beforeEach(function (callback) {
@@ -27,7 +26,7 @@ describe('strata', function () {
   describe('a HEAD request to stream OK response w/o length', function () {
     var app = function (env, callback) {
       assert.equal(env.requestMethod, 'HEAD');
-      callback(200, {}, BufferedStream('OK'));
+      callback(200, {}, mock.stream('OK'));
     };
 
     beforeEach(function (callback) {
