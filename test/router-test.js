@@ -6,7 +6,7 @@ describe('router', function () {
 
   var innerApp = function (env, callback) {
     var routeParams = env.route;
-    assert.ok(routeParams);
+    assert(routeParams);
 
     callback(200, {
       'Content-Type': 'text/plain',
@@ -35,12 +35,12 @@ describe('router', function () {
     });
 
     it('calls the correct app', function () {
-      assert.ok(headers['X-Route']);
+      assert(headers['X-Route']);
       assert.deepEqual(JSON.parse(headers['X-Route']), ['/users/1', '1']);
     });
 
     it('does not set the id route parameter', function () {
-      assert.ok(headers['X-Id']);
+      assert(headers['X-Id']);
       assert.equal(headers['X-Id'], 'undefined');
     });
   });
@@ -51,12 +51,12 @@ describe('router', function () {
     });
 
     it('calls the correct app', function () {
-      assert.ok(headers['X-Route']);
+      assert(headers['X-Route']);
       assert.deepEqual(JSON.parse(headers['X-Route']), ['/posts/1', '1']);
     });
 
     it('sets the id route parameter', function () {
-      assert.ok(headers['X-Id']);
+      assert(headers['X-Id']);
       assert.equal(headers['X-Id'], '1');
     });
   });
@@ -70,12 +70,12 @@ describe('router', function () {
     });
 
     it('calls the correct app', function () {
-      assert.ok(headers['X-Route']);
+      assert(headers['X-Route']);
       assert.deepEqual(JSON.parse(headers['X-Route']), ['/posts/2', '2']);
     });
 
     it('sets the id route parameter', function () {
-      assert.ok(headers['X-Id']);
+      assert(headers['X-Id']);
       assert.equal(headers['X-Id'], '2');
     });
   });
@@ -89,12 +89,12 @@ describe('router', function () {
     });
 
     it('calls the correct app', function () {
-      assert.ok(headers['X-Route']);
+      assert(headers['X-Route']);
       assert.deepEqual(JSON.parse(headers['X-Route']), ['/posts/3', '3']);
     });
 
     it('sets the id route parameter', function () {
-      assert.ok(headers['X-Id']);
+      assert(headers['X-Id']);
       assert.equal(headers['X-Id'], '3');
     });
   });
@@ -124,7 +124,7 @@ describe('router', function () {
       });
 
       it('cascades to the next route', function () {
-        assert.ok(headers['X-Id']);
+        assert(headers['X-Id']);
         assert.equal(headers['X-Id'], '2');
       });
     });

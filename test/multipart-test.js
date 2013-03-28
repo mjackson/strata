@@ -31,7 +31,7 @@ describe('multipart', function () {
 
       var ended = false;
       parser.onEnd = function () {
-        assert.ok(!ended); // onEnd should only be called once
+        assert(!ended); // onEnd should only be called once
         ended = true;
         callback(null);
       };
@@ -81,19 +81,19 @@ describe('multipart', function () {
 
       it('correctly parses the file name', function () {
         var file = params.files;
-        assert.ok(file);
+        assert(file);
         assert.equal(file.name, 'file1.txt');
       });
 
       it('correctly parses the file content type', function () {
         var file = params.files;
-        assert.ok(file);
+        assert(file);
         assert.equal(file.type, 'text/plain');
       });
 
       it("correctly parses the file's contents", function () {
         var file = params.files;
-        assert.ok(file);
+        assert(file);
         assert.equal(fs.readFileSync(file.path, 'utf8'), 'contents');
       });
     });
@@ -107,19 +107,19 @@ describe('multipart', function () {
 
       it('correctly parses the file name', function () {
         var file = params.files;
-        assert.ok(file);
+        assert(file);
         assert.equal('rack-logo.png', file.name);
       });
 
       it('correctly parses the file content type', function () {
         var file = params.files;
-        assert.ok(file);
+        assert(file);
         assert.equal(file.type, 'image/png');
       });
 
       it("correctly parses the file's contents", function () {
         var file = params.files;
-        assert.ok(file);
+        assert(file);
         assert.equal(fs.readFileSync(file.path).length, 26473);
       });
     });
@@ -129,25 +129,25 @@ describe('multipart', function () {
 
       it('correctly parses the file name', function () {
         var file = params.files;
-        assert.ok(file);
+        assert(file);
         assert.equal(file.name, 'empty.txt');
       });
 
       it('correctly parses the file content type', function () {
         var file = params.files;
-        assert.ok(file);
+        assert(file);
         assert.equal(file.type, 'text/plain');
       });
 
       it('correctly determines the file size', function () {
         var file = params.files;
-        assert.ok(file);
+        assert(file);
         assert.strictEqual(file.size, 0);
       });
 
       it("correctly parses the file's contents", function () {
         var file = params.files;
-        assert.ok(file);
+        assert(file);
         assert.equal(fs.readFileSync(file.path, 'utf8'), '');
       });
     });
@@ -157,19 +157,19 @@ describe('multipart', function () {
 
       it('correctly parses and clean up the file name', function () {
         var file = params.files;
-        assert.ok(file);
+        assert(file);
         assert.equal(file.name, 'file1.txt');
       });
 
       it('correctly parses the file content type', function () {
         var file = params.files;
-        assert.ok(file);
+        assert(file);
         assert.equal(file.type, 'text/plain');
       });
 
       it("correctly parses the file's contents", function () {
         var file = params.files;
-        assert.ok(file);
+        assert(file);
         assert.equal(fs.readFileSync(file.path, 'utf8'), 'contents');
       });
     });
@@ -183,7 +183,7 @@ describe('multipart', function () {
 
       it('correctly parses a nested multipart message', function () {
         var file = params.files;
-        assert.ok(file);
+        assert(file);
         assert.equal(252, file.length);
       });
     });
@@ -193,7 +193,7 @@ describe('multipart', function () {
 
       it('returns the field as an empty string', function () {
         var file = params.files;
-        assert.ok(typeof file !== 'undefined');
+        assert(typeof file !== 'undefined');
         assert.equal(file, '');
       });
     });
@@ -203,22 +203,22 @@ describe('multipart', function () {
 
       it('correctly parses the file name', function () {
         var file = params.files;
-        assert.ok(file);
-        assert.ok(file.name);
+        assert(file);
+        assert(file.name);
         assert.equal(file.name, 'escape "quotes');
       });
 
       it('correctly parses the file content type', function () {
         var file = params.files;
-        assert.ok(file);
-        assert.ok(file.type);
+        assert(file);
+        assert(file.type);
         assert.equal(file.type, 'application/octet-stream');
       });
 
       it("correctly parses the file's contents", function () {
         var file = params.files;
-        assert.ok(file);
-        assert.ok(file.path);
+        assert(file);
+        assert(file.path);
         assert.equal(fs.readFileSync(file.path, 'utf8'), 'contents');
       });
     });
@@ -228,22 +228,22 @@ describe('multipart', function () {
 
       it('correctly parses the file name', function () {
         var file = params.files;
-        assert.ok(file);
-        assert.ok(file.name);
+        assert(file);
+        assert(file.name);
         assert.equal(file.name, 'escape "quotes');
       });
 
       it('correctly parses the file content type', function () {
         var file = params.files;
-        assert.ok(file);
-        assert.ok(file.type);
+        assert(file);
+        assert(file.type);
         assert.equal(file.type, 'application/octet-stream');
       });
 
       it("correctly parses the file's contents", function () {
         var file = params.files;
-        assert.ok(file);
-        assert.ok(file.path);
+        assert(file);
+        assert(file.path);
         assert.equal(fs.readFileSync(file.path, 'utf8'), 'contents');
       });
     });
@@ -253,22 +253,22 @@ describe('multipart', function () {
 
       it('correctly parses the file name', function () {
         var file = params.files;
-        assert.ok(file);
-        assert.ok(file.name);
+        assert(file);
+        assert(file.name);
         assert.equal(file.name, 'escape "quotes');
       });
 
       it('correctly parses the file content type', function () {
         var file = params.files;
-        assert.ok(file);
-        assert.ok(file.type);
+        assert(file);
+        assert(file.type);
         assert.equal(file.type, 'application/octet-stream');
       });
 
       it("correctly parses the file's contents", function () {
         var file = params.files;
-        assert.ok(file);
-        assert.ok(file.path);
+        assert(file);
+        assert(file.path);
         assert.equal(fs.readFileSync(file.path, 'utf8'), 'contents');
       });
     });
@@ -278,22 +278,22 @@ describe('multipart', function () {
 
       it('correctly parses the file name', function () {
         var file = params.files;
-        assert.ok(file);
-        assert.ok(file.name);
+        assert(file);
+        assert(file.name);
         assert.equal(file.name, 'genome.jpeg');
       });
 
       it('correctly parses the file content type', function () {
         var file = params.files;
-        assert.ok(file);
-        assert.ok(file.type);
+        assert(file);
+        assert(file.type);
         assert.equal(file.type, 'image/jpeg');
       });
 
       it("correctly parses the file's contents", function () {
         var file = params.files;
-        assert.ok(file);
-        assert.ok(file.path);
+        assert(file);
+        assert(file.path);
         assert.equal(fs.readFileSync(file.path, 'utf8'), 'contents');
       });
     });
@@ -303,22 +303,22 @@ describe('multipart', function () {
 
       it('correctly parses the file name', function () {
         var file = params.files;
-        assert.ok(file);
-        assert.ok(file.name);
+        assert(file);
+        assert(file.name);
         assert.equal(file.name, '"human" genome.jpeg');
       });
 
       it('correctly parses the file content type', function () {
         var file = params.files;
-        assert.ok(file);
-        assert.ok(file.type);
+        assert(file);
+        assert(file.type);
         assert.equal(file.type, 'image/jpeg');
       });
 
       it("correctly parses the file's contents", function () {
         var file = params.files;
-        assert.ok(file);
-        assert.ok(file.path);
+        assert(file);
+        assert(file.path);
         assert.equal(fs.readFileSync(file.path, 'utf8'), 'contents');
       });
     });

@@ -18,7 +18,7 @@ describe('rewrite', function () {
     });
 
     it('rewrites the pathInfo properly', function () {
-      assert.ok(headers['X-Path-Info']);
+      assert(headers['X-Path-Info']);
       assert.equal(headers['X-Path-Info'], '/xyz');
     });
   });
@@ -29,7 +29,7 @@ describe('rewrite', function () {
     });
 
     it('rewrites the pathInfo properly', function () {
-      assert.ok(headers['X-Path-Info']);
+      assert(headers['X-Path-Info']);
       assert.equal(headers['X-Path-Info'], '/xyz');
     });
   });
@@ -40,7 +40,7 @@ describe('rewrite', function () {
     });
 
     it('rewrites the pathInfo properly', function () {
-      assert.ok(headers['X-Path-Info']);
+      assert(headers['X-Path-Info']);
       assert.equal(headers['X-Path-Info'], '/xyz/path/xyz');
     });
   });

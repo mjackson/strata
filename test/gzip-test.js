@@ -77,7 +77,7 @@ describe('gzip', function () {
 
     it('does not gzip-encode the body', function () {
       assert.equal(headers['Content-Type'], 'text/plain');
-      assert.ok(!headers['Content-Encoding']);
+      assert(!headers['Content-Encoding']);
       assert.equal(body, contents);
     });
   });

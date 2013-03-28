@@ -33,7 +33,7 @@ describe('contentLength', function () {
     });
 
     it('writes to the error stream', function () {
-      assert.ok(error.data.match(/body with no length/));
+      assert(error.data.match(/body with no length/));
     });
   });
 });

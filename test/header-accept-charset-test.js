@@ -3,7 +3,7 @@ var AcceptCharset = strata.AcceptCharset;
 
 describe('AcceptCharset', function () {
   it('may be instantiated without using new', function () {
-    assert.ok(AcceptCharset() instanceof AcceptCharset);
+    assert(AcceptCharset() instanceof AcceptCharset);
   });
 
   it('knows its qvalues', function () {

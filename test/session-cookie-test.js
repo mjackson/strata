@@ -9,10 +9,10 @@ describe('sessionCookie', function () {
       var sync = false;
 
       call(app, '/', function (err) {
-        assert.ok(!err);
-        assert.ok(headers['Set-Cookie']);
+        assert(!err);
+        assert(headers['Set-Cookie']);
         var match = headers['Set-Cookie'].match(/(strata\.session=[^;]+)/);
-        assert.ok(match);
+        assert(match);
         assert.equal(JSON.parse(body).counter, 1);
 
         call(app, mock.env({
@@ -21,13 +21,13 @@ describe('sessionCookie', function () {
           }
         }), function (err) {
           sync = true;
-          assert.ok(!err);
-          assert.ok(headers['Set-Cookie']);
+          assert(!err);
+          assert(headers['Set-Cookie']);
           assert.equal(JSON.parse(body).counter, 2);
         });
       });
 
-      assert.ok(sync);
+      assert(sync);
     });
   });
 
@@ -36,10 +36,10 @@ describe('sessionCookie', function () {
       var sync = false;
 
       call(app, '/', function (err) {
-        assert.ok(!err);
-        assert.ok(headers['Set-Cookie']);
+        assert(!err);
+        assert(headers['Set-Cookie']);
         var match = headers['Set-Cookie'].match(/(strata\.session=[^;]+)/);
-        assert.ok(match);
+        assert(match);
         assert.deepEqual(JSON.parse(body).counter, 1);
 
         // Tamper with the cookie.
@@ -51,13 +51,13 @@ describe('sessionCookie', function () {
           }
         }), function (err) {
           sync = true;
-          assert.ok(!err);
-          assert.ok(headers['Set-Cookie']);
+          assert(!err);
+          assert(headers['Set-Cookie']);
           assert.deepEqual(JSON.parse(body).counter, 1);
         });
       });
 
-      assert.ok(sync);
+      assert(sync);
     });
   });
 
@@ -73,11 +73,11 @@ describe('sessionCookie', function () {
     });
 
     it('does not set the cookie', function () {
-      assert.ok(!headers['Set-Cookie']);
+      assert(!headers['Set-Cookie']);
     });
 
     it('drops content', function () {
-      assert.ok(stream.data.match(/content dropped/i));
+      assert(stream.data.match(/content dropped/i));
     });
   });
 
@@ -86,10 +86,10 @@ describe('sessionCookie', function () {
     it('doesn\'t wrongly overwrite the session.', function () {
       var sync = false;
       call(app, '/', function (err) {
-        assert.ok(!err);
-        assert.ok(headers['Set-Cookie']);
+        assert(!err);
+        assert(headers['Set-Cookie']);
         var match = headers['Set-Cookie'].match(/(strata\.session=[^;]+)/);
-        assert.ok(match);
+        assert(match);
         assert.equal(JSON.parse(body).counter, 1);
 
         call(app, mock.env({
@@ -98,13 +98,13 @@ describe('sessionCookie', function () {
           }
         }), function (err) {
           sync = true;
-          assert.ok(!err);
-          assert.ok(headers['Set-Cookie']);
+          assert(!err);
+          assert(headers['Set-Cookie']);
           assert.equal(JSON.parse(body).counter, 2);
         });
       });
 
-      assert.ok(sync);
+      assert(sync);
     });
   });
 });
@@ -119,7 +119,7 @@ function stringify(env, callback) {
 }
 
 function increment(env, callback) {
-  assert.ok(env.session);
+  assert(env.session);
 
   if (!('counter' in env.session)) {
     env.session.counter = 0;
@@ -131,7 +131,7 @@ function increment(env, callback) {
 }
 
 function toobig(env, callback) {
-  assert.ok(env.session);
+  assert(env.session);
 
   var value = '';
 
@@ -145,7 +145,7 @@ function toobig(env, callback) {
 }
 
 function includeDelimiter(env, callback) {
-  assert.ok(env.session);
+  assert(env.session);
 
   if (!('counter' in env.session)) {
     env.session.counter = 0;

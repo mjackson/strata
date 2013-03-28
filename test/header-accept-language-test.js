@@ -3,7 +3,7 @@ var AcceptLanguage = strata.AcceptLanguage;
 
 describe('AcceptLanguage', function () {
   it('may be instantiated without using new', function () {
-    assert.ok(AcceptLanguage() instanceof AcceptLanguage);
+    assert(AcceptLanguage() instanceof AcceptLanguage);
   });
 
   it('knows its qvalues', function () {

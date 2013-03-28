@@ -3,7 +3,7 @@ var AcceptEncoding = strata.AcceptEncoding;
 
 describe('AcceptEncoding', function () {
   it('may be instantiated without using new', function () {
-    assert.ok(AcceptEncoding() instanceof AcceptEncoding);
+    assert(AcceptEncoding() instanceof AcceptEncoding);
   });
 
   it('knows its qvalues', function () {

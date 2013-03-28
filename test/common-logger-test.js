@@ -15,6 +15,6 @@ describe('commonLogger', function () {
   });
 
   it('logs the request', function () {
-    assert.ok(output.match(/GET \/.+200/));
+    assert(output.match(/GET \/.+200/));
   });
 });

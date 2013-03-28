@@ -62,7 +62,7 @@ describe('utils', function () {
       keys = [];
       pattern = utils.compileRoute('/users/:id', keys);
 
-      assert.ok(pattern);
+      assert(pattern);
       assert.deepEqual(keys, ['id']);
       assert.match('/users/1', pattern);
       assert.match('/users/asdf1324_', pattern);
@@ -70,14 +70,14 @@ describe('utils', function () {
       keys = [];
       pattern = utils.compileRoute('/users/:$id/photos/:_photo_id', keys);
 
-      assert.ok(pattern);
+      assert(pattern);
       assert.deepEqual(keys, ['$id', '_photo_id']);
       assert.match('/users/1/photos/1', pattern);
 
       keys = [];
       pattern = utils.compileRoute('/users/:id.:format', keys);
 
-      assert.ok(pattern);
+      assert(pattern);
       assert.deepEqual(keys, ['id', 'format']);
       assert.match('/users/2.json', pattern);
     });
@@ -86,7 +86,7 @@ describe('utils', function () {
       var keys = [];
       var pattern = utils.compileRoute('/users/*', keys);
 
-      assert.ok(pattern);
+      assert(pattern);
       assert.deepEqual(keys, ['splat']);
       assert.match('/users/1', pattern);
       assert.match('/users/1/photos/1', pattern);
@@ -96,7 +96,7 @@ describe('utils', function () {
       var keys = [];
       var pattern = utils.compileRoute('/users/:1id');
 
-      assert.ok(pattern);
+      assert(pattern);
       assert.empty(keys);
     });
   });

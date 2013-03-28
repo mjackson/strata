@@ -3,7 +3,7 @@ var Response = strata.Response;
 
 describe('Response', function () {
   it('may be instantiated without using new', function () {
-    assert.ok(Response() instanceof Response);
+    assert(Response() instanceof Response);
   });
 
   describe('when newly created', function () {
@@ -72,7 +72,7 @@ describe('Response', function () {
     });
 
     it('has the correct Set-Cookie header', function () {
-      assert.ok(res.headers['Set-Cookie']);
+      assert(res.headers['Set-Cookie']);
       assert.equal(res.headers['Set-Cookie'], 'the_cookie=the%20value');
     });
 
@@ -98,7 +98,7 @@ describe('Response', function () {
     });
 
     it('has the correct Set-Cookie header', function () {
-      assert.ok(res.headers['Set-Cookie']);
+      assert(res.headers['Set-Cookie']);
       assert.equal(res.headers['Set-Cookie'], 'the_cookie=the%20value; domain=example.org; path=/account; expires=Sat, 17 Feb 1973 02:50:32 GMT');
     });
 
@@ -133,7 +133,7 @@ describe('Response', function () {
     });
 
     it('has the correct Set-Cookie header', function () {
-      assert.ok(res.headers['Set-Cookie']);
+      assert(res.headers['Set-Cookie']);
       assert.equal(res.headers['Set-Cookie'], 'cookie1=value%201; domain=example.org; path=/account; expires=Sat, 17 Feb 1973 02:50:32 GMT\ncookie2=value%202; domain=example.net; path=/users; expires=Sat, 17 Feb 1973 02:50:32 GMT');
     });
 
@@ -164,7 +164,7 @@ describe('Response', function () {
     });
 
     it('has the correct Set-Cookie header', function () {
-      assert.ok(res.headers['Set-Cookie']);
+      assert(res.headers['Set-Cookie']);
       assert.equal(res.headers['Set-Cookie'], 'cookie1=value%201; domain=example.org\ncookie2=value%202; domain=example.org');
     });
 

@@ -16,7 +16,7 @@ describe('directory', function () {
 
     it('returns a directory listing of that directory', function () {
       var pattern = new RegExp(path.basename(__filename));
-      assert.ok(body.match(pattern));
+      assert(body.match(pattern));
     });
   });
 

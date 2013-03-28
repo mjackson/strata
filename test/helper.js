@@ -28,9 +28,9 @@ checkHeader = function (name, value) {
 };
 
 assert.match = function (string, pattern, message) {
-  assert.ok(string.match(pattern), message);
+  assert(string.match(pattern), message);
 };
 
 assert.empty = function (object, message) {
-  assert.ok(utils.isEmptyObject(object), message);
+  assert(utils.isEmptyObject(object), message);
 };

@@ -1,3 +1,10 @@
+= HEAD
+
+  * Major backwards-incompatible changes to the high-level API.
+    * strata.createServer/startServer/run have all been replaced by strata.serve
+    * All high-level get/post/route/map/etc. methods are gone. This should help
+      to prevent confusion when using the build/router APIs.
+
 = 0.20.1 / 2013-03-28
 
   * Allow multipart upload of empty files (thanks @jeffbski).

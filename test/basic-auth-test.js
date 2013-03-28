@@ -31,7 +31,7 @@ describe('basicAuth', function () {
     });
 
     it('returns a WWW-Authenticate header', function () {
-      assert.ok(headers['WWW-Authenticate']);
+      assert(headers['WWW-Authenticate']);
     });
   });
 

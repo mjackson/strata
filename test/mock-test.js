@@ -4,6 +4,7 @@ var crypto = require('crypto');
 var BufferedStream = require('bufferedstream');
 
 describe('mock', function () {
+
   describe('a request to utils.ok', function () {
     beforeEach(function (callback) {
       call(utils.ok, '/', callback);
@@ -104,6 +105,6 @@ describe('mock', function () {
         assert.equal(data.b, 'b');
       });
     });
-
   });
+
 });

@@ -116,33 +116,32 @@ if (options.reload) {
   });
 } else {
   if (options.dir) {
-    var app = strata.directory(app, options.dir);
-    app = strata.file(utils.notFound, options.dir, 'index.html');
+    var app = strata.directory(utils.notFound, options.dir);
+    app = strata.file(app, options.dir, [ 'index.html' ]);
     app = strata.commonLogger(app);
 
-    strata.run(app, options, function () {
-      if (!options.quiet) {
+    var server = strata.serve(app, options);
+
+    if (!options.quiet) {
+      server.on('listening', function () {
         console.log('>> Serving directory ' + options.dir);
-      }
-    });
-  } else if (options.appFile) {
-    try {
-      strata.run(require(options.appFile), options);
-    } catch (e) {
-      console.log('Error: ' + e.message);
+      });
     }
+  } else if (options.appFile) {
+    var app = require(options.appFile);
+    strata.serve(app, options);
   } else {
     printUsage();
   }
 }
 
 function printVersion() {
-  console.log(strata.version.join('.'));
+  console.log(strata.version);
 }
 
 function printUsage() {
   var usage = [
-    'strata v. ' + strata.version.join('.'),
+    'strata v. ' + strata.version,
     'Usage: strata [options] [appFile]',
     '',
     '  Starts the Strata application contained in the given appFile.',

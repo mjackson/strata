@@ -3,7 +3,7 @@ var Accept = strata.Accept;
 
 describe('Accept', function () {
   it('may be instantiated without using new', function () {
-    assert.ok(Accept() instanceof Accept);
+    assert(Accept() instanceof Accept);
   });
 
   it('knows its qvalues', function () {

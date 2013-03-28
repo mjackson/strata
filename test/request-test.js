@@ -4,7 +4,7 @@ var Request = strata.Request;
 
 describe('Request', function () {
   it('may be instantiated without using new', function () {
-    assert.ok(Request() instanceof Request);
+    assert(Request() instanceof Request);
   });
 
   var protocol = 'https:';
@@ -108,7 +108,7 @@ describe('Request', function () {
     });
 
     it("knows if it's parseable", function () {
-      assert.ok(req.parseableData);
+      assert(req.parseableData);
     });
 
     it('knows its user agent', function () {
@@ -120,31 +120,31 @@ describe('Request', function () {
     });
 
     it('knows what content types are acceptable', function () {
-      assert.ok(req.accepts('text/html'));
-      assert.ok(req.accepts('application/json'));
+      assert(req.accepts('text/html'));
+      assert(req.accepts('application/json'));
     });
 
     it('knows what character sets are acceptable', function () {
-      assert.ok(req.acceptsCharset('iso-8859-1'));
-      assert.ok(req.acceptsCharset('utf-8'));
+      assert(req.acceptsCharset('iso-8859-1'));
+      assert(req.acceptsCharset('utf-8'));
     });
 
     it('knows what content encodings are acceptable', function () {
-      assert.ok(req.acceptsEncoding('gzip'));
-      assert.ok(req.acceptsEncoding('compress'));
+      assert(req.acceptsEncoding('gzip'));
+      assert(req.acceptsEncoding('compress'));
     });
 
     it('knows what languages are acceptable', function () {
-      assert.ok(req.acceptsLanguage('en'));
-      assert.ok(!req.acceptsLanguage('jp'));
+      assert(req.acceptsLanguage('en'));
+      assert(!req.acceptsLanguage('jp'));
     });
 
     it('knows if it is secure', function () {
-      assert.ok(req.ssl);
+      assert(req.ssl);
     });
 
     it('knows if it was made via XMLHttpRequest', function () {
-      assert.ok(req.xhr);
+      assert(req.xhr);
     });
 
     it('knows its host and port', function () {
