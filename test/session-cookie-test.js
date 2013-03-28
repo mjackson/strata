@@ -64,12 +64,10 @@ describe('sessionCookie', function () {
   describe('when the cookie size exceeds 4k', function () {
     var app = sessionCookie(toobig);
 
-    var stream;
+    var error;
     beforeEach(function (callback) {
-      stream = {};
-      call(app, mock.env({
-        error: mock.stream(stream)
-      }), callback);
+      error = {};
+      call(app, { error: error }, callback);
     });
 
     it('does not set the cookie', function () {
@@ -77,7 +75,8 @@ describe('sessionCookie', function () {
     });
 
     it('drops content', function () {
-      assert(stream.data.match(/content dropped/i));
+      assert(error.data);
+      assert(error.data.match(/content dropped/i));
     });
   });
 

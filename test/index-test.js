@@ -36,10 +36,6 @@ describe('strata', function () {
       }), callback);
     });
 
-    it('returns a Transfer-Encoding of chunked', function () {
-      assert.equal(headers['Transfer-Encoding'], 'chunked');
-    });
-
     it('returns an empty body', function () {
       assert.equal(body, '');
     });

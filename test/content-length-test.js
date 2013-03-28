@@ -29,10 +29,11 @@ describe('contentLength', function () {
         callback(200, { 'Content-Type': 'text/plain' }, body);
       });
 
-      call(app, mock.env({ error: mock.stream(error) }), callback);
+      call(app, { error: error }, callback);
     });
 
     it('writes to the error stream', function () {
+      assert(error.data);
       assert(error.data.match(/body with no length/));
     });
   });

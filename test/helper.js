@@ -9,10 +9,12 @@ headers = null;
 body = null;
 
 call = function (app, env, callback, returnBuffer) {
-  mock.call(app, env, function (err, s, h, b) {
+  function responseHandler(err, s, h, b) {
     status = s, headers = h, body = b;
     callback(err);
-  }, returnBuffer);
+  }
+
+  mock.call(app, env, responseHandler, returnBuffer);
 };
 
 checkStatus = function (code) {
