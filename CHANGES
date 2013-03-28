@@ -4,6 +4,8 @@
     * strata.createServer/startServer/run have all been replaced by strata.serve
     * All high-level get/post/route/map/etc. methods are gone. This should help
       to prevent confusion when using the build/router APIs.
+  * Remove jsonp middleware
+  * Remove strataVersion environment variable
   * Remove dependency on BufferedStream
   * Require node 0.10.x
 

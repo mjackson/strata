@@ -43,8 +43,7 @@ describe('lint', function () {
       'serverPort',
       'headers',
       'input',
-      'error',
-      'strataVersion'
+      'error'
     ].forEach(function (p) {
       assertRequiredProperty(p);
     });
@@ -92,12 +91,6 @@ describe('lint', function () {
       env.error = '';
       app(env, noop);
     }, /error must be a Stream/);
-
-    assert.throws(function () {
-      var env = mock.env();
-      env.strataVersion = {};
-      app(env, noop);
-    }, /strataVersion must be a string/, 'strataVersion must be a string');
 
     assert.throws(function () {
       app(mock.env({ requestMethod: '123' }), noop);
