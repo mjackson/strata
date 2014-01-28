@@ -1,3 +1,5 @@
+Please note: *All future development of strata will happen in [mach](https://github.com/mjijackson/mach). strata will be maintained for bug fixes, but no new features will be introduced.*
+
 [![build status](https://secure.travis-ci.org/mjijackson/strata.png)](http://travis-ci.org/mjijackson/strata)
 
 Strata is a streaming HTTP server for node.js that is patterned after time-honored web server design principles pioneered in the Python and Ruby communities, namely [WSGI](http://www.wsgi.org/) and [Rack](http://rack.rubyforge.org/). Using Strata, developers can build highly performant web servers in a powerful, modular style that is easy to maintain and takes full advantage of the streaming capabilities and excellent I/O handling of node.js.
